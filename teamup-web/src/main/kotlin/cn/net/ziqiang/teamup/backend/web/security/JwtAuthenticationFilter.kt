@@ -4,6 +4,8 @@ package cn.net.ziqiang.teamup.backend.web.security
 import cn.net.ziqiang.teamup.backend.common.constant.ResultType
 import cn.net.ziqiang.teamup.backend.common.utils.auth.JwtUtils
 import cn.net.ziqiang.teamup.backend.service.service.user.AuthService
+import org.apache.logging.log4j.util.Strings
+import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.context.SecurityContextHolder
@@ -22,11 +24,14 @@ class JwtAuthenticationFilter(
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
         SecurityContextHolder.getContext().authentication = null
 
-        //开始认证
-        val authorization = request.getHeader("Authorization") ?: run {
+        val header = request.getHeader(HttpHeaders.AUTHORIZATION)
+        if (Strings.isEmpty(header) || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response)
             return
         }
+
+        val authorization = header.substring(7)
+
         val jwtPayloadInfo = JwtUtils.parseJwtWithoutThrow(secretKey = jwtSecret, jwtStr = authorization)
         val jwtPayload = jwtPayloadInfo.first ?: run {
             chain.doFilter(request, response)

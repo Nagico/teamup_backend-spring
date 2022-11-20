@@ -33,7 +33,7 @@ class User(
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    var role: UserRole = UserRole.None,
+    var role: UserRole = UserRole.User,
 
     @Column(name = "openid", nullable = false)
     var openid: String = "",
@@ -41,12 +41,17 @@ class User(
     @Column(name = "avatar_url")
     var avatarUrl: String? = null,
 
+    @Column(name = "active")
+    var active: Boolean = false,
+
     @Column(name = "blocked")
     var blocked: Boolean = false,
 
     @CreatedDate
     @Column(name = "create_time")
-    var createTime: LocalDateTime? = null,
-
-
-    ): Serializable
+    var createTime: Date? = null,
+): Serializable {
+    override fun toString(): String {
+        return "User(id=$id, username='$username', openid='$openid')"
+    }
+}

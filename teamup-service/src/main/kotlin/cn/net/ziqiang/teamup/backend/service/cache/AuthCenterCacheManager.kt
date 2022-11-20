@@ -68,7 +68,7 @@ class AuthCenterCacheManager {
     }
 
     fun setToken(userId: Long, tokenBean: TokenBean) {
-        setAuthToken(userId = userId, token = tokenBean.auth)
+        setAuthToken(userId = userId, token = tokenBean.access)
         setRefreshToken(refreshToken = tokenBean.refresh)
     }
 

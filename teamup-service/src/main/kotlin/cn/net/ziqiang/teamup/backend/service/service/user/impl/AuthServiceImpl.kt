@@ -1,5 +1,7 @@
 package cn.net.ziqiang.teamup.backend.service.service.user.impl
 
+import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j
+import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j.Companion.logger
 import cn.net.ziqiang.teamup.backend.common.bean.auth.JwtPayload
 import cn.net.ziqiang.teamup.backend.common.bean.auth.TokenBean
 import cn.net.ziqiang.teamup.backend.common.constant.JwtType
@@ -14,7 +16,10 @@ import cn.net.ziqiang.teamup.backend.service.properties.JwtProperties
 import cn.net.ziqiang.teamup.backend.service.service.user.AuthService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.util.*
 
+@Slf4j
 @Service
 class AuthServiceImpl: AuthService {
 //    @Autowired
@@ -42,13 +47,22 @@ class AuthServiceImpl: AuthService {
         var user = userRepository.findByOpenid(openid = openid)
 
         if (user == null) {
-            user = User()
+            user = User(
+                openid = openid,
+                role = UserRole.User,
+                active = false,
+                blocked = false,
+                createTime = Date(),
+            )
+
+            //更新资料
+            userRepository.save(user)
+
+            logger.info("新用户: $user")
         }
 
-        //更新资料
-        userRepository.save(user)
-
         val generatedToken = generateToken(user)
+        generatedToken.user = user
         authCenterCacheManager.setToken(userId = user.id!!, tokenBean = generatedToken)
 
         //返回新的token
@@ -67,9 +81,16 @@ class AuthServiceImpl: AuthService {
             JwtUtils.parseJwtWithoutThrow(secretKey = jwtProperties.secret, jwtStr = refreshToken)
         val jwtPayload = jwtPayloadInfo.first ?: throw jwtPayloadInfo.second!!
 
+        // 查询用户信息
+        val user = userRepository.findById(jwtPayload.userId).orElse(null) ?: throw ApiException(ResultType.TokenInvalid)
+
         //提取信息
         val newTokenBean = generateToken(userId = jwtPayload.userId, role = jwtPayload.role)
+
+        newTokenBean.user = user
+
         authCenterCacheManager.setToken(userId = jwtPayload.userId, tokenBean = newTokenBean)
+
         return newTokenBean
     }
 
@@ -83,7 +104,7 @@ class AuthServiceImpl: AuthService {
 
     fun generateToken(userId: Long, role: UserRole): TokenBean {
         val authPayload = JwtPayload(userId = userId, role =role, jwtType = JwtType.Auth)
-        val bearerToken = "bearer " + JwtUtils.generateJwt(
+        val bearerToken = JwtUtils.generateJwt(
             secretKey = jwtProperties.secret,
             expireOffset = 8 * 60,
             payload = authPayload
@@ -96,7 +117,7 @@ class AuthServiceImpl: AuthService {
             payload = refreshPayload
         )
 
-        return TokenBean(auth = bearerToken, refresh = refreshToken)
+        return TokenBean(access = bearerToken, refresh = refreshToken)
     }
 
     fun generateToken(user: User): TokenBean {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDateTime
+import java.util.*
 
 @RestController
 @RequestMapping("/test")
@@ -23,11 +24,11 @@ class TestController {
     fun testAnonymous(): TestVO {
         try {
             val user = userService.getUserById(id = SecurityContextUtils.userId)
-            return TestVO(user.id, user.username, user.role, LocalDateTime.now())
+            return TestVO(user.id, user.username, user.role)
         }
         catch (e: ApiException) {
             if (e.code == ResultType.NotLogin.code) {
-                return TestVO(null, null, UserRole.None, LocalDateTime.now())
+                return TestVO(null, null, UserRole.None)
             }
             throw e
         }
@@ -38,6 +39,6 @@ class TestController {
     fun testUser(): TestVO {
         val user = userService.getUserById(id = SecurityContextUtils.userId)
 
-        return TestVO(user.id, user.username, user.role, LocalDateTime.now())
+        return TestVO(user.id, user.username, user.role)
     }
 }

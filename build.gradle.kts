@@ -89,6 +89,7 @@ subprojects {
 
 		// JSON
 		implementation("com.alibaba:fastjson")
+		implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0")
 
 		//JPA
 		implementation("org.springframework.boot:spring-boot-starter-data-jpa")
