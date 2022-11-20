@@ -6,16 +6,26 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import org.springframework.cache.annotation.CachingConfigurerSupport
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.StringRedisSerializer
+import javax.annotation.Resource
+import org.springframework.cache.CacheManager
+import org.springframework.cache.interceptor.*
+import org.springframework.data.redis.cache.RedisCacheConfiguration
+import org.springframework.data.redis.cache.RedisCacheConfiguration.defaultCacheConfig
+import org.springframework.data.redis.cache.RedisCacheManager
+import org.springframework.data.redis.serializer.RedisSerializationContext
 
 
 @Configuration
-class RedisConfig {
+class RedisConfig : CachingConfigurerSupport() {
+    @Resource
+    private lateinit var factory: RedisConnectionFactory
 
     companion object {
         val objectMapper: ObjectMapper
@@ -41,14 +51,30 @@ class RedisConfig {
             }
     }
 
+    /**
+     * 自定义生成redis-key
+     *
+     * @return
+     */
     @Bean
-    fun redisTemplate(
-        redisConnectionFactory: RedisConnectionFactory
-    ): RedisTemplate<String, Any> {
+    override fun keyGenerator(): KeyGenerator {
+        return KeyGenerator { o, method, objects ->
+            val sb = StringBuilder()
+            sb.append(o::class.simpleName).append(".")
+            sb.append(method.name).append(".")
+            for (obj in objects) {
+                sb.append(obj.toString())
+            }
+            sb.toString()
+        }
+    }
+
+    @Bean
+    fun redisTemplate(): RedisTemplate<String, Any> {
 
 
         val redisTemplate = RedisTemplate<String, Any>().apply {
-            setConnectionFactory(redisConnectionFactory)
+            setConnectionFactory(factory)
             val jsonSerializer = GenericJackson2JsonRedisSerializer(objectMapper)
             val stringSerializer = StringRedisSerializer()
 
@@ -59,5 +85,28 @@ class RedisConfig {
         }
         redisTemplate.afterPropertiesSet()
         return redisTemplate
+    }
+
+    @Bean
+    override fun cacheResolver(): CacheResolver {
+        return SimpleCacheResolver(cacheManager()!!)
+    }
+
+    @Bean
+    override fun errorHandler(): CacheErrorHandler {
+        // 用于捕获从Cache中进行CRUD时的异常的回调处理器。
+        return SimpleCacheErrorHandler()
+    }
+
+    @Bean
+    override fun cacheManager(): CacheManager? {
+        val cacheConfiguration: RedisCacheConfiguration = defaultCacheConfig()
+            .disableCachingNullValues()
+            .serializeValuesWith(
+                RedisSerializationContext.SerializationPair.fromSerializer(
+                    GenericJackson2JsonRedisSerializer()
+                )
+            )
+        return RedisCacheManager.builder(factory).cacheDefaults(cacheConfiguration).build()
     }
 }

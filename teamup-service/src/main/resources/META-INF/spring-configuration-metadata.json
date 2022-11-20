@@ -1,0 +1,43 @@
+{
+  "groups": [],
+  "hints": [],
+  "properties": [
+    {
+      "name": "wx.miniapp.appid",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.WxMaProperties",
+      "description": "小程序appid."
+    },
+    {
+      "name": "wx.miniapp.secret",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.WxMaProperties",
+      "description": "小程序secret."
+    },
+    {
+      "name": "wx.miniapp.token",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.WxMaProperties",
+      "description": "微信小程序消息服务器配置的token."
+    },
+    {
+      "name": "wx.miniapp.aesKey",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.WxMaProperties",
+      "description": "微信小程序消息服务器配置的EncodingAESKey."
+    },
+    {
+      "name": "wx.miniapp.msgDataFormat",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.WxMaProperties",
+      "description": "小程序消息格式，XML或者JSON."
+    },
+
+    {
+      "name": "security.jwt.secret",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.JwtProperties",
+      "description": "JWT密钥."
+    }
+  ]
+}

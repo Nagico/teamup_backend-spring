@@ -8,13 +8,9 @@ import org.springframework.validation.annotation.Validated
 @Validated
 @ConfigurationProperties(prefix = "wx.miniapp")
 class WxMaProperties {
-    private lateinit var configs: List<Config>
-
-    data class Config(
-        var appid: String? = null,
-        var secret: String? = null,
-        var token: String? = null,
-        var aesKey: String? = null,
-        var msgDataFormat: String? = null
-    )
+    var appid: String? = null
+    var secret: String? = null
+    var token: String? = null
+    var aesKey: String? = null
+    var msgDataFormat: String? = null
 }
