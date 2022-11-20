@@ -12,7 +12,7 @@ data class UpdateUserProfileDto(
 
     @field:NotEmpty
     @Schema(description = "昵称")
-    var nickname: String = "",
+    var username: String = "",
 
     @Pattern(regexp = "^1[3456789][0-9]{9}$")
     @Schema(description = "手机号")

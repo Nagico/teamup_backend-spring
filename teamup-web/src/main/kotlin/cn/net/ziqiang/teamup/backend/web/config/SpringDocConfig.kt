@@ -1,7 +1,7 @@
 package cn.net.ziqiang.teamup.backend.web.config
 
 import cn.net.ziqiang.teamup.backend.common.constant.ResultType
-import cn.net.ziqiang.teamup.backend.web.vo.ResultVO
+import cn.net.ziqiang.teamup.backend.service.vo.ResultVO
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.media.Content

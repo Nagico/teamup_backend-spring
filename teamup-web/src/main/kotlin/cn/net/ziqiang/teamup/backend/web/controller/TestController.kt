@@ -6,7 +6,7 @@ import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.service.service.user.UserService
 import cn.net.ziqiang.teamup.backend.web.annotation.user.NormalUser
 import cn.net.ziqiang.teamup.backend.web.security.SecurityContextUtils
-import cn.net.ziqiang.teamup.backend.web.vo.test.TestVO
+import cn.net.ziqiang.teamup.backend.service.vo.test.TestVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping

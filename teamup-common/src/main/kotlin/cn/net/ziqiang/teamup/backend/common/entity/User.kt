@@ -38,8 +38,8 @@ class User(
     @Column(name = "openid", nullable = false)
     var openid: String = "",
 
-    @Column(name = "avatar_url")
-    var avatarUrl: String? = null,
+    @Column(name = "avatar")
+    var avatar: String? = null,
 
     @Column(name = "active")
     var active: Boolean = false,

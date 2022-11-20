@@ -2,6 +2,10 @@ dependencies {
     implementation(project(":teamup-common"))
     implementation(project(":teamup-dao"))
 
+    //Spring doc
+    implementation("org.springdoc:springdoc-openapi-ui")
+    runtimeOnly("org.springdoc:springdoc-openapi-kotlin")
+
     // MyBatis
     testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter")
 

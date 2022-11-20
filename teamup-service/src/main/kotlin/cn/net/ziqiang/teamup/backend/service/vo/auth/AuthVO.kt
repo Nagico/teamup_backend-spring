@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.web.vo.auth
+package cn.net.ziqiang.teamup.backend.service.vo.auth
 
 import cn.net.ziqiang.teamup.backend.common.bean.auth.TokenBean
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole

@@ -1,6 +1,6 @@
 package cn.net.ziqiang.teamup.backend.web.aop.response
 
-import cn.net.ziqiang.teamup.backend.web.vo.ResultVO
+import cn.net.ziqiang.teamup.backend.service.vo.ResultVO
 import com.alibaba.fastjson.JSON
 import org.springframework.core.MethodParameter
 import org.springframework.http.MediaType

@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.web.vo
+package cn.net.ziqiang.teamup.backend.service.vo
 
 import cn.net.ziqiang.teamup.backend.common.constant.ResultType
 import com.fasterxml.jackson.annotation.JsonIgnore

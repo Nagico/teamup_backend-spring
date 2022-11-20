@@ -8,6 +8,8 @@ import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.dao.repository.UserRepository
 import cn.net.ziqiang.teamup.backend.service.cache.UserCacheManager
 import cn.net.ziqiang.teamup.backend.service.service.user.UserService
+import cn.net.ziqiang.teamup.backend.service.vo.user.UserInfoVO
+import cn.net.ziqiang.teamup.backend.service.vo.user.UserProfileVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -32,23 +34,69 @@ class UserServiceImpl : UserService{
         }
     }
 
-    override fun updateUser(id: Long, dto: UpdateUserProfileDto) : User {
+    override fun getUserInfoById(id: Long): UserInfoVO {
+        val user = getUserById(id)
+        if (!user.active)
+            throw ApiException(type = ResultType.ResourceNotFound, message = "用户不存在")
+        return UserInfoVO(user)
+    }
+
+    override fun getUserProfileById(id: Long): UserProfileVO {
+        val user = getUserById(id)
+
+        return UserProfileVO(user)
+    }
+
+    override fun updateUser(id: Long, dto: UpdateUserProfileDto) : UserProfileVO {
         val user = getUserById(id = id)
         val copiedUser = User()
         BeanUtil.copyProperties(user, copiedUser)
-        copiedUser.apply {
-            realName = dto.realName
-            username = dto.nickname
-            phone = dto.phone
-            faculty = dto.faculty
+
+        // 检测激活
+        if (
+            !dto.realName.isNullOrEmpty() &&
+            !dto.username.isNullOrEmpty() &&
+            !dto.phone.isNullOrEmpty() &&
+            !dto.faculty.isNullOrEmpty()
+        ) {
+            copiedUser.active = true
+        } else {
+            copiedUser.active = user.active
         }
+
+        // 更新
+        if (!dto.realName.isNullOrEmpty() && dto.realName != user.realName)
+            copiedUser.realName = dto.realName
+        if (!dto.username.isNullOrEmpty() && dto.username != user.username) {
+            copiedUser.username = dto.username
+            if (countByUsername(dto.username) > 0)  // 检测重复
+                throw ApiException(type = ResultType.ParamValidationFailed, message = "用户名已存在")
+        }
+        if (!dto.phone.isNullOrEmpty() && dto.phone != user.phone)
+            copiedUser.phone = dto.phone
+        if (!dto.faculty.isNullOrEmpty() && dto.faculty != user.faculty)
+            copiedUser.faculty = dto.faculty
         userRepository.save(copiedUser)
         userCacheManager.setUserCache(copiedUser)
-        return copiedUser
+
+        return UserProfileVO(copiedUser)
     }
 
     override fun checkNormalUserOrThrow(user: User) {
         if (user.blocked)
             throw ApiException(type = ResultType.UserBlocked, message = "账号已被封禁")
+    }
+
+    override fun checkActiveUserOrThrow(user: User) {
+        checkNormalUserOrThrow(user)
+
+        if (!user.active)
+            throw ApiException(type = ResultType.NotActive, message = "账号未激活")
+    }
+
+    override fun countByUsername(username: String?): Int {
+        if (username == null)
+            return 0
+        return userRepository.countByUsername(username)
     }
 }
