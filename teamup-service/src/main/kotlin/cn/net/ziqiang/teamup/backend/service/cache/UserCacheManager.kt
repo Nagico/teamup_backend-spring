@@ -18,7 +18,7 @@ class UserCacheManager {
 
     fun setUserCache(user: User) {
         redisTemplate.opsForValue().set(
-            /* key = */ RedisKey.userKey(userId = user.userId!!),
+            /* key = */ RedisKey.userKey(userId = user.id!!),
             /* value = */ user,
             /* timeout = */ Duration.ofHours(1)
         )

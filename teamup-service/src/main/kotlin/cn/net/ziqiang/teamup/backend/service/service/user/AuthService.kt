@@ -12,6 +12,8 @@ interface AuthService {
      */
     fun loginWechat(code: String, iv: String, encryptedString: String): TokenBean
 
+    fun loginOpenid(openid: String): TokenBean
+
     /**
      * 刷新token
      * @param refreshToken

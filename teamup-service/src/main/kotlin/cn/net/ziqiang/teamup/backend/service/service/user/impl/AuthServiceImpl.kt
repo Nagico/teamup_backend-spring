@@ -35,8 +35,10 @@ class AuthServiceImpl: AuthService {
 
         val decryptedJson = mapOf("openid" to "test")
 
-        //数据库获取用户，没有则新建
-        val openid = decryptedJson["openid"]!!
+        return loginOpenid(openid = decryptedJson["openid"].toString())
+    }
+
+    override fun loginOpenid(openid: String): TokenBean {
         var user = userRepository.findByOpenid(openid = openid)
 
         if (user == null) {
@@ -47,7 +49,7 @@ class AuthServiceImpl: AuthService {
         userRepository.save(user)
 
         val generatedToken = generateToken(user)
-        authCenterCacheManager.setToken(userId = user.userId!!, tokenBean = generatedToken)
+        authCenterCacheManager.setToken(userId = user.id!!, tokenBean = generatedToken)
 
         //返回新的token
         return generatedToken
@@ -98,7 +100,7 @@ class AuthServiceImpl: AuthService {
     }
 
     fun generateToken(user: User): TokenBean {
-        return generateToken(userId = user.userId!!, role = user.role)
+        return generateToken(userId = user.id!!, role = user.role)
     }
 
     //endregion

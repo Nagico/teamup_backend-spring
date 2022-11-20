@@ -6,22 +6,17 @@ import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import org.springframework.security.core.context.SecurityContextHolder
 
-/**
- * @author orangeboyChen
- * @version 1.0
- * @date 2022/9/26 21:29
- */
-object SecurityContextUtils {
 
-    val jwtPayload: JwtPayload?
+object SecurityContextUtils {
+    private val jwtPayload: JwtPayload?
         get() = SecurityContextHolder.getContext().authentication.details as? JwtPayload
 
-    private val userId: Long?
+    private val userIdOrNull: Long?
         get() = jwtPayload?.userId
 
     val role: UserRole
         get() = jwtPayload?.role ?: UserRole.None
 
-    val userIdOrThrow: Long
-        get() = userId ?: throw ApiException(ResultType.NotLogin)
+    val userId: Long
+        get() = userIdOrNull ?: throw ApiException(ResultType.NotLogin)
 }

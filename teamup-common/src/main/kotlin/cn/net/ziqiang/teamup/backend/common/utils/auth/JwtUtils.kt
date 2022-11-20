@@ -10,11 +10,7 @@ import cn.net.ziqiang.teamup.backend.common.constant.ResultType
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.common.bean.auth.JwtPayload
 
-/**
- * @author orangeboyChen
- * @version 1.0
- * @date 2022/9/24 11:28
- */
+
 object JwtUtils {
 
     /**

@@ -1,5 +1,6 @@
 package cn.net.ziqiang.teamup.backend.web.security
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
@@ -12,8 +13,11 @@ import javax.servlet.http.HttpServletResponse
 
 
 @Component
-class AuthenticationFailHandler(private val handlerExceptionResolver: HandlerExceptionResolver): AuthenticationFailureHandler,
+class AuthenticationFailHandler: AuthenticationFailureHandler,
     AccessDeniedHandler, AuthenticationEntryPoint {
+    @Autowired
+    private lateinit var handlerExceptionResolver: HandlerExceptionResolver
+
     override fun onAuthenticationFailure(
         request: HttpServletRequest,
         response: HttpServletResponse,

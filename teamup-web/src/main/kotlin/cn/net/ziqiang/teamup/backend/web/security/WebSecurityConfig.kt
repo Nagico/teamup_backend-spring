@@ -20,9 +20,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
  * SpringSecurity配置类
  * 下面有个坑。虽然WebSecurityConfigurerAdapter过时了，但用推荐但方式注入AuthenticationManager会导致
  * 含ApplicationContext的单测不通过
- * @author orangeboyChen
- * @version 1.0
- * @date 2022/9/24 11:15
  */
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)

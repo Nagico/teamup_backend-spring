@@ -4,23 +4,23 @@ import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.springframework.data.annotation.CreatedDate
 import java.io.Serializable
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
-import javax.persistence.Transient
 
 @Entity(name = "user")
 @JsonIgnoreProperties(value= ["handler"])
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
-    var userId: Long? = null,
+    @Column(name = "id")
+    var id: Long? = null,
 
     @Column(name = "real_name", nullable = false)
     var realName: String = "",
 
-    @Column(name = "nickname", nullable = false)
-    var nickname: String = "",
+    @Column(name = "username", nullable = false)
+    var username: String = "",
 
     @Column(name = "student_id")
     var studentId: String? = null,
@@ -41,9 +41,12 @@ class User(
     @Column(name = "avatar_url")
     var avatarUrl: String? = null,
 
+    @Column(name = "blocked")
+    var blocked: Boolean = false,
+
     @CreatedDate
     @Column(name = "create_time")
-    var createTime: Date? = null,
+    var createTime: LocalDateTime? = null,
 
 
     ): Serializable
