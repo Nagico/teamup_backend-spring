@@ -9,11 +9,11 @@ spring:
     group:
       dev:
         - web-dev
-        - pojo-dev
+        - dao-dev
         - common-dev
         - service-dev
       prod:
         - web-prod
-        - pojo-prod
+        - dao-prod
         - common-prod
         - service-prod

@@ -63,32 +63,38 @@ subprojects {
 
 			// JWT
 			mavenBom("io.jsonwebtoken:jjwt:0.9.1")
+
+			//MyBatis
+			mavenBom("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2")
+
+			// MyBatis Plus
+			mavenBom("com.baomidou:mybatis-plus-boot-starter:3.5.2")
+
+			// MyBatis Plus Generator
+			mavenBom("com.baomidou:mybatis-plus-generator:3.5.3")
+			mavenBom("org.freemarker:freemarker:2.3.31")
 		}
 	}
 
 	dependencies {
 		// Springboot
-		implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 		implementation("org.springframework.boot:spring-boot-starter-web")
-		implementation("org.springframework.boot:spring-boot-starter-security")
-		implementation("org.springframework.boot:spring-boot-starter-cache")
-		implementation("org.springframework.boot:spring-boot-starter-data-redis")
-		implementation("org.springframework.boot:spring-boot-configuration-processor")
+		annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+		implementation("org.springframework.boot:spring-boot-starter-validation")
 
 		// Kotlin
 		implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 		implementation("org.jetbrains.kotlin:kotlin-reflect")
 		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-		// Spring Doc
-		implementation("org.springdoc:springdoc-openapi-ui")
-		runtimeOnly("org.springdoc:springdoc-openapi-kotlin")
-
 		// JSON
 		implementation("com.alibaba:fastjson")
 
-		// JWT
-		implementation("io.jsonwebtoken:jjwt")
+		//JPA
+		implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+		//hutool
+		implementation("cn.hutool:hutool-all:5.8.7")
 
 		// MYSQL
 		runtimeOnly("com.mysql:mysql-connector-j")

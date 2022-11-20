@@ -1,6 +1,6 @@
 package cn.net.ziqiang.teamup.backend.common.exception
 
-import cn.net.ziqiang.teamup.backend.common.response.ApiResponseType
+import cn.net.ziqiang.teamup.backend.common.constant.ResultType
 import org.springframework.http.HttpStatus
 
 /**
@@ -8,30 +8,30 @@ import org.springframework.http.HttpStatus
  *
  */
 class ApiException : Exception {
-    var type: ApiResponseType
+    var type: ResultType
     var code: String
     var httpStatus: HttpStatus
     override var message: String
 
-    constructor(type: ApiResponseType = ApiResponseType.ServerError) : super(type.message) {
+    constructor(type: ResultType = ResultType.ServerError) : super(type.message) {
         this.type = type
         this.code = type.code
         this.httpStatus = type.httpStatus
         this.message = type.message
     }
-    constructor(type: ApiResponseType, cause: Throwable) : super(cause) {
+    constructor(type: ResultType, cause: Throwable) : super(cause) {
         this.type = type
         this.code = type.code
         this.httpStatus = type.httpStatus
         this.message = type.message
     }
-    constructor(type: ApiResponseType, message: String) : super(message) {
+    constructor(type: ResultType, message: String) : super(message) {
         this.type = type
         this.code = type.code
         this.httpStatus = type.httpStatus
         this.message = message
     }
-    constructor(type: ApiResponseType, message: String, cause: Throwable) : super(message, cause) {
+    constructor(type: ResultType, message: String, cause: Throwable) : super(message, cause) {
         this.type = type
         this.code = type.code
         this.httpStatus = type.httpStatus

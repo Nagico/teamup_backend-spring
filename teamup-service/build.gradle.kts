@@ -1,10 +1,13 @@
 dependencies {
     implementation(project(":teamup-common"))
-    implementation(project(":teamup-pojo"))
+    implementation(project(":teamup-dao"))
 
-    //okhttp
-    implementation("com.squareup.okhttp3:okhttp")
+    // MyBatis
+    testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter")
 
-    //redis
+    // redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+    // Wechat
+    implementation("com.github.binarywang:weixin-java-miniapp:4.4.0")
 }
