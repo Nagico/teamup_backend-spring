@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
+      - main
 
 env:
   JOB_NAME: teamup-backend-test
