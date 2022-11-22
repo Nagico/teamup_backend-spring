@@ -34,7 +34,7 @@ jobs:
           echo "WORKING_DIR=~/${{ env.BASE_NAME }}" >> $GITHUB_OUTPUT
           echo "DOCKER_COMPOSE_FILE=${{ env.DOCKER_COMPOSE_FILE }}" >> $GITHUB_OUTPUT
 
-  build-spring:
+  build_spring:
     runs-on: ubuntu-latest
     needs:
       - define_env
@@ -73,7 +73,7 @@ jobs:
           docker push ${{ needs.define_env.outputs.DOCKER_HOST }}/${{ needs.define_env.outputs.DOCKER_NAMESPACE }}/${{ needs.define_env.outputs.IMAGE_NAME }}:${{ matrix.image }}
           docker image prune -f
 
-  build-others:
+  build_others:
     runs-on: ubuntu-latest
     needs:
       - define_env
