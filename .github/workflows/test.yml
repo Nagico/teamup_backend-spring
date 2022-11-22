@@ -9,25 +9,35 @@ on:
     branches:
       - main
 
-env:
-  JOB_NAME: teamup-backend-test
-
-  DOCKER_HOST: ccr.ccs.tencentyun.com
-  DOCKER_NAMESPACE: ziqiang
-  IMAGE_NAME: {{ JOB_NAME }}
-
-  WORKING_DIR: ~/{{ JOB_NAME }}
-  DOCKER_COMPOSE_FILE: docker-compose-test.yml
-
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  SSH_HOST: ${{ secrets.TEST_SSH_HOST }}
-  SSH_USERNAME: ${{ secrets.TEST_SSH_USERNAME }}
-  SSH_PASSWORD: ${{ secrets.TEST_SSH_PASSWORD }}
-
 jobs:
+  define_env:
+    runs-on: ubuntu-latest
+    env:
+      BASE_NAME: teamup-backend-test
+      DOCKER_HOST: ccr.ccs.tencentyun.com
+      DOCKER_NAMESPACE: ziqiang
+      DOCKER_COMPOSE_FILE: docker-compose-test.yml
+
+    outputs:
+      DOCKER_HOST: ${{ steps.set_env.outputs.DOCKER_HOST }}
+      DOCKER_NAMESPACE: ${{ steps.set_env.outputs.DOCKER_NAMESPACE }}
+      IMAGE_NAME: ${{ steps.set_env.outputs.IMAGE_NAME }}
+      WORKING_DIR: ${{ steps.set_env.outputs.WORKING_DIR }}
+      DOCKER_COMPOSE_FILE: ${{ steps.set_env.outputs.DOCKER_COMPOSE_FILE }}
+    steps:
+      - id: set_env
+        run: |
+          echo "BASE_NAME=${{ env.BASE_NAME }}" >> $GITHUB_ENV
+          echo "DOCKER_HOST=${{ env.DOCKER_HOST }}" >> $GITHUB_OUTPUT
+          echo "DOCKER_NAMESPACE=${{ env.DOCKER_NAMESPACE }}" >> $GITHUB_OUTPUT
+          echo "IMAGE_NAME=~/${{ env.IMAGE_NAME }}" >> $GITHUB_OUTPUT
+          echo "WORKING_DIR=~/${{ env.BASE_NAME }}" >> $GITHUB_OUTPUT
+          echo "DOCKER_COMPOSE_FILE=${{ env.DOCKER_COMPOSE_FILE }}" >> $GITHUB_OUTPUT
+
   build:
     runs-on: ubuntu-latest
+    needs:
+      - define_env
     strategy:
       matrix:
         image: [ 'redis', 'spring' ]
@@ -58,26 +68,27 @@ jobs:
 
       - name: build and push docker image ${{ matrix.image }}
         run: |
-          docker login {{ DOCKER_HOST }} --username=${{ DOCKER_USERNAME }} --password=${{ DOCKER_PASSWORD }}
-          docker build -f docker/${{ matrix.image }}/Dockerfile -t {{ DOCKER_HOST }}/{{ DOCKER_NAMESPACE }}/{{ IMAGE_NAME }}:${{ matrix.image }} .
-          docker push {{ DOCKER_HOST }}/{{ DOCKER_NAMESPACE }}/{{ IMAGE_NAME }}:${{ matrix.image }}
+          docker login ${{ needs.define_env.outputs.DOCKER_HOST }} --username=${{ secret.DOCKER_USERNAME }} --password=${{ secret.DOCKER_PASSWORD }}
+          docker build -f docker/${{ matrix.image }}/Dockerfile -t ${{ needs.define_env.outputs.DOCKER_HOST }}/${{ needs.define_env.outputs.DOCKER_NAMESPACE }}/${{ needs.define_env.outputs.IMAGE_NAME }}:${{ matrix.image }} .
+          docker push ${{ needs.define_env.outputs.DOCKER_HOST }}/${{ needs.define_env.outputs.DOCKER_NAMESPACE }}/${{ needs.define_env.outputs.IMAGE_NAME }}:${{ matrix.image }}
           docker image prune -f
   deploy:
     runs-on: ubuntu-latest
     needs:
+      - define_env
       - build
     steps:
       - name: Turn down docker compose
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ SSH_HOST }}
-          username: ${{ SSH_USERNAME }}
-          password: ${{ SSH_PASSWORD }}
+          host: ${{ secret.SSH_HOST }}
+          username: ${{ secret.SSH_USERNAME }}
+          password: ${{ secret.SSH_PASSWORD }}
           script: |
-            mkdir -p {{ WORKING_DIR }}
-            cd {{ WORKING_DIR }}
+            mkdir -p ${{ needs.define_env.outputs.WORKING_DIR }}
+            cd ${{ needs.define_env.outputs.WORKING_DIR }}
             if [ -f docker-compose.yml ]; then
-              docker login {{ DOCKER_HOST }} --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+              docker login ${{ needs.define_env.outputs.DOCKER_HOST }} --username=${{ secret.DOCKER_USERNAME }} --password=${{ secret.DOCKER_PASSWORD }}
               docker-compose pull
               docker-compose down
             fi
@@ -85,31 +96,31 @@ jobs:
       - name: Update docker compose file
         uses: appleboy/scp-action@master
         with:
-          host: ${{ SSH_HOST }}
-          username: ${{ SSH_USERNAME }}
-          password: ${{ SSH_PASSWORD }}
-          source: ./docker/{{ DOCKER_COMPOSE_FILE }}
-          target: {{ WORKING_DIR }}
+          host: ${{ secret.SSH_HOST }}
+          username: ${{ secret.SSH_USERNAME }}
+          password: ${{ secret.SSH_PASSWORD }}
+          source: ./docker/${{ needs.define_env.outputs.DOCKER_COMPOSE_FILE }}
+          target: ${{ needs.define_env.outputs.WORKING_DIR }}
 
       - name: Rename docker compose file
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ SSH_HOST }}
-          username: ${{ SSH_USERNAME }}
-          password: ${{ SSH_PASSWORD }}
+          host: ${{ secret.SSH_HOST }}
+          username: ${{ secret.SSH_USERNAME }}
+          password: ${{ secret.SSH_PASSWORD }}
           script: |
-            cd {{ WORKING_DIR }}
-            mv {{ DOCKER_COMPOSE_FILE }} docker-compose.yml
+            cd ${{ needs.define_env.outputs.WORKING_DIR }}
+            mv ${{ needs.define_env.outputs.DOCKER_COMPOSE_FILE }} docker-compose.yml
 
       - name: Restart docker compose containers
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ SSH_HOST }}
-          username: ${{ SSH_USERNAME }}
-          password: ${{ SSH_PASSWORD }}
+          host: ${{ secret.SSH_HOST }}
+          username: ${{ secret.SSH_USERNAME }}
+          password: ${{ secret.SSH_PASSWORD }}
           script: |
-            cd {{ WORKING_DIR }}
-            docker login {{ DOCKER_HOST }} --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+            cd ${{ needs.define_env.outputs.WORKING_DIR }}
+            docker login ${{ needs.define_env.outputs.DOCKER_HOST }} --username=${{ secret.DOCKER_USERNAME }} --password=${{ secret.DOCKER_PASSWORD }}
             docker-compose pull
             docker-compose up -d --remove-orphans
             docker image prune -f
