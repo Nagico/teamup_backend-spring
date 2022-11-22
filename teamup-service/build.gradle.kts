@@ -6,6 +6,9 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui")
     runtimeOnly("org.springdoc:springdoc-openapi-kotlin")
 
+    // 阿里云OSS
+    implementation("com.aliyun.oss:aliyun-sdk-oss:3.15.2")
+
     // MyBatis
     testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter")
 

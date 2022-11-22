@@ -11,6 +11,4 @@ dependencies {
 }
 
 //支持启动类
-tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
-    enabled = true
-}
+tasks.bootJar {enabled = true}

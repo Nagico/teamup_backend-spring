@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.FileInputStream
 
 plugins {
 	id("org.springframework.boot") version "2.7.5"
@@ -13,7 +14,7 @@ version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 springBoot {
-	mainClass.value("cn.net.ziqiang.teamup.backend.Application")
+	mainClass.set("cn.net.ziqiang.teamup.backend.Application")
 }
 
 allprojects {
@@ -114,16 +115,11 @@ subprojects {
 		inputs.files(tasks.named("processResources"))
 	}
 
-
-	tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+	tasks.bootJar {
 		enabled = false
-
-		doLast {
-
-		}
 	}
 
-	tasks.getByName<Jar>("jar") {
+	tasks.jar {
 		enabled = true
 	}
 
@@ -131,3 +127,255 @@ subprojects {
 		useJUnitPlatform()
 	}
 }
+
+buildscript {
+	dependencies {
+		classpath("org.yaml:snakeyaml:1.17")
+		classpath("com.fasterxml.jackson.core:jackson-core:2.13.4")
+	}
+}
+
+val dockerComposeDevFilePath = "docker/dev/docker-compose-dev.yml"
+val dockerComposeUnitTestFilePath = "docker/unit-test/docker-compose-unit-test.yml"
+
+tasks.register("buildTestEnvironmentAndTest") {
+
+}
+
+tasks.register("startDevEnvironment") {
+	group = "dev docker"
+	description = "开启开发环境下的运行环境"
+	doFirst {
+		exec {
+			commandLine("docker", "compose", "-f", dockerComposeDevFilePath, "up", "-d")
+		}
+	}
+}
+
+tasks.register("resetDevEnvironment") {
+	group = "dev docker"
+	description = "重置开发环境下的运行环境"
+	doFirst {
+		listOf(
+			arrayOf("docker", "compose", "-f", dockerComposeDevFilePath, "stop"),
+			arrayOf("docker", "compose", "-f", dockerComposeDevFilePath, "rm", "-f")
+		).forEach {
+			exec {
+				commandLine(*it)
+			}
+		}
+	}
+}
+
+tasks.register("stopDevEnvironment") {
+	group = "dev docker"
+	description = "停止开发环境下的运行环境"
+	doFirst {
+		exec {
+			commandLine("docker", "compose", "-f", dockerComposeDevFilePath, "stop")
+		}
+	}
+}
+
+tasks.register("cleanAll") {
+	group = "build"
+	description = "清除所有build"
+
+	dependsOn(
+		*subprojects.map { it.tasks.named("clean") }
+			.toMutableList()
+			.apply {
+				add(tasks.named("clean"))
+			}
+			.toTypedArray()
+	)
+}
+
+//region DevelopmentBuild
+tasks.register("buildDevJar") {
+	group = "build dev"
+	description = "构建开发版本的Jar包"
+
+	val dependsList = mutableListOf<Any>()
+
+	//前置添加docker测试环境
+	dependsList.add(tasks.named("buildDevPreTask"))
+
+	//clean
+	dependsList.add(tasks.named("cleanAll"))
+
+	//构建
+	dependsList.addAll(subprojects.map { it.tasks.named("build") })
+	dependsOn(*dependsList.toTypedArray())
+
+	doFirst {
+		//构建完成，移动构建jar包
+		//删除之前的文件夹
+		delete("target")
+		mkdir("target")
+		copy {
+			from("teamup-web/build/libs/teamup-web.jar")
+			into("target")
+			rename("teamup-web.jar", "app.jar")
+		}
+
+		if (project.file("target/app.jar").exists()) {
+			println("Create JAR file successfully in: ${System.getProperty("user.dir")}/target/app.jar")
+		} else {
+			error("Create JAR file failed")
+		}
+
+	}
+
+	this.finalizedBy("buildDevPostTask")
+}
+
+tasks.register("buildDevPostTask") {
+	group = "build dev"
+	description = "构建开发版本Jar包后置步骤"
+
+	doFirst {
+	}
+}
+
+tasks.register("buildDevPreTask") {
+	group = "build dev"
+	description = "构建开发版本Jar包前置步骤"
+	doFirst {
+	}
+}
+//endregion
+
+//region ReleaseBuild
+tasks.register("buildReleaseJar") {
+	group = "build release"
+	description = "构建发布版本的Jar包"
+
+	val dependsList = mutableListOf<Any>()
+
+	//前置添加docker测试环境
+	dependsList.add(tasks.named("buildReleasePreTask"))
+
+	//clean
+	dependsList.add(tasks.named("cleanAll"))
+
+	//构建
+	dependsList.addAll(subprojects.map { it.tasks.named("build") })
+	dependsOn(*dependsList.toTypedArray())
+
+	doFirst {
+		//构建完成，移动构建jar包
+		//删除之前的文件夹
+		delete("target")
+		mkdir("target")
+		copy {
+			from("teamup-web/build/libs/teamup-web.jar")
+			into("target")
+			rename("teamup-web.jar", "app.jar")
+		}
+
+		if (project.file("target/app.jar").exists()) {
+			println("Create JAR file successfully in: ${System.getProperty("user.dir")}/target/app.jar")
+		} else {
+			error("Create JAR file failed")
+		}
+
+	}
+
+	this.finalizedBy("buildReleasePostTask")
+}
+
+tasks.register("buildReleasePostTask") {
+	group = "build release"
+	description = "构建发布版本Jar包后置步骤"
+
+	doFirst {
+		stopUnitTestEnvironment()
+	}
+}
+
+tasks.register("buildReleasePreTask") {
+	group = "build release"
+	description = "构建发布版本Jar包前置步骤"
+	doFirst {
+
+		//1. 测试是否开启生产模式
+		val file =
+			FileInputStream(File("${project.projectDir}/ev-web/src/main/resources/application.yml"))
+		val yml = org.yaml.snakeyaml.Yaml()
+
+		var prod = false
+		for (data in yml.loadAll(file)) {
+			val map = data as Map<*, *>
+			with(com.fasterxml.jackson.databind.ObjectMapper()) {
+				val jsonStr = writeValueAsString(map)
+				val profile = readTree(jsonStr)["spring"]["profiles"]["active"]?.asText() ?: ""
+				if (profile == "prod") {
+					prod = true
+				}
+			}
+
+			if (prod) {
+				break
+			}
+		}
+
+		if (!prod) {
+			error("未开启生产模式")
+		}
+
+
+		//2. 开启测试环境
+		startUnitTestEnvironment()
+	}
+}
+//endregion
+
+//region verification
+tasks.register("startUnitTestEnvironment") {
+	group = "verification"
+	doFirst {
+		stopUnitTestEnvironment()
+		startUnitTestEnvironment()
+	}
+}
+
+tasks.register("stopUnitTestEnvironment") {
+	group = "verification"
+	doFirst {
+		stopUnitTestEnvironment()
+	}
+}
+
+fun startUnitTestEnvironment() {
+	println("Starting test env...")
+
+	listOf(
+		arrayOf("docker", "version"),
+		arrayOf("docker", "compose", "version"),
+		arrayOf("docker", "compose", "-f", dockerComposeUnitTestFilePath, "stop"),
+		arrayOf("docker", "compose", "-f", dockerComposeUnitTestFilePath, "rm", "-f"),
+		arrayOf("docker", "compose", "-f", dockerComposeUnitTestFilePath, "up", "-d"),
+		arrayOf("docker", "compose", "-f", dockerComposeUnitTestFilePath, "ps")
+	).forEach { commands ->
+		exec {
+			commandLine(*commands)
+		}
+	}
+}
+
+fun stopUnitTestEnvironment() {
+	println("Stopping test env...")
+
+	listOf(
+		arrayOf("docker", "compose", "-f", dockerComposeUnitTestFilePath, "ps"),
+		arrayOf("docker", "compose", "-f", dockerComposeUnitTestFilePath, "stop"),
+		arrayOf("docker", "compose", "-f", dockerComposeUnitTestFilePath, "rm", "-f"),
+	).forEach { commands ->
+		exec {
+			commandLine(*commands)
+		}
+	}
+	println("Stop test env")
+}
+//endregion
