@@ -1,5 +1,5 @@
 # Redis
-FROM redis-stack:latest as redis
+FROM redis/redis-stack:latest as redis
 
 WORKDIR /usr/local/etc/redis
 
