@@ -1,4 +1,4 @@
-FROM amazoncorretto:17 as springboot
+FROM amazoncorretto:17-alpine-jdk as springboot
 
 RUN apk -U upgrade
 
