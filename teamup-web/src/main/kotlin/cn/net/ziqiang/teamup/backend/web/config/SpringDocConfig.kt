@@ -18,7 +18,7 @@ class SpringDocConfig {
         return OpenAPI()
             .info(
                 Info()
-                    .title("赛道有你API文档")
+                    .title("赛道友你API文档")
                     .license(
                         License()
                             .name("AGPL-3.0")
