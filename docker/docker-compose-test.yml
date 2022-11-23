@@ -14,7 +14,7 @@ services:
     image: ccr.ccs.tencentyun.com/ziqiang/teamup-backend-test:spring
     container_name: zq-teamup-backend-test-spring
     ports:
-      - "${HTTP_PORT}:8081"
+      - "${HTTP_PORT}:8080"
     env_file: .env # ENV file
     restart: always #系统重启后容器自动启动
     privileged: true   #容器启动后是否有系统权限

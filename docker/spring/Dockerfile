@@ -14,4 +14,6 @@ COPY target/app.jar app.jar
 
 EXPOSE 8080
 
+HEALTHCHECK --interval=30s --timeout=3s --retries=3 CMD curl -f http://localhost:8080/test/healthcheck || exit 1
+
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/etc/spring/app.jar"]
