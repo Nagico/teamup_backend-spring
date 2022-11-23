@@ -80,6 +80,8 @@ jobs:
     strategy:
       matrix:
         image: [ 'redis' ]
+      exclude:
+        - image: 'redis'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
