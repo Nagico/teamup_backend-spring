@@ -5,6 +5,7 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.info.License
 import io.swagger.v3.oas.models.security.SecurityScheme
+import io.swagger.v3.oas.models.servers.Server
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -37,6 +38,16 @@ class SpringDocConfig {
                         .scheme("Bearer")
                         .bearerFormat("JWT")
                     )
+            )
+            .servers(
+                listOf(
+                    Server()
+                        .url("https://api.teamup.nagico.cn")
+                        .description("测试环境"),
+                    Server()
+                        .url("http://localhost:8080")
+                        .description("本地环境")
+                )
             )
     }
 
