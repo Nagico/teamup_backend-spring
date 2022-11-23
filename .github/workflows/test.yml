@@ -107,6 +107,9 @@ jobs:
       - build_spring
       - build_others
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Turn down docker compose
         uses: appleboy/ssh-action@master
         with:
