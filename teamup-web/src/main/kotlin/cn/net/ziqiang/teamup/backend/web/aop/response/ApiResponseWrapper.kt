@@ -20,7 +20,7 @@ class ApiResponseWrapper : ResponseBodyAdvice<Any> {
      * 支持包装
      */
     override fun supports(returnType: MethodParameter, converterType: Class<out HttpMessageConverter<*>>): Boolean {
-        return !returnType.declaringClass.name.contains("OpenApi")
+        return !returnType.declaringClass.name.contains("org.springdoc")
     }
 
     /**
