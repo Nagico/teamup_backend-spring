@@ -213,8 +213,10 @@ tasks.register("buildDevJar") {
 	doFirst {
 		//构建完成，移动构建jar包
 		//删除之前的文件夹
-		delete("target")
 		mkdir("target")
+		delete("target/app.jar")
+		delete("target/lib")
+
 		copy {
 			from("teamup-web/build/libs/teamup-web.jar")
 			into("target")
@@ -273,12 +275,19 @@ tasks.register("buildReleaseJar") {
 	doFirst {
 		//构建完成，移动构建jar包
 		//删除之前的文件夹
-		delete("target")
 		mkdir("target")
+		delete("target/app.jar")
+		delete("target/lib")
+
 		copy {
 			from("teamup-web/build/libs/teamup-web.jar")
 			into("target")
 			rename("teamup-web.jar", "app.jar")
+		}
+
+		copy {
+			from("teamup-web/build/libs/lib")
+			into("target/lib")
 		}
 
 		if (project.file("target/app.jar").exists()) {

@@ -32,7 +32,7 @@ tasks.bootJar {
     manifest {
         attributes(
             "Manifest-Version" to 1.0,
-            "Class-Path" to configurations.runtimeClasspath.get().files.joinToString(" ") { it.toURI().toURL().toString() }
+            "Class-Path" to configurations.runtimeClasspath.get().files.joinToString(" ") { "lib/${it.name}" }
         )
     }
 
