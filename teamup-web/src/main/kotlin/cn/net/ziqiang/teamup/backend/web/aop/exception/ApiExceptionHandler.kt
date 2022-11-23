@@ -35,12 +35,29 @@ class ApiExceptionHandler {
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception): ResultVO<String> {
         logger.error(e.message)
-        if (logger.isInfoEnabled) {
-            e.printStackTrace()
-        }
 
         if (e is org.springframework.security.access.AccessDeniedException) {
             return ResultVO.fail(ResultType.PermissionDenied)
+        }
+
+        if (e is org.springframework.web.servlet.NoHandlerFoundException) {
+            return ResultVO.fail(ResultType.APINotFound)
+        }
+
+        if (e is org.springframework.web.HttpRequestMethodNotSupportedException) {
+            return ResultVO.fail(ResultType.MethodNotAllowed)
+        }
+
+        if (e is org.springframework.web.bind.MethodArgumentNotValidException) {
+            return ResultVO.fail(ResultType.ParamValidationFailed)
+        }
+
+        if (e is org.springframework.web.bind.MissingServletRequestParameterException) {
+            return ResultVO.fail(ResultType.ParamValidationFailed)
+        }
+
+        if (logger.isInfoEnabled) {
+            e.printStackTrace()
         }
 
         return ResultVO(ResultType.ServerError.code, ResultType.ServerError.message, e.message, ResultType.ServerError.httpStatus)
