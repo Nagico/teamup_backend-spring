@@ -133,7 +133,7 @@ jobs:
           password: ${{ secrets.TEST_SSH_PASSWORD }}
           source: ./docker/${{ needs.define_env.outputs.DOCKER_COMPOSE_FILE }}
           target: ${{ needs.define_env.outputs.WORKING_DIR }}
-          strip_components: 1
+          strip_components: 2
 
       - name: Rename docker compose file
         uses: appleboy/ssh-action@master
