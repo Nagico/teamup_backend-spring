@@ -26,12 +26,6 @@ _✨ Author: [Nagico](https://github.com/Nagico/) ✨_
     <img src="https://img.shields.io/badge/Github-backend-brightgreen?logo=github" alt="backend_repository">
   </a>
   <br />
-
-[//]: # (  <a href="https://github.com/ZiqiangStudio/zq_recruitment_backend/actions/workflows/prod.yml">)
-
-[//]: # (    <img src="https://github.com/ZiqiangStudio/zq_recruitment_backend/actions/workflows/prod.yml/badge.svg?branch=production" alt="Production Server CI/CD">)
-
-[//]: # (  </a>)
   <a href="https://github.com/Nagico/teamup_backend/actions/workflows/test.yml">
     <img src="https://github.com/Nagico/teamup_backend/actions/workflows/test.yml/badge.svg?branch=main" alt="Test Server CI/CD">
   </a>
