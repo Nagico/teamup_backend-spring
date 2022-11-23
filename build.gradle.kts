@@ -196,6 +196,8 @@ tasks.register("buildDevJar") {
 	group = "build dev"
 	description = "构建开发版本的Jar包"
 
+
+
 	val dependsList = mutableListOf<Any>()
 
 	//前置添加docker测试环境
@@ -219,6 +221,11 @@ tasks.register("buildDevJar") {
 			rename("teamup-web.jar", "app.jar")
 		}
 
+		copy {
+			from("teamup-web/build/libs/lib")
+			into("target/lib")
+		}
+
 		if (project.file("target/app.jar").exists()) {
 			println("Create JAR file successfully in: ${System.getProperty("user.dir")}/target/app.jar")
 		} else {
@@ -227,7 +234,7 @@ tasks.register("buildDevJar") {
 
 	}
 
-	this.finalizedBy("buildDevPostTask")
+	finalizedBy("buildDevPostTask")
 }
 
 tasks.register("buildDevPostTask") {

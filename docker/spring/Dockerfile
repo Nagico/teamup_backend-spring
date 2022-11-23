@@ -2,14 +2,16 @@ FROM amazoncorretto:17-alpine-jdk as spring
 
 RUN apk -U upgrade
 
-RUN apk --no-cache upgrade musl curl
+RUN apk add curl
 
-WORKDIR /etc/java
+RUN apk upgrade musl
 
-ARG JAR_FILE=target/*.jar
+WORKDIR /etc/spring
 
-COPY ${JAR_FILE} app.jar
+COPY target/lib lib
+
+COPY target/app.jar app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/etc/java/app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/etc/spring/app.jar"]
