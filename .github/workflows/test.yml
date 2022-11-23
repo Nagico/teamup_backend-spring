@@ -79,9 +79,7 @@ jobs:
       - define_env
     strategy:
       matrix:
-        image: [ 'redis' ]
-      exclude:
-        - image: 'redis'
+        image: [  ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
