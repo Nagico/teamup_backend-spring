@@ -1,7 +1,7 @@
 package cn.net.ziqiang.teamup.backend.web.security
 
 
-import cn.net.ziqiang.teamup.backend.common.constant.ResultType
+import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.utils.auth.JwtUtils
 import cn.net.ziqiang.teamup.backend.service.service.user.AuthService
 import org.apache.logging.log4j.util.Strings
@@ -48,7 +48,7 @@ class JwtAuthenticationFilter(
 
         //认证成功，准备权限
         SecurityContextHolder.getContext().authentication =
-            JwtAuthenticationToken(authorities = AuthorityUtils.createAuthorityList(jwtPayload.role.string)).apply {
+            JwtAuthenticationToken(authorities = AuthorityUtils.createAuthorityList("ROLE_${jwtPayload.role.name}")).apply {
                 details = jwtPayload
             }
         chain.doFilter(request, response)

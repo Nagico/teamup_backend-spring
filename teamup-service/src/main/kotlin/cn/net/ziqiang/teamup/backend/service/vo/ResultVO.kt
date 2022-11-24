@@ -1,6 +1,6 @@
 package cn.net.ziqiang.teamup.backend.service.vo
 
-import cn.net.ziqiang.teamup.backend.common.constant.ResultType
+import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.http.HttpStatus
 

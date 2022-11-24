@@ -1,7 +1,7 @@
 package cn.net.ziqiang.teamup.backend.web.aop.response
 
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
-import cn.net.ziqiang.teamup.backend.common.constant.ResultType
+import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import org.springframework.boot.autoconfigure.web.ServerProperties
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes

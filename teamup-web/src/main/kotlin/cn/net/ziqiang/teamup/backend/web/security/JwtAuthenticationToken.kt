@@ -11,7 +11,7 @@ class JwtAuthenticationToken(authorities: List<GrantedAuthority>): AbstractAuthe
         return null
     }
 
-    override fun getPrincipal(): Any? {
-        return null
+    override fun getPrincipal(): Any {
+        return true
     }
 }

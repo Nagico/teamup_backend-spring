@@ -4,8 +4,8 @@ import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j
 import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j.Companion.logger
 import cn.net.ziqiang.teamup.backend.common.bean.auth.JwtPayload
 import cn.net.ziqiang.teamup.backend.common.bean.auth.TokenBean
-import cn.net.ziqiang.teamup.backend.common.constant.JwtType
-import cn.net.ziqiang.teamup.backend.common.constant.ResultType
+import cn.net.ziqiang.teamup.backend.common.constant.type.JwtType
+import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import cn.net.ziqiang.teamup.backend.common.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
@@ -16,7 +16,6 @@ import cn.net.ziqiang.teamup.backend.service.properties.JwtProperties
 import cn.net.ziqiang.teamup.backend.service.service.user.AuthService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 import java.util.*
 
 @Slf4j

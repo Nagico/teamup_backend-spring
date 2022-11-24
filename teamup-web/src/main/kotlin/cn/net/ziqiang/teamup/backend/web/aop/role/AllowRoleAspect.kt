@@ -22,7 +22,7 @@ class AllowRoleAspect {
 
         for (role in roles) {
             if (role.isNotEmpty() && httpRequest.isUserInRole(role)) {
-                jp.proceed()
+                return jp.proceed()
             }
         }
 
@@ -37,7 +37,7 @@ class AllowRoleAspect {
 
         for (role in roles) {
             if (role.isNotEmpty() && httpRequest.isUserInRole(role)) {
-                jp.proceed()
+                return jp.proceed()
             }
         }
 

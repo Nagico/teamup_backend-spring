@@ -1,5 +1,6 @@
 package cn.net.ziqiang.teamup.backend.service.vo.user
 
+import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import cn.net.ziqiang.teamup.backend.common.entity.User
 
 data class UserProfileVO(
@@ -10,7 +11,8 @@ data class UserProfileVO(
     var studentId: String? = null,
     override var faculty: String? = null,
     var phone: String? = null,
-    override var avatar: String? = null
+    override var avatar: String? = null,
+    var role: UserRole? = null,
 ) : UserInfo() {
     constructor(user: User) : this(
         id = user.id,
@@ -20,6 +22,7 @@ data class UserProfileVO(
         studentId = user.studentId,
         faculty = user.faculty,
         phone = user.phone,
-        avatar = user.avatar
+        avatar = user.avatar,
+        role = user.role
     )
 }

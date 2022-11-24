@@ -1,6 +1,6 @@
 package cn.net.ziqiang.teamup.backend.web.controller
 
-import cn.net.ziqiang.teamup.backend.common.constant.ResultType
+import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.service.service.user.UserService

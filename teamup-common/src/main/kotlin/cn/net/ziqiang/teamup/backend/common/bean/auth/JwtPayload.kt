@@ -1,6 +1,6 @@
 package cn.net.ziqiang.teamup.backend.common.bean.auth
 
-import cn.net.ziqiang.teamup.backend.common.constant.JwtType
+import cn.net.ziqiang.teamup.backend.common.constant.type.JwtType
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 
 

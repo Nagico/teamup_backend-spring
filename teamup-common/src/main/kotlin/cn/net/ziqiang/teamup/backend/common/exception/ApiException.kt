@@ -1,6 +1,6 @@
 package cn.net.ziqiang.teamup.backend.common.exception
 
-import cn.net.ziqiang.teamup.backend.common.constant.ResultType
+import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import org.springframework.http.HttpStatus
 
 /**

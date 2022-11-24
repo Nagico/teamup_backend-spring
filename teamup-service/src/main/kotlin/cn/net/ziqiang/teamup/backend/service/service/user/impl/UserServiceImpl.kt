@@ -1,7 +1,7 @@
 package cn.net.ziqiang.teamup.backend.service.service.user.impl
 
 import cn.hutool.core.bean.BeanUtil
-import cn.net.ziqiang.teamup.backend.common.constant.ResultType
+import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.dto.user.UpdateUserProfileDto
 import cn.net.ziqiang.teamup.backend.common.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException

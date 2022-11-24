@@ -6,7 +6,7 @@ import cn.hutool.core.date.DateTime
 import cn.hutool.json.JSONUtil
 import cn.hutool.jwt.JWTPayload
 import cn.hutool.jwt.JWTUtil
-import cn.net.ziqiang.teamup.backend.common.constant.ResultType
+import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.common.bean.auth.JwtPayload
 

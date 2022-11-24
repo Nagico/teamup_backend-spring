@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.common.constant
+package cn.net.ziqiang.teamup.backend.common.constant.type
 
 
 enum class JwtType(val string: String) {
