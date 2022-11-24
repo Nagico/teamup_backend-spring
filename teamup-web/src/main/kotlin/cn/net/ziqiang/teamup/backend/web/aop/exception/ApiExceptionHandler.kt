@@ -64,6 +64,10 @@ class ApiExceptionHandler {
             return ResultVO.fail(ResultType.HeaderNotAcceptable, "仅支持multipart/form-data格式")
         }
 
+        if (e is org.springframework.web.HttpMediaTypeNotSupportedException) {
+            return ResultVO.fail(ResultType.HeaderNotAcceptable, "仅支持application/json格式")
+        }
+
         if (logger.isInfoEnabled) {
             e.printStackTrace()
         }

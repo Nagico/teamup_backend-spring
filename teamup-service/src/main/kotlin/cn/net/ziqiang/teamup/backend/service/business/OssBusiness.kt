@@ -1,5 +1,6 @@
 package cn.net.ziqiang.teamup.backend.service.business
 
+import cn.net.ziqiang.teamup.backend.service.vo.file.OssTokenVO
 import org.springframework.web.multipart.MultipartFile
 import java.io.InputStream
 import java.nio.file.Path
@@ -36,4 +37,34 @@ interface OssBusiness {
      * @return url
      */
     fun uploadAvatar(file: MultipartFile): String
+
+    /**
+     * 生成直传Token
+     *
+     * @return
+     */
+    fun generateToken(path: Path, fileName: String, callbackPath: String): OssTokenVO
+
+    /**
+     * 验证直传回调签名
+     *
+     * @return
+     */
+    fun verifyCallback()
+
+    /**
+     * 获取文件url
+     *
+     * @param objectKey
+     * @return
+     */
+    fun getUrl(objectKey: String): String
+
+    /**
+     * 获取文件object key
+     *
+     * @param url
+     * @return
+     */
+    fun getObjectKey(url: String): String
 }
