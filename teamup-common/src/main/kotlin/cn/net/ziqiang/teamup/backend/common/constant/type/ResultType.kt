@@ -30,7 +30,7 @@ enum class ResultType(var code: String, var message: String, var httpStatus: Htt
     UserBlocked("A0320", "黑名单用户", HttpStatus.FORBIDDEN),
     UserFrozen("A0321", "账号被冻结", HttpStatus.FORBIDDEN),
     IPInvalid("A0322", "非法 IP 地址", HttpStatus.UNAUTHORIZED),
-    ParamError("A0HttpStatus.BAD_REQUEST", "用户请求参数错误", HttpStatus.BAD_REQUEST),
+    ParamError("A0400", "用户请求参数错误", HttpStatus.BAD_REQUEST),
     JSONParseFailed("A0410", "请求 JSON 解析错误", HttpStatus.BAD_REQUEST),
     ParamEmpty("A0420", "请求必填参数为空", HttpStatus.BAD_REQUEST),
     ParamValidationFailed("A0430", "请求参数值校验失败", HttpStatus.BAD_REQUEST),

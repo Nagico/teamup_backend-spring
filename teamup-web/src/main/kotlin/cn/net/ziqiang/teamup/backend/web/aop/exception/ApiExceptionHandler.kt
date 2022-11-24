@@ -60,6 +60,10 @@ class ApiExceptionHandler {
             return ResultVO.fail(ResultType.ParamValidationFailed, "文件大小超过5M限制")
         }
 
+        if (e is org.springframework.web.multipart.MultipartException) {
+            return ResultVO.fail(ResultType.HeaderNotAcceptable, "仅支持multipart/form-data格式")
+        }
+
         if (logger.isInfoEnabled) {
             e.printStackTrace()
         }

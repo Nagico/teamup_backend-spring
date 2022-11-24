@@ -90,6 +90,11 @@ class UserServiceImpl : UserService{
 
     @Transactional
     override fun updateUserAvatar(id: Long, avatar: MultipartFile): UserProfileVO {
+        if (avatar.isEmpty)
+            throw ApiException(type = ResultType.ParamValidationFailed, message = "头像不能为空")
+        if (avatar.contentType != "image/jpeg" && avatar.contentType != "image/png")
+            throw ApiException(type = ResultType.ParamValidationFailed, message = "头像仅支持jpg与png格式的图片")
+
         val user = getUserById(id)
 
         if (!user.avatar.isNullOrEmpty() && user.avatar != DEFAULT_AVATAR) {
