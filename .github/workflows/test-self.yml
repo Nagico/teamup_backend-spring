@@ -46,6 +46,8 @@ jobs:
           username: ${{ secrets.BUILD_SSH_USERNAME }}
           password: ${{ secrets.BUILD_SSH_PASSWORD }}
           script: |
+            export GRADLE_HOME=/etc/gradle
+            export PATH=$GRADLE_HOME/bin:$PATH
             cd ~/Github/teamup_backend
             git pull --force
             gradle buildDevJar
