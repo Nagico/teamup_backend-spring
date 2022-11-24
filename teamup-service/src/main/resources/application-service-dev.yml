@@ -17,3 +17,15 @@ spring:
     ssl: false
     timeout: 5000
 
+  servlet:
+    multipart:
+      max-file-size: 5MB  #单个文件最大大小
+      max-request-size: 50MB #文件最多上传的大小
+
+aliyun:
+  oss:
+    accessKeyId: ${ALIYUN_OSS_KEY_ID}
+    accessKeySecret: ${ALIYUN_OSS_KEY_SECRET}
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    bucketName: zq-teamup
+

@@ -4,6 +4,7 @@ import cn.net.ziqiang.teamup.backend.common.dto.user.UpdateUserProfileDto
 import cn.net.ziqiang.teamup.backend.common.entity.User
 import cn.net.ziqiang.teamup.backend.service.vo.user.UserInfoVO
 import cn.net.ziqiang.teamup.backend.service.vo.user.UserProfileVO
+import org.springframework.web.multipart.MultipartFile
 
 interface UserService {
     /**
@@ -44,6 +45,15 @@ interface UserService {
     fun updateUser(id: Long, dto: UpdateUserProfileDto): UserProfileVO
 
     /**
+     * 更新用户头像
+     *
+     * @param id 用户id
+     * @param avatar 头像文件
+     * @return
+     */
+    fun updateUserAvatar(id: Long, avatar: MultipartFile): UserProfileVO
+
+    /**
      * 是否是可以正常使用的用户
      * @param user
      */
@@ -55,5 +65,11 @@ interface UserService {
      */
     fun checkActiveUserOrThrow(user: User)
 
+    /**
+     * 检查用户名数量
+     *
+     * @param username 待检测用户名
+     * @return
+     */
     fun countByUsername(username: String?): Int
 }

@@ -10,7 +10,7 @@ import cn.net.ziqiang.teamup.backend.common.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.common.pagenation.PagedList
 import cn.net.ziqiang.teamup.backend.dao.repository.ReportRepository
-import cn.net.ziqiang.teamup.backend.service.util.permission.PermissionUtil
+import cn.net.ziqiang.teamup.backend.service.util.PermissionUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service

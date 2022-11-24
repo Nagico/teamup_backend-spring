@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.service.util.permission
+package cn.net.ziqiang.teamup.backend.service.util
 
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType

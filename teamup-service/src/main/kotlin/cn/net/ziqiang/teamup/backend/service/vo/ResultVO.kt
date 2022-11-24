@@ -34,8 +34,8 @@ data class ResultVO<T>(
             return ResultVO(code, message, null, httpStatus)
         }
 
-        fun <T> fail(type: ResultType): ResultVO<T> {
-            return ResultVO(type.code, type.message, null, type.httpStatus)
+        fun <T> fail(type: ResultType, message: String? = null): ResultVO<T> {
+            return ResultVO(type.code, message?:type.message, null, type.httpStatus)
         }
     }
 }

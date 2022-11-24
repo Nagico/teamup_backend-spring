@@ -38,6 +38,31 @@
       "type": "java.lang.String",
       "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.JwtProperties",
       "description": "JWT密钥."
+    },
+
+    {
+      "name": "aliyun.oss.accessKeyId",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.OssProperties",
+      "description": "阿里云OSS Access Key ID."
+    },
+    {
+      "name": "aliyun.oss.accessKeySecret",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.OssProperties",
+      "description": "阿里云OSS Access Key Secret."
+    },
+    {
+      "name": "aliyun.oss.endpoint",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.OssProperties",
+      "description": "阿里云OSS Endpoint."
+    },
+    {
+      "name": "aliyun.oss.bucketName",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.OssProperties",
+      "description": "阿里云OSS Bucket name."
     }
   ]
 }

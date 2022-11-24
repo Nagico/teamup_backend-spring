@@ -4,6 +4,7 @@ import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j
 import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j.Companion.logger
 import cn.net.ziqiang.teamup.backend.common.bean.auth.JwtPayload
 import cn.net.ziqiang.teamup.backend.common.bean.auth.TokenBean
+import cn.net.ziqiang.teamup.backend.common.constant.FileConstant.DEFAULT_AVATAR
 import cn.net.ziqiang.teamup.backend.common.constant.type.JwtType
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
@@ -49,6 +50,7 @@ class AuthServiceImpl: AuthService {
             user = User(
                 openid = openid,
                 role = UserRole.User,
+                avatar = DEFAULT_AVATAR,
                 active = false,
                 blocked = false,
                 createTime = Date(),
