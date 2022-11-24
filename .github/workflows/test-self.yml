@@ -51,8 +51,8 @@ jobs:
             gradle buildDevJar
             
             docker login ${{ needs.define_env.outputs.DOCKER_HOST }} --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
-            docker build -f docker/${{ matrix.image }}/Dockerfile -t ${{ needs.define_env.outputs.DOCKER_HOST }}/${{ needs.define_env.outputs.DOCKER_NAMESPACE }}/${{ needs.define_env.outputs.IMAGE_NAME }}:${{ matrix.image }} .
-            docker push ${{ needs.define_env.outputs.DOCKER_HOST }}/${{ needs.define_env.outputs.DOCKER_NAMESPACE }}/${{ needs.define_env.outputs.IMAGE_NAME }}:${{ matrix.image }}
+            docker build -f docker/spring/Dockerfile -t ${{ needs.define_env.outputs.DOCKER_HOST }}/${{ needs.define_env.outputs.DOCKER_NAMESPACE }}/${{ needs.define_env.outputs.IMAGE_NAME }}:spring .
+            docker push ${{ needs.define_env.outputs.DOCKER_HOST }}/${{ needs.define_env.outputs.DOCKER_NAMESPACE }}/${{ needs.define_env.outputs.IMAGE_NAME }}:spring
             docker image prune -f
 
   deploy:
