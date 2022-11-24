@@ -34,8 +34,8 @@ class TestController {
     }
 
     @GetMapping("/healthcheck")
-    fun healthCheck(): Nothing? {
-        return null
+    fun healthCheck(): String {
+        return ""
     }
     
     @NormalUser
