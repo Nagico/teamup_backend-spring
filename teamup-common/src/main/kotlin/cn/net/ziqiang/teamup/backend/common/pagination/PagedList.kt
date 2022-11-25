@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.common.pagenation
+package cn.net.ziqiang.teamup.backend.common.pagination
 
 import org.springframework.data.domain.Page
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder

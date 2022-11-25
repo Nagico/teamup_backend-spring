@@ -6,7 +6,7 @@ import cn.net.ziqiang.teamup.backend.common.constant.type.ReportType
 import cn.net.ziqiang.teamup.backend.common.dto.report.ReportManagerDto
 import cn.net.ziqiang.teamup.backend.common.dto.report.ReportUserDto
 import cn.net.ziqiang.teamup.backend.common.entity.Report
-import cn.net.ziqiang.teamup.backend.common.pagenation.PagedList
+import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.common.util.handleSort
 import cn.net.ziqiang.teamup.backend.service.service.report.ReportService
 import cn.net.ziqiang.teamup.backend.web.annotation.permission.Owner

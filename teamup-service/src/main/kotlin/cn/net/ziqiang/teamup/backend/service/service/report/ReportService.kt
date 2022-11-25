@@ -4,7 +4,7 @@ import cn.net.ziqiang.teamup.backend.common.dto.report.ReportManagerDto
 import cn.net.ziqiang.teamup.backend.common.dto.report.ReportUserDto
 import cn.net.ziqiang.teamup.backend.common.entity.Report
 import cn.net.ziqiang.teamup.backend.common.entity.User
-import cn.net.ziqiang.teamup.backend.common.pagenation.PagedList
+import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import org.springframework.data.domain.PageRequest
 
 interface ReportService {

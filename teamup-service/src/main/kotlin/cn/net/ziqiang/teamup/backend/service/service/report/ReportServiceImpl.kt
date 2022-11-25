@@ -8,7 +8,7 @@ import cn.net.ziqiang.teamup.backend.common.dto.report.ReportUserDto
 import cn.net.ziqiang.teamup.backend.common.entity.Report
 import cn.net.ziqiang.teamup.backend.common.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
-import cn.net.ziqiang.teamup.backend.common.pagenation.PagedList
+import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.dao.repository.ReportRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
