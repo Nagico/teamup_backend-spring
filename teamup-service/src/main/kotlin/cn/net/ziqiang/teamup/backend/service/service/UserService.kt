@@ -1,9 +1,10 @@
-package cn.net.ziqiang.teamup.backend.service.service.user
+package cn.net.ziqiang.teamup.backend.service.service
 
-import cn.net.ziqiang.teamup.backend.common.pojo.dto.user.UpdateUserProfileDto
+import cn.net.ziqiang.teamup.backend.common.pojo.auth.TokenBean
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.UserInfoVO
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.UserProfileVO
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.RegisterDto
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.ResetPasswordDto
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.*
 import org.springframework.web.multipart.MultipartFile
 
 interface UserService {
@@ -72,4 +73,41 @@ interface UserService {
      * @return
      */
     fun countByUsername(username: String?): Int
+
+    /**
+     * 检查手机号数量
+     *
+     * @param phone 待检测手机号
+     * @return
+     */
+    fun countByPhone(phone: String?): Int
+
+    /**
+     * 用户名密码注册
+     *
+     * @return
+     */
+    fun register(registerDto: RegisterDto): TokenBean
+
+    /**
+     * 重置密码
+     *
+     * @param resetPasswordDto
+     */
+    fun resetPassword(resetPasswordDto: ResetPasswordDto)
+
+    /**
+     * 修改密码
+     *
+     * @param changePasswordDto
+     */
+    fun changePassword(userId: Long, changePasswordDto: ChangePasswordDto)
+
+    /**
+     * 修改手机号
+     *
+     * @param userId
+     * @param changePhoneDto
+     */
+    fun changePhone(userId: Long, changePhoneDto: ChangePhoneDto)
 }

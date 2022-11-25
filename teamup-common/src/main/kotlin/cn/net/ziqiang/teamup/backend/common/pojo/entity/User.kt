@@ -2,6 +2,7 @@ package cn.net.ziqiang.teamup.backend.common.pojo.entity
 
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.data.annotation.CreatedDate
 import java.io.Serializable
@@ -23,6 +24,11 @@ class User(
     @Column(name = "username", nullable = false)
     @Schema(description = "用户名")
     var username: String = "",
+
+    @Column(name = "password", nullable = false)
+    @Schema(description = "密码")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    var password: String = "",
 
     @Column(name = "student_id")
     @Schema(description = "学号")

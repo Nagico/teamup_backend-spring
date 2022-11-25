@@ -5,7 +5,7 @@ import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
-import cn.net.ziqiang.teamup.backend.service.service.user.UserService
+import cn.net.ziqiang.teamup.backend.service.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component

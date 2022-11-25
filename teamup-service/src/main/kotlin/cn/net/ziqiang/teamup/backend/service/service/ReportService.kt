@@ -1,7 +1,7 @@
-package cn.net.ziqiang.teamup.backend.service.service.report
+package cn.net.ziqiang.teamup.backend.service.service
 
-import cn.net.ziqiang.teamup.backend.common.pojo.dto.report.ReportManagerDto
-import cn.net.ziqiang.teamup.backend.common.pojo.dto.report.ReportUserDto
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.report.ReportManagerDto
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.report.ReportUserDto
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Report
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.pagination.PagedList

@@ -63,6 +63,31 @@
       "type": "java.lang.String",
       "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.OssProperties",
       "description": "阿里云OSS Bucket name."
+    },
+
+    {
+      "name": "aliyun.sms.accessKeyId",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.SmsProperties",
+      "description": "阿里云SMS Access Key ID."
+    },
+    {
+      "name": "aliyun.sms.accessKeySecret",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.SmsProperties",
+      "description": "阿里云SMS Access Key Secret."
+    },
+    {
+      "name": "aliyun.sms.signName",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.SmsProperties",
+      "description": "阿里云SMS 签名."
+    },
+    {
+      "name": "aliyun.sms.templateCode",
+      "type": "java.util.List<cn.net.ziqiang.teamup.backend.service.properties.SmsProperties.TemplateCode>",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.SmsProperties",
+      "description": "阿里云SMS 消息模板."
     }
   ]
 }

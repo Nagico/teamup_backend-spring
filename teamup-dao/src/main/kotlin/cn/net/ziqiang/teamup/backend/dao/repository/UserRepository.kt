@@ -7,4 +7,10 @@ interface UserRepository : JpaRepository<User, Long> {
     fun findByOpenid(openid: String): User?
 
     fun countByUsername(username: String): Int
+
+    fun countByPhone(phone: String): Int
+
+    fun findByUsername(username: String): User?
+
+    fun findByPhone(phone: String): User?
 }

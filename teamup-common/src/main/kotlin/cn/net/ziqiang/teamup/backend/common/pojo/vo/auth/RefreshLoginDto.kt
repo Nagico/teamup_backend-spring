@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.common.pojo.dto.auth
+package cn.net.ziqiang.teamup.backend.common.pojo.vo.auth
 
 import javax.validation.constraints.NotEmpty
 

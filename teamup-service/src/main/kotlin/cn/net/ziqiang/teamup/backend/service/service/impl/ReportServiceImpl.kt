@@ -1,15 +1,16 @@
-package cn.net.ziqiang.teamup.backend.service.service.report
+package cn.net.ziqiang.teamup.backend.service.service.impl
 
 import cn.net.ziqiang.teamup.backend.common.constant.status.ReportStatus
 import cn.net.ziqiang.teamup.backend.common.constant.type.ReportType
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
-import cn.net.ziqiang.teamup.backend.common.pojo.dto.report.ReportManagerDto
-import cn.net.ziqiang.teamup.backend.common.pojo.dto.report.ReportUserDto
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.report.ReportManagerDto
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.report.ReportUserDto
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Report
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.dao.repository.ReportRepository
+import cn.net.ziqiang.teamup.backend.service.service.ReportService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service

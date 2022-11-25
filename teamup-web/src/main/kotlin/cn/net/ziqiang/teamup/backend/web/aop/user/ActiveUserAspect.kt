@@ -1,6 +1,6 @@
 package cn.net.ziqiang.teamup.backend.web.aop.user
 
-import cn.net.ziqiang.teamup.backend.service.service.user.UserService
+import cn.net.ziqiang.teamup.backend.service.service.UserService
 import cn.net.ziqiang.teamup.backend.web.security.SecurityContextUtils
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around

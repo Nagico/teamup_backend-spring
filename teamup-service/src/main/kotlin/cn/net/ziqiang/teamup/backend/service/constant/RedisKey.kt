@@ -19,6 +19,15 @@ object RedisKey {
     fun refreshToken(refreshToken: String): String {
         return "auth.refreshToken::refreshToken=$refreshToken"
     }
-
     //endregion
+
+    // region sms
+    fun smsVerifyCodeKey(phone: String): String {
+        return "sms.smsVerifyCode::phone=$phone"
+    }
+
+    fun phoneStatusKey(phone: String): String {
+        return "sms.phoneStatus::phone=$phone"
+    }
+    // endregion
 }

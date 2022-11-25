@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.service.service.log
+package cn.net.ziqiang.teamup.backend.service.service
 
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.ExceptionLog
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.RequestLog

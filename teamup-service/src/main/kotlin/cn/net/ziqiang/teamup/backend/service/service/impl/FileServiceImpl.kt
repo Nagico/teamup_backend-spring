@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.service.service.file
+package cn.net.ziqiang.teamup.backend.service.service.impl
 
 import cn.net.ziqiang.teamup.backend.common.constant.type.FileType
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
@@ -9,6 +9,7 @@ import cn.net.ziqiang.teamup.backend.dao.repository.FileRepository
 import cn.net.ziqiang.teamup.backend.service.business.OssBusiness
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.file.OssCallbackVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.file.OssTokenVO
+import cn.net.ziqiang.teamup.backend.service.service.FileService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

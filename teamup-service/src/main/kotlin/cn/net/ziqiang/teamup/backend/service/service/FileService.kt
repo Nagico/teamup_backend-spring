@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.service.service.file
+package cn.net.ziqiang.teamup.backend.service.service
 
 import cn.net.ziqiang.teamup.backend.common.constant.type.FileType
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.File

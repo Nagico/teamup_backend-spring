@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.service.service.user.impl
+package cn.net.ziqiang.teamup.backend.service.service.impl
 
 import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j
 import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j.Companion.logger
@@ -11,10 +11,12 @@ import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.common.util.JwtUtils
+import cn.net.ziqiang.teamup.backend.common.util.SecurityUtils
 import cn.net.ziqiang.teamup.backend.dao.repository.UserRepository
-import cn.net.ziqiang.teamup.backend.service.cache.AuthCenterCacheManager
+import cn.net.ziqiang.teamup.backend.service.cache.AuthCacheManager
 import cn.net.ziqiang.teamup.backend.service.properties.JwtProperties
-import cn.net.ziqiang.teamup.backend.service.service.user.AuthService
+import cn.net.ziqiang.teamup.backend.service.service.AuthService
+import cn.net.ziqiang.teamup.backend.service.service.SmsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
@@ -22,14 +24,14 @@ import java.util.*
 @Slf4j
 @Service
 class AuthServiceImpl: AuthService {
-//    @Autowired
-//    lateinit var wechatServiceManager: WechatServiceManager
     @Autowired
-    lateinit var userRepository: UserRepository
+    private lateinit var userRepository: UserRepository
     @Autowired
-    lateinit var jwtProperties: JwtProperties
+    private lateinit var jwtProperties: JwtProperties
     @Autowired
-    lateinit var authCenterCacheManager: AuthCenterCacheManager
+    private lateinit var authCacheManager: AuthCacheManager
+    @Autowired
+    private lateinit var smsService: SmsService
 
     //region implementation
     override fun loginWechat(code: String, iv: String, encryptedString: String): TokenBean {
@@ -62,20 +64,28 @@ class AuthServiceImpl: AuthService {
             logger.info("新用户: $user")
         }
 
-        val generatedToken = generateToken(user)
-        generatedToken.user = user
-        authCenterCacheManager.setToken(userId = user.id!!, tokenBean = generatedToken)
+        //返回新的token
+        return generateToken(user)
+    }
+
+    override fun loginPassword(phone: String, password: String): TokenBean {
+        val user = userRepository.findByPhone(phone = phone)
+            ?: throw ApiException(ResultType.UsernameNotExist, "手机号不存在")
+
+        if (!SecurityUtils.matches(password = password, encodedPassword = user.password)) {
+            throw ApiException(ResultType.PasswordWrong)
+        }
 
         //返回新的token
-        return generatedToken
+        return generateToken(user)
     }
 
     override fun refreshToken(refreshToken: String): TokenBean {
-        authCenterCacheManager.getRefreshToken(refreshToken = refreshToken)
+        authCacheManager.getRefreshToken(refreshToken = refreshToken)
             ?: throw ApiException(ResultType.TokenInvalid)
 
         //验证成功后立刻删掉
-        authCenterCacheManager.deleteRefreshToken(refreshToken = refreshToken)
+        authCacheManager.deleteRefreshToken(refreshToken = refreshToken)
 
         //解析jwt
         val jwtPayloadInfo =
@@ -90,13 +100,13 @@ class AuthServiceImpl: AuthService {
 
         newTokenBean.user = user
 
-        authCenterCacheManager.setToken(userId = jwtPayload.userId, tokenBean = newTokenBean)
+        authCacheManager.setToken(userId = jwtPayload.userId, tokenBean = newTokenBean)
 
         return newTokenBean
     }
 
     override fun getAuthToken(userId: Long): String? {
-        return authCenterCacheManager.getAuthToken(userId = userId)
+        return authCacheManager.getAuthToken(userId = userId)
     }
 
     //endregion
@@ -121,8 +131,11 @@ class AuthServiceImpl: AuthService {
         return TokenBean(access = bearerToken, refresh = refreshToken)
     }
 
-    fun generateToken(user: User): TokenBean {
-        return generateToken(userId = user.id!!, role = user.role)
+    override fun generateToken(user: User): TokenBean {
+        return generateToken(userId = user.id!!, role = user.role).apply {
+            this.user = user
+            authCacheManager.setToken(userId = user.id!!, tokenBean = this)
+        }
     }
 
     //endregion

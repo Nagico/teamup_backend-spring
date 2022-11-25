@@ -85,6 +85,10 @@ class ApiExceptionHandler {
             return ResultVO.fail(ResultType.HeaderNotAcceptable, "仅支持application/json格式")
         }
 
+        if (e is org.springframework.http.converter.HttpMessageNotReadableException) {
+            return ResultVO.fail(ResultType.JSONParseFailed, "JSON解析失败")
+        }
+
         logger.info(e.stackTraceToString())
         val eid = notifySentry(e)
         logAspect.logException(null, e, eid)

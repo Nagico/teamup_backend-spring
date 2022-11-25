@@ -3,12 +3,12 @@ package cn.net.ziqiang.teamup.backend.web.controller
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import cn.net.ziqiang.teamup.backend.common.constant.status.ReportStatus
 import cn.net.ziqiang.teamup.backend.common.constant.type.ReportType
-import cn.net.ziqiang.teamup.backend.common.pojo.dto.report.ReportManagerDto
-import cn.net.ziqiang.teamup.backend.common.pojo.dto.report.ReportUserDto
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.report.ReportManagerDto
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.report.ReportUserDto
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Report
 import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.common.util.handleSort
-import cn.net.ziqiang.teamup.backend.service.service.report.ReportService
+import cn.net.ziqiang.teamup.backend.service.service.ReportService
 import cn.net.ziqiang.teamup.backend.web.annotation.permission.Owner
 import cn.net.ziqiang.teamup.backend.web.annotation.permission.OwnerOrManager
 import cn.net.ziqiang.teamup.backend.web.annotation.role.AllowRole

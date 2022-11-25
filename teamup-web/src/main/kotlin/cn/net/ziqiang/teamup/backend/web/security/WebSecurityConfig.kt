@@ -1,7 +1,7 @@
 package cn.net.ziqiang.teamup.backend.web.security
 
 import cn.net.ziqiang.teamup.backend.service.properties.JwtProperties
-import cn.net.ziqiang.teamup.backend.service.service.user.AuthService
+import cn.net.ziqiang.teamup.backend.service.service.AuthService
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder

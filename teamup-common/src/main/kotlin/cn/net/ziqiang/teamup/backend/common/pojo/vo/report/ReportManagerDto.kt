@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.common.pojo.dto.report
+package cn.net.ziqiang.teamup.backend.common.pojo.vo.report
 
 import cn.net.ziqiang.teamup.backend.common.constant.status.ReportStatus
 import io.swagger.v3.oas.annotations.media.Schema

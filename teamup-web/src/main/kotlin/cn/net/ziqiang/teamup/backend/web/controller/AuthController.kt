@@ -1,10 +1,7 @@
 package cn.net.ziqiang.teamup.backend.web.controller
 
-import cn.net.ziqiang.teamup.backend.common.pojo.dto.auth.OpenidLoginDto
-import cn.net.ziqiang.teamup.backend.common.pojo.dto.auth.RefreshLoginDto
-import cn.net.ziqiang.teamup.backend.common.pojo.dto.auth.WechatLoginDto
-import cn.net.ziqiang.teamup.backend.service.service.user.AuthService
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.auth.AuthVO
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.auth.*
+import cn.net.ziqiang.teamup.backend.service.service.AuthService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,12 +14,13 @@ import javax.validation.Valid
 
 @Tag(name = "鉴权")
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/auth")
 class AuthController {
     @Autowired
     private lateinit var authService: AuthService
 
     @PermitAll
+    @Deprecated("暂停微信登录")
     @Operation(summary = "微信登录")
     @PostMapping("/wechat")
     fun loginWechat(@Valid @RequestBody dto: WechatLoginDto): AuthVO {
@@ -32,6 +30,7 @@ class AuthController {
     }
 
     @PermitAll
+    @Deprecated("暂停微信登录")
     @Operation(summary = "微信openid登录")
     @PostMapping("/openid")
     fun loginOpenId(@Valid @RequestBody dto: OpenidLoginDto): AuthVO {
@@ -41,9 +40,16 @@ class AuthController {
     }
 
     @PermitAll
+    @Operation(summary = "手机号密码登录")
+    @PostMapping("/login")
+    fun loginPassword(@Valid @RequestBody dto: PasswordLoginDto): AuthVO {
+        return AuthVO(authService.loginPassword(dto.phone, dto.password))
+    }
+
+    @PermitAll
     @Operation(summary = "刷新token")
     @PostMapping("/refresh")
-    fun refresh(@RequestBody @Valid dto: RefreshLoginDto): AuthVO {
+    fun refresh(@Valid @RequestBody dto: RefreshLoginDto): AuthVO {
         val tokenBean = authService.refreshToken(refreshToken = dto.refresh)
         return AuthVO(tokenBean)
     }

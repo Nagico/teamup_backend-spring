@@ -28,6 +28,13 @@ aliyun:
     accessKeySecret: ${ALIYUN_OSS_KEY_SECRET}
     endpoint: oss-cn-hangzhou.aliyuncs.com
     bucketName: zq-teamup
+  sms:
+    accessKeyId: ${ALIYUN_SMS_KEY_ID}
+    accessKeySecret: ${ALIYUN_SMS_KEY_SECRET}
+    signName: 自强Studio
+    templateCode:
+      - name: verifyCode
+        code: SMS_209826176
 
 sentry:
   traces-sample-rate: 1.0

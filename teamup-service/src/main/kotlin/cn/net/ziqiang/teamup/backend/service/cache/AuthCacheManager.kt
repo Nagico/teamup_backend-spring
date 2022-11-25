@@ -9,7 +9,7 @@ import java.time.Duration
 
 
 @Component
-class AuthCenterCacheManager {
+class AuthCacheManager {
     @Autowired
     private lateinit var redisTemplate: RedisTemplate<String, Any>
 
@@ -71,5 +71,4 @@ class AuthCenterCacheManager {
         setAuthToken(userId = userId, token = tokenBean.access)
         setRefreshToken(refreshToken = tokenBean.refresh)
     }
-
 }
