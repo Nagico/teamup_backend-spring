@@ -32,6 +32,10 @@ class User(
     @Schema(description = "学院")
     var faculty: String? = null,
 
+    @Column(name = "grade")
+    @Schema(description = "年级")
+    var grade: String? = null,
+
     @Column(name = "phone")
     @Schema(description = "手机")
     var phone: String? = null,

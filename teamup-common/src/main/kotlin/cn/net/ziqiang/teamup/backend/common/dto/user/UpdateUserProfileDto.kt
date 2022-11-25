@@ -19,5 +19,8 @@ data class UpdateUserProfileDto(
     var phone: String = "",
 
     @Schema(description = "学院")
-    var faculty: String = ""
+    var faculty: String = "",
+
+    @Schema(description = "年级")
+    var grade: String = "",
 )

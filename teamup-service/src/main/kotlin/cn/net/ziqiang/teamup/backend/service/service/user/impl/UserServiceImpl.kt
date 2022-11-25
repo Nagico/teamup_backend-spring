@@ -59,11 +59,9 @@ class UserServiceImpl : UserService{
         BeanUtil.copyProperties(user, copiedUser)
 
         // 检测激活
-        if (
-            !dto.realName.isNullOrEmpty() &&
-            !dto.username.isNullOrEmpty() &&
-            !dto.phone.isNullOrEmpty() &&
-            !dto.faculty.isNullOrEmpty()
+        if (dto.realName.isNotEmpty() && dto.username.isNotEmpty() &&
+            dto.phone.isNotEmpty() && dto.faculty.isNotEmpty() &&
+            dto.grade.isNotEmpty()
         ) {
             copiedUser.active = true
         } else {
@@ -71,17 +69,19 @@ class UserServiceImpl : UserService{
         }
 
         // 更新
-        if (!dto.realName.isNullOrEmpty() && dto.realName != user.realName)
+        if (dto.realName.isNotEmpty() && dto.realName != user.realName)
             copiedUser.realName = dto.realName
-        if (!dto.username.isNullOrEmpty() && dto.username != user.username) {
+        if (dto.username.isNotEmpty() && dto.username != user.username) {
             copiedUser.username = dto.username
             if (countByUsername(dto.username) > 0)  // 检测重复
                 throw ApiException(type = ResultType.ParamValidationFailed, message = "用户名已存在")
         }
-        if (!dto.phone.isNullOrEmpty() && dto.phone != user.phone)
+        if (dto.phone.isNotEmpty() && dto.phone != user.phone)
             copiedUser.phone = dto.phone
-        if (!dto.faculty.isNullOrEmpty() && dto.faculty != user.faculty)
+        if (dto.faculty.isNotEmpty() && dto.faculty != user.faculty)
             copiedUser.faculty = dto.faculty
+        if (dto.grade.isNotEmpty() && dto.grade != user.grade)
+            copiedUser.grade = dto.grade
         userRepository.save(copiedUser)
         userCacheManager.setUserCache(copiedUser)
 
