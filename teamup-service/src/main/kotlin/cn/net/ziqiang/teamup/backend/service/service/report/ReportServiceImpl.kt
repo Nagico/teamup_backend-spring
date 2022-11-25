@@ -10,7 +10,6 @@ import cn.net.ziqiang.teamup.backend.common.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.common.pagenation.PagedList
 import cn.net.ziqiang.teamup.backend.dao.repository.ReportRepository
-import cn.net.ziqiang.teamup.backend.service.util.PermissionUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -75,8 +74,6 @@ class ReportServiceImpl : ReportService {
     }
 
     override fun getReport(reportId: Long): Report {
-        val res =  reportRepository.findById(reportId).orElse(null) ?: throw ApiException(ResultType.ResourceNotFound)
-        PermissionUtil.checkPermission("report", res)
-        return res
+        return reportRepository.findById(reportId).orElseThrow { ApiException(ResultType.ResourceNotFound) }.checkPermission()
     }
 }

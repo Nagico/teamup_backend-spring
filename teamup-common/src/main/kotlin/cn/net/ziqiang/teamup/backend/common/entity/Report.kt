@@ -1,5 +1,6 @@
 package cn.net.ziqiang.teamup.backend.common.entity
 
+import cn.net.ziqiang.teamup.backend.common.bean.entity.PermissionChecker
 import cn.net.ziqiang.teamup.backend.common.constant.status.ReportStatus
 import cn.net.ziqiang.teamup.backend.common.constant.type.ReportType
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -44,4 +45,4 @@ class Report(
 
     @Column(name = "create_time")
     var createTime: Date? = null,
-)
+): PermissionChecker<Report>("report")

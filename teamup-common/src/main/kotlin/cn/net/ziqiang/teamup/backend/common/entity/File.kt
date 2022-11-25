@@ -1,5 +1,6 @@
 package cn.net.ziqiang.teamup.backend.common.entity
 
+import cn.net.ziqiang.teamup.backend.common.bean.entity.PermissionChecker
 import cn.net.ziqiang.teamup.backend.common.constant.type.FileType
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.*
@@ -41,7 +42,7 @@ class File (
     @Column(name = "create_time")
     @Schema(description = "创建时间")
     var createTime: Date? = null,
-) {
+): PermissionChecker<File>("file") {
     override fun toString(): String {
         return "File(id=$id, name='$name')"
     }

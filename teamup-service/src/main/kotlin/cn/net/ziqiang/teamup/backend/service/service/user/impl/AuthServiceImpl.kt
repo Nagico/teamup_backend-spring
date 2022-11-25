@@ -10,7 +10,7 @@ import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import cn.net.ziqiang.teamup.backend.common.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
-import cn.net.ziqiang.teamup.backend.common.utils.auth.JwtUtils
+import cn.net.ziqiang.teamup.backend.common.util.JwtUtils
 import cn.net.ziqiang.teamup.backend.dao.repository.UserRepository
 import cn.net.ziqiang.teamup.backend.service.cache.AuthCenterCacheManager
 import cn.net.ziqiang.teamup.backend.service.properties.JwtProperties

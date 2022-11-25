@@ -16,6 +16,20 @@ interface FileService {
     fun getFile(id: Long): File
 
     /**
+     * 删除文件
+     *
+     * @param id
+     */
+    fun deleteFile(id: Long)
+
+    /**
+     * 文件过期
+     *
+     * @param id
+     */
+    fun expireFile(id: Long)
+
+    /**
      * 生成直传Token
      *
      * @param user

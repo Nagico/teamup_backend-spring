@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.service.util
+package cn.net.ziqiang.teamup.backend.common.util
 
 import java.text.SimpleDateFormat
 import java.util.*

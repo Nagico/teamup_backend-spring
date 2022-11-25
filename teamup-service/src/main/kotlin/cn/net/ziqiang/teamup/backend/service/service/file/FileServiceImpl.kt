@@ -22,7 +22,21 @@ class FileServiceImpl : FileService {
     @Autowired
     private lateinit var fileRepository: FileRepository
     override fun getFile(id: Long): File {
-        return fileRepository.findById(id).orElseThrow { ApiException(ResultType.ResourceNotFound) }
+        return fileRepository.findById(id).orElseThrow { ApiException(ResultType.ResourceNotFound) }.checkPermission()
+    }
+
+    override fun deleteFile(id: Long) {
+        fileRepository.delete(getFile(id))
+    }
+
+    override fun expireFile(id: Long) {
+        val file = getFile(id)
+        file.expired = true
+        try {
+            ossBusiness.deleteFileByUrl(file.url)
+        } catch (_: Exception) { }
+
+        fileRepository.save(file)
     }
 
     @Transactional

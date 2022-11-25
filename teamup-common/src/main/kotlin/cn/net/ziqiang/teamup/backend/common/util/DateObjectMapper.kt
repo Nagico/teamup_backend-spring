@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.common.utils.date
+package cn.net.ziqiang.teamup.backend.common.util
 
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.annotation.Bean

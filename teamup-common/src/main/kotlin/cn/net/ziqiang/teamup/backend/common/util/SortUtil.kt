@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.common.utils.sort
+package cn.net.ziqiang.teamup.backend.common.util
 
 import org.springframework.data.domain.Sort
 

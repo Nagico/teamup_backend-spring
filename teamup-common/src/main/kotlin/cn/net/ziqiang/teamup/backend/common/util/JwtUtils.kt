@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.common.utils.auth
+package cn.net.ziqiang.teamup.backend.common.util
 
 import cn.hutool.core.bean.BeanUtil
 import cn.hutool.core.date.DateField

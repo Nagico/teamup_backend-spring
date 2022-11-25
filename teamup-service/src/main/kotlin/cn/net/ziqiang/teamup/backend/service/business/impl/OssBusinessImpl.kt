@@ -8,7 +8,7 @@ import cn.net.ziqiang.teamup.backend.service.annotation.Business
 import cn.net.ziqiang.teamup.backend.service.business.OssBusiness
 import cn.net.ziqiang.teamup.backend.service.cache.OssCacheManager
 import cn.net.ziqiang.teamup.backend.service.properties.OssProperties
-import cn.net.ziqiang.teamup.backend.service.util.FileUtil
+import cn.net.ziqiang.teamup.backend.common.util.FileUtil
 import cn.net.ziqiang.teamup.backend.service.vo.file.OssTokenVO
 import com.alibaba.fastjson.JSONObject
 import com.aliyun.oss.OSS

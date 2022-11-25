@@ -2,7 +2,7 @@ package cn.net.ziqiang.teamup.backend.web.security
 
 
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
-import cn.net.ziqiang.teamup.backend.common.utils.auth.JwtUtils
+import cn.net.ziqiang.teamup.backend.common.util.JwtUtils
 import cn.net.ziqiang.teamup.backend.service.service.user.AuthService
 import org.apache.logging.log4j.util.Strings
 import org.springframework.http.HttpHeaders
