@@ -2,6 +2,7 @@ package cn.net.ziqiang.teamup.backend.service.vo
 
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import com.fasterxml.jackson.annotation.JsonIgnore
+import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.http.HttpStatus
 
 /**
@@ -12,9 +13,13 @@ import org.springframework.http.HttpStatus
  * @property message 响应消息
  * @property data 响应内容
  */
+@Schema(description = "响应VO")
 data class ResultVO<T>(
+    @Schema(description = "响应代码")
     var code: String,
+    @Schema(description = "反馈消息")
     var message: String,
+    @Schema(description = "数据")
     var data: T?,
     @JsonIgnore var httpStatus: HttpStatus,
 ) {
