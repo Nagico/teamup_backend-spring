@@ -42,7 +42,7 @@ class FileServiceImpl : FileService {
         return ossBusiness.generateToken(
             fileName = fileName,
             path = Path.of("media", type.string),
-            callbackPath = "/file/${file.id}/callback/"
+            callbackPath = "/files/${file.id}/callback/"
         )
     }
 
