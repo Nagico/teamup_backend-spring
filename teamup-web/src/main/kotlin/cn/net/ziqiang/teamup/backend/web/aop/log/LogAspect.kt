@@ -48,14 +48,14 @@ class LogAspect {
         return result
     }
 
-    @AfterThrowing(pointcut = "execution(* cn.net.ziqiang.teamup.backend.web.controller.*.*(..))", throwing = "ex")
-    fun logException(joinPoint: JoinPoint?, ex: Throwable) {
+    //@AfterThrowing(pointcut = "execution(* cn.net.ziqiang.teamup.backend.web.controller.*.*(..))", throwing = "ex")
+    fun logException(joinPoint: JoinPoint?, ex: Throwable, eid: String) {
         val request = (RequestContextHolder.getRequestAttributes() as ServletRequestAttributes).request
 
-        request.setAttribute("alreadyLogged", true)
         thread {
             val log = ExceptionLog()
             prepareRequestLog(log, joinPoint, request)
+            log.eid = eid
             log.time = null
             log.createTime = Date()
             log.classType = ex::class.java.name

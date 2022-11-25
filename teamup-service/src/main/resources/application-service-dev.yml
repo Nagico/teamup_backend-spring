@@ -29,3 +29,6 @@ aliyun:
     endpoint: oss-cn-hangzhou.aliyuncs.com
     bucketName: zq-teamup
 
+sentry:
+  traces-sample-rate: 1.0
+  send-default-pii: true

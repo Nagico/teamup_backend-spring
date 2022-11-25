@@ -6,6 +6,8 @@ import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.service.vo.ResultVO
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.web.aop.log.LogAspect
+import cn.net.ziqiang.teamup.backend.web.security.SecurityContextUtils
+import io.sentry.Sentry
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
@@ -30,6 +32,13 @@ class ApiExceptionHandler {
     @ExceptionHandler(ApiException::class)
     fun handleApiException(e: ApiException): ResultVO<String> {
         logger.error(e.message)
+
+        if (e.type.record) {
+            logger.info(e.stackTraceToString())
+            val eid = notifySentry(e)
+            logAspect.logException(null, e, eid)
+        }
+
         return ResultVO.fail(e.code, e.message, e.httpStatus)
     }
 
@@ -76,16 +85,34 @@ class ApiExceptionHandler {
             return ResultVO.fail(ResultType.HeaderNotAcceptable, "仅支持application/json格式")
         }
 
-        if (logger.isInfoEnabled) {
-            logger.info(e.stackTraceToString())
-
-            val request = (RequestContextHolder.getRequestAttributes() as ServletRequestAttributes).request
-
-            if (request.getAttribute("alreadyLogged") == null) {
-                logAspect.logException(null, e)
-            }
-        }
+        logger.info(e.stackTraceToString())
+        val eid = notifySentry(e)
+        logAspect.logException(null, e, eid)
 
         return ResultVO(ResultType.ServerError.code, ResultType.ServerError.message, e.message, ResultType.ServerError.httpStatus)
     }
+
+    // region Utils
+    fun notifySentry(e: Exception) : String {
+        val user = SecurityContextUtils.userOrNull
+        if (user == null) {
+            Sentry.configureScope { scope -> scope.setTag("role", "Anonymous") }
+        } else {
+            Sentry.configureScope { scope -> scope.setTag("role", user.role.toString()) }
+        }
+
+        if (e is ApiException) {
+            Sentry.configureScope { scope ->
+                run {
+                    scope.setExtra("code", e.code)
+                    scope.setExtra("type", e.type.toString())
+                    scope.setExtra("message", e.message)
+                }
+            }
+        }
+
+        return Sentry.captureException(e).toString()
+    }
+
+    // endregion
 }

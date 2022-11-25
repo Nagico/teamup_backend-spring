@@ -20,10 +20,16 @@ springBoot {
 allprojects {
 	repositories {
 		maven {
-			setUrl("https://maven.aliyun.com/repository/public/")
+			setUrl("https://mirrors.163.com/maven/repository/maven-public/")
+			content {
+				includeGroup("io.sentry")
+			}
 		}
 		maven {
-			setUrl("https://maven.aliyun.com/repository/spring/")
+			setUrl("https://maven.aliyun.com/repository/public")
+		}
+		maven {
+			setUrl("https://maven.aliyun.com/repository/spring")
 		}
 		maven {
 			setUrl("https://maven.aliyun.com/repository/spring-plugin")
@@ -100,6 +106,9 @@ subprojects {
 
 		// MYSQL
 		runtimeOnly("com.mysql:mysql-connector-j")
+
+		// Sentry
+		implementation("io.sentry:sentry-spring-boot-starter:6.8.0")
 
 		// 测试
 		testImplementation("org.springframework.boot:spring-boot-starter-test")

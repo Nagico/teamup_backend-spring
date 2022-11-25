@@ -9,6 +9,10 @@ import javax.persistence.Lob
 @Entity(name = "exception_log")
 @DiscriminatorValue("0")
 class ExceptionLog (
+    @Column(name = "eid")
+    @Schema(description = "异常ID")
+    var eid: String? = null,
+
     @Column(name = "class_type")
     @Schema(description = "API异常类型")
     var classType: String? = null,
