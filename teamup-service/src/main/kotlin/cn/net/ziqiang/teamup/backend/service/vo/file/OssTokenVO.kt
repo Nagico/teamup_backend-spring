@@ -4,6 +4,7 @@ import java.util.*
 
 data class OssTokenVO (
     var accessKeyId: String,
+    var key: String,
     var host: String,
     var policy: String,
     var signature: String,

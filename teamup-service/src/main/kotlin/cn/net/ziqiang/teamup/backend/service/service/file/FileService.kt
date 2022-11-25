@@ -3,7 +3,7 @@ package cn.net.ziqiang.teamup.backend.service.service.file
 import cn.net.ziqiang.teamup.backend.common.constant.type.FileType
 import cn.net.ziqiang.teamup.backend.common.entity.File
 import cn.net.ziqiang.teamup.backend.common.entity.User
-import cn.net.ziqiang.teamup.backend.service.vo.file.CallbackVO
+import cn.net.ziqiang.teamup.backend.service.vo.file.OssCallbackVO
 import cn.net.ziqiang.teamup.backend.service.vo.file.OssTokenVO
 
 interface FileService {
@@ -29,8 +29,8 @@ interface FileService {
      * 验证直传回调签名
      *
      * @param fileId
-     * @param callbackVO
+     * @param ossCallbackVO
      * @return
      */
-    fun callback(fileId: Long, callbackVO: CallbackVO): File
+    fun callback(fileId: Long, ossCallbackVO: OssCallbackVO): File
 }

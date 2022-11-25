@@ -117,7 +117,8 @@ class OssBusinessImpl : OssBusiness {
             signature = postSignature,
             host = "https://${ossProperties.bucketName}.${ossProperties.endpoint}",
             expire = expiration,
-            callback = base64CallbackBody
+            callback = base64CallbackBody,
+            key = objectKey
         )
 
     }

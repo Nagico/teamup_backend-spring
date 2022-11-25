@@ -7,7 +7,7 @@ import cn.net.ziqiang.teamup.backend.common.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.dao.repository.FileRepository
 import cn.net.ziqiang.teamup.backend.service.business.OssBusiness
-import cn.net.ziqiang.teamup.backend.service.vo.file.CallbackVO
+import cn.net.ziqiang.teamup.backend.service.vo.file.OssCallbackVO
 import cn.net.ziqiang.teamup.backend.service.vo.file.OssTokenVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -47,12 +47,12 @@ class FileServiceImpl : FileService {
     }
 
     @Transactional
-    override fun callback(fileId: Long, callbackVO: CallbackVO): File {
+    override fun callback(fileId: Long, ossCallbackVO: OssCallbackVO): File {
         ossBusiness.verifyCallback()
         val file = getFile(fileId)
 
-        file.url = ossBusiness.getUrl(callbackVO.objectKey)
-        file.size = callbackVO.size
+        file.url = ossBusiness.getUrl(ossCallbackVO.objectKey)
+        file.size = ossCallbackVO.size
         file.createTime = Date()
 
         return fileRepository.save(file)

@@ -3,7 +3,7 @@ package cn.net.ziqiang.teamup.backend.web.controller
 import cn.net.ziqiang.teamup.backend.common.constant.type.FileType
 import cn.net.ziqiang.teamup.backend.common.entity.File
 import cn.net.ziqiang.teamup.backend.service.service.file.FileService
-import cn.net.ziqiang.teamup.backend.service.vo.file.CallbackVO
+import cn.net.ziqiang.teamup.backend.service.vo.file.OssCallbackVO
 import cn.net.ziqiang.teamup.backend.service.vo.file.OssTokenVO
 import cn.net.ziqiang.teamup.backend.web.annotation.user.ActiveUser
 import cn.net.ziqiang.teamup.backend.web.security.SecurityContextUtils
@@ -30,8 +30,8 @@ class FileController {
     @PostMapping("/{id}/callback")
     fun ossCallback(
         @PathVariable id: Long,
-        @RequestBody callbackVO: CallbackVO
+        @RequestBody ossCallbackVO: OssCallbackVO
     ) : File {
-        return fileService.callback(id, callbackVO)
+        return fileService.callback(id, ossCallbackVO)
     }
 }
