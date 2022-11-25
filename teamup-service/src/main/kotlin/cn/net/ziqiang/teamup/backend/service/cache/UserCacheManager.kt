@@ -1,7 +1,7 @@
 package cn.net.ziqiang.teamup.backend.service.cache
 
 
-import cn.net.ziqiang.teamup.backend.common.entity.User
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.service.constant.RedisKey
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate

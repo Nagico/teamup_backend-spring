@@ -1,6 +1,6 @@
 package cn.net.ziqiang.teamup.backend.service.business
 
-import cn.net.ziqiang.teamup.backend.service.vo.file.OssTokenVO
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.file.OssTokenVO
 import org.springframework.web.multipart.MultipartFile
 import java.io.InputStream
 import java.nio.file.Path

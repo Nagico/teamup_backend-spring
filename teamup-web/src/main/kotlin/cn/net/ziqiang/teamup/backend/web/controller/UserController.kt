@@ -1,11 +1,11 @@
 package cn.net.ziqiang.teamup.backend.web.controller
 
-import cn.net.ziqiang.teamup.backend.common.dto.user.UpdateUserProfileDto
+import cn.net.ziqiang.teamup.backend.common.pojo.dto.user.UpdateUserProfileDto
 import cn.net.ziqiang.teamup.backend.service.service.user.UserService
-import cn.net.ziqiang.teamup.backend.service.vo.user.UserInfo
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.UserInfo
 import cn.net.ziqiang.teamup.backend.web.annotation.user.NormalUser
 import cn.net.ziqiang.teamup.backend.web.security.SecurityContextUtils
-import cn.net.ziqiang.teamup.backend.service.vo.user.UserProfileVO
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.UserProfileVO
 import cn.net.ziqiang.teamup.backend.web.annotation.user.ActiveUser
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag

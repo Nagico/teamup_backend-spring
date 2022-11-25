@@ -3,9 +3,9 @@ package cn.net.ziqiang.teamup.backend.web.controller
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import cn.net.ziqiang.teamup.backend.common.constant.status.ReportStatus
 import cn.net.ziqiang.teamup.backend.common.constant.type.ReportType
-import cn.net.ziqiang.teamup.backend.common.dto.report.ReportManagerDto
-import cn.net.ziqiang.teamup.backend.common.dto.report.ReportUserDto
-import cn.net.ziqiang.teamup.backend.common.entity.Report
+import cn.net.ziqiang.teamup.backend.common.pojo.dto.report.ReportManagerDto
+import cn.net.ziqiang.teamup.backend.common.pojo.dto.report.ReportUserDto
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.Report
 import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.common.util.handleSort
 import cn.net.ziqiang.teamup.backend.service.service.report.ReportService

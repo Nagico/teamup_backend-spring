@@ -8,7 +8,7 @@ import cn.hutool.jwt.JWTPayload
 import cn.hutool.jwt.JWTUtil
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
-import cn.net.ziqiang.teamup.backend.common.bean.auth.JwtPayload
+import cn.net.ziqiang.teamup.backend.common.pojo.auth.JwtPayload
 
 
 object JwtUtils {

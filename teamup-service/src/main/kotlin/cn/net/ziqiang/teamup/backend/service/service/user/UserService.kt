@@ -1,9 +1,9 @@
 package cn.net.ziqiang.teamup.backend.service.service.user
 
-import cn.net.ziqiang.teamup.backend.common.dto.user.UpdateUserProfileDto
-import cn.net.ziqiang.teamup.backend.common.entity.User
-import cn.net.ziqiang.teamup.backend.service.vo.user.UserInfoVO
-import cn.net.ziqiang.teamup.backend.service.vo.user.UserProfileVO
+import cn.net.ziqiang.teamup.backend.common.pojo.dto.user.UpdateUserProfileDto
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.UserInfoVO
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.UserProfileVO
 import org.springframework.web.multipart.MultipartFile
 
 interface UserService {

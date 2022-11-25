@@ -1,9 +1,9 @@
 package cn.net.ziqiang.teamup.backend.web.security
 
-import cn.net.ziqiang.teamup.backend.common.bean.auth.JwtPayload
+import cn.net.ziqiang.teamup.backend.common.pojo.auth.JwtPayload
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
-import cn.net.ziqiang.teamup.backend.common.entity.User
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.service.service.user.UserService
 import org.springframework.beans.factory.annotation.Autowired

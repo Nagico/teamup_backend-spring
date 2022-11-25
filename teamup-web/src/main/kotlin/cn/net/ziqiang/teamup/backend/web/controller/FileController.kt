@@ -1,10 +1,10 @@
 package cn.net.ziqiang.teamup.backend.web.controller
 
 import cn.net.ziqiang.teamup.backend.common.constant.type.FileType
-import cn.net.ziqiang.teamup.backend.common.entity.File
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.File
 import cn.net.ziqiang.teamup.backend.service.service.file.FileService
-import cn.net.ziqiang.teamup.backend.service.vo.file.OssCallbackVO
-import cn.net.ziqiang.teamup.backend.service.vo.file.OssTokenVO
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.file.OssCallbackVO
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.file.OssTokenVO
 import cn.net.ziqiang.teamup.backend.web.annotation.permission.OwnerOrManager
 import cn.net.ziqiang.teamup.backend.web.annotation.user.ActiveUser
 import cn.net.ziqiang.teamup.backend.web.security.SecurityContextUtils

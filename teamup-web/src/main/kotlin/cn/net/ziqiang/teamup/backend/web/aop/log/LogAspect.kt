@@ -2,8 +2,8 @@ package cn.net.ziqiang.teamup.backend.web.aop.log
 
 import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j
 import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j.Companion.logger
-import cn.net.ziqiang.teamup.backend.common.entity.ExceptionLog
-import cn.net.ziqiang.teamup.backend.common.entity.RequestLog
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.ExceptionLog
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.RequestLog
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.service.service.log.LogService
 import org.aspectj.lang.JoinPoint

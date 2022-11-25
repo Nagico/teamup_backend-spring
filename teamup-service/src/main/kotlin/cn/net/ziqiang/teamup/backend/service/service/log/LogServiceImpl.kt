@@ -1,7 +1,7 @@
 package cn.net.ziqiang.teamup.backend.service.service.log
 
-import cn.net.ziqiang.teamup.backend.common.entity.ExceptionLog
-import cn.net.ziqiang.teamup.backend.common.entity.RequestLog
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.ExceptionLog
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.RequestLog
 import cn.net.ziqiang.teamup.backend.dao.repository.ExceptionLogRepository
 import cn.net.ziqiang.teamup.backend.dao.repository.RequestLogRepository
 import org.springframework.beans.factory.annotation.Autowired

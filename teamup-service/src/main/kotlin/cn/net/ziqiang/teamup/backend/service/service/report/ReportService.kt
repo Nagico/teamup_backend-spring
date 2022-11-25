@@ -1,9 +1,9 @@
 package cn.net.ziqiang.teamup.backend.service.service.report
 
-import cn.net.ziqiang.teamup.backend.common.dto.report.ReportManagerDto
-import cn.net.ziqiang.teamup.backend.common.dto.report.ReportUserDto
-import cn.net.ziqiang.teamup.backend.common.entity.Report
-import cn.net.ziqiang.teamup.backend.common.entity.User
+import cn.net.ziqiang.teamup.backend.common.pojo.dto.report.ReportManagerDto
+import cn.net.ziqiang.teamup.backend.common.pojo.dto.report.ReportUserDto
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.Report
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import org.springframework.data.domain.PageRequest
 

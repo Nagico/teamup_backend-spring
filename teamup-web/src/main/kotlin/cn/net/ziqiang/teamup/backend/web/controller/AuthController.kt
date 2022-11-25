@@ -1,10 +1,10 @@
 package cn.net.ziqiang.teamup.backend.web.controller
 
-import cn.net.ziqiang.teamup.backend.common.dto.auth.OpenidLoginDto
-import cn.net.ziqiang.teamup.backend.common.dto.auth.RefreshLoginDto
-import cn.net.ziqiang.teamup.backend.common.dto.auth.WechatLoginDto
+import cn.net.ziqiang.teamup.backend.common.pojo.dto.auth.OpenidLoginDto
+import cn.net.ziqiang.teamup.backend.common.pojo.dto.auth.RefreshLoginDto
+import cn.net.ziqiang.teamup.backend.common.pojo.dto.auth.WechatLoginDto
 import cn.net.ziqiang.teamup.backend.service.service.user.AuthService
-import cn.net.ziqiang.teamup.backend.service.vo.auth.AuthVO
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.auth.AuthVO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired

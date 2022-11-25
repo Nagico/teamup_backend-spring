@@ -2,13 +2,13 @@ package cn.net.ziqiang.teamup.backend.service.service.user.impl
 
 import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j
 import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j.Companion.logger
-import cn.net.ziqiang.teamup.backend.common.bean.auth.JwtPayload
-import cn.net.ziqiang.teamup.backend.common.bean.auth.TokenBean
+import cn.net.ziqiang.teamup.backend.common.pojo.auth.JwtPayload
+import cn.net.ziqiang.teamup.backend.common.pojo.auth.TokenBean
 import cn.net.ziqiang.teamup.backend.common.constant.FileConstant.DEFAULT_AVATAR
 import cn.net.ziqiang.teamup.backend.common.constant.type.JwtType
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
-import cn.net.ziqiang.teamup.backend.common.entity.User
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.common.util.JwtUtils
 import cn.net.ziqiang.teamup.backend.dao.repository.UserRepository

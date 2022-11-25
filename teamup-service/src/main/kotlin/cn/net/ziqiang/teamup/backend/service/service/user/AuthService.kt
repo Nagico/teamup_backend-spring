@@ -1,6 +1,6 @@
 package cn.net.ziqiang.teamup.backend.service.service.user
 
-import cn.net.ziqiang.teamup.backend.common.bean.auth.TokenBean
+import cn.net.ziqiang.teamup.backend.common.pojo.auth.TokenBean
 
 
 interface AuthService {
