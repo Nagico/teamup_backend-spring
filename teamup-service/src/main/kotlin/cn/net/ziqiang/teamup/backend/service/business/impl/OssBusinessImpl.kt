@@ -104,10 +104,7 @@ class OssBusinessImpl : OssBusiness {
         val jasonCallback = JSONObject().apply {
             put("callbackUrl", "https://api.teamup.nagico.cn$callbackPath")
             put("callbackBodyType", "application/json")
-            put("callbackBody", JSONObject().apply {
-                put("objectKey", "\${object}")
-                put("size", "\${size}")
-            }.toString())
+            put("callbackBody", "{\"size\":\${size},\"objectKey\":\${object}}")
         }
         val base64CallbackBody = BinaryUtil.toBase64String(jasonCallback.toString().toByteArray())
 
