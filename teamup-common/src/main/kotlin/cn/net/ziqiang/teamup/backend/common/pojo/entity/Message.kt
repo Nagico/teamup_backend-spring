@@ -6,5 +6,5 @@ data class Message (
     var type: MessageType,
     var content: String,
     var sender: String,
-    var receiver: String,
+    var receiver: String? = null,
 )

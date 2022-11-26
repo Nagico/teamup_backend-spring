@@ -18,22 +18,14 @@ class MessageServiceImpl : MessageService {
     @Autowired
     private lateinit var rabbitTemplate: RabbitTemplate
 
-    override fun deliverToWs(message: String): Boolean {
-        return try {
-            val msg = JSONObject.parseObject(message, Message::class.java)
-            deliverToWs(msg)
-        } catch (e: MessagingException) {
-            false
-        }
-    }
-
-    override fun deliverToWs(message: Message) : Boolean {
+    override fun deliverToWS(message: String) : Boolean {
         try {
-//            if (message.sender == "all" && message.type == MessageType.CHAT) {
-//                messagingTemplate.convertAndSend("/topic/public", message)
-//            } else
-            if (message.sender != "all" && message.type == MessageType.CHAT) {
-                messagingTemplate.convertAndSendToUser(message.receiver, "/topic/msg", message)
+            val msg = JSONObject.parseObject(message, Message::class.java)
+            if (msg.receiver == null && msg.type == MessageType.CHAT) {
+                messagingTemplate.convertAndSend("/topic/public", message)
+            } else
+            if (msg.receiver != null && msg.type == MessageType.CHAT) {
+                messagingTemplate.convertAndSendToUser(msg.receiver!!, "/topic/msg", message)
             }
         } catch (e: MessagingException) {
             e.printStackTrace()
@@ -46,7 +38,7 @@ class MessageServiceImpl : MessageService {
         rabbitTemplate.convertAndSend(
             "topicWebSocketExchange",
             "topic.public",
-            message
+            JSONObject.toJSONString(message)
         )
     }
 }

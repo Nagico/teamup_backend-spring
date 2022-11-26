@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.service.config.websocket
+package cn.net.ziqiang.teamup.backend.web.config.websocket
 
 import java.security.Principal
 

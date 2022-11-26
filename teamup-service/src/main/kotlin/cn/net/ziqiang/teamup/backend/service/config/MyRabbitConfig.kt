@@ -59,17 +59,17 @@ class MyRabbitConfig {
         //设置开启Mandatory,才能触发回调函数,无论消息推送结果怎么样都强制调用回调函数
         rabbitTemplate.setMandatory(true)
         rabbitTemplate.setConfirmCallback { correlationData, ack, cause ->
-            logger.info("ConfirmCallback:     相关数据：$correlationData")
-            logger.info("ConfirmCallback:     确认情况：$ack")
-            logger.info("ConfirmCallback:     原因：$cause")
+            logger.debug("ConfirmCallback:     相关数据：$correlationData")
+            logger.debug("ConfirmCallback:     确认情况：$ack")
+            logger.debug("ConfirmCallback:     原因：$cause")
         }
 
         rabbitTemplate.setReturnsCallback { message ->
-            logger.info("ReturnCallback:     消息：${message.message}")
-            logger.info("ReturnCallback:     回应码：${message.replyCode}")
-            logger.info("ReturnCallback:     回应信息：${message.replyText}")
-            logger.info("ReturnCallback:     交换机：${message.exchange}")
-            logger.info("ReturnCallback:     路由键：${message.routingKey}")
+            logger.debug("ReturnCallback:     消息：${message.message}")
+            logger.debug("ReturnCallback:     回应码：${message.replyCode}")
+            logger.debug("ReturnCallback:     回应信息：${message.replyText}")
+            logger.debug("ReturnCallback:     交换机：${message.exchange}")
+            logger.debug("ReturnCallback:     路由键：${message.routingKey}")
         }
         return rabbitTemplate
     }
@@ -91,9 +91,9 @@ class MyRabbitConfig {
             val body = message.body
             val msg = String(body)
             logger.info("rabbitmq收到消息 : $msg")
-            val sendToWebsocket: Boolean = messageService.deliverToWs(msg)
+            val sendToWebsocket = messageService.deliverToWS(msg)
             if (sendToWebsocket) {
-                logger.info("消息处理成功！ 已经推送到websocket！")
+                logger.debug("消息处理成功！ 已经推送到websocket！")
                 channel.basicAck(message.messageProperties.deliveryTag, true) //确认消息成功消费
             }
         })

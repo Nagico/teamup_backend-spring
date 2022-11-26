@@ -70,10 +70,11 @@ class WebSecurityConfig(
 
     fun corsConfigurationSource(): CorsConfigurationSource {
         val corsConfiguration = CorsConfiguration().apply {
-            allowedHeaders = listOf("*")
-            allowedMethods = listOf("*")
-            allowedOrigins = listOf("*")
+//            allowedHeaders = listOf("*")
+//            allowedMethods = listOf("*")
+            allowedOrigins = listOf("http://localhost:5500", "http://jxy.me")
             maxAge = 3600
+            allowCredentials = true
         }
         val source = UrlBasedCorsConfigurationSource().apply {
             registerCorsConfiguration("/**", corsConfiguration)

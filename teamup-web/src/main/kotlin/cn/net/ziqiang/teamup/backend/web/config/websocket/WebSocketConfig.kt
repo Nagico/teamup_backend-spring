@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.service.config.websocket
+package cn.net.ziqiang.teamup.backend.web.config.websocket
 
 import cn.net.ziqiang.teamup.backend.service.properties.RabbitMqProperties
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,14 +14,14 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 class WebSocketConfig : WebSocketMessageBrokerConfigurer {
     @Autowired
-    private lateinit var getHeaderParamInterceptor: GetHeaderParamInterceptor
+    private lateinit var webSocketMessageProcessor: WebSocketMessageProcessor
     @Autowired
     private lateinit var rabbitMqProperties: RabbitMqProperties
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry
             .addEndpoint("/ws")
-            .setAllowedOriginPatterns("*")
+            .setAllowedOrigins("http://localhost:5500", "http://jxy.me")
             .withSockJS()
     }
 
@@ -50,6 +50,6 @@ class WebSocketConfig : WebSocketMessageBrokerConfigurer {
      * @param registration
      */
     override fun configureClientInboundChannel(registration: ChannelRegistration) {
-        registration.interceptors(getHeaderParamInterceptor)
+        registration.interceptors(webSocketMessageProcessor)
     }
 }
