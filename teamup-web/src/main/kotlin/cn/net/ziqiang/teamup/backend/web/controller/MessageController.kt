@@ -17,7 +17,7 @@ class MessageController {
     private lateinit var messageService: MessageService
 
     /**
-     * 接收 客户端传过来的消息 通过setSender和type 来判别时单发还是群发
+     * 接收 客户端传过来的消息
      * @param message
      */
     @PermitAll
