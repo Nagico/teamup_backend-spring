@@ -3,7 +3,7 @@
 # 赛道友你 后端项目
 
 <!-- markdownlint-disable-next-line MD036 -->
-_✨ Author: [Nagico](https://github.com/Nagico/) ✨_
+_✨ Author: [Nagico](https://github.com/Nagico/), [LSX-s-Software](https://github.com/LSX-s-Software/) ✨_
 </div>
 
 <p align="center">
