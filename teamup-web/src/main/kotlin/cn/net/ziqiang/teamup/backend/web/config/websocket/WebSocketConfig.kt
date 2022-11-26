@@ -1,6 +1,7 @@
 package cn.net.ziqiang.teamup.backend.web.config.websocket
 
 import cn.net.ziqiang.teamup.backend.service.properties.RabbitMqProperties
+import cn.net.ziqiang.teamup.backend.web.properties.CorsProperties
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.messaging.simp.config.ChannelRegistration
@@ -17,11 +18,13 @@ class WebSocketConfig : WebSocketMessageBrokerConfigurer {
     private lateinit var webSocketMessageProcessor: WebSocketMessageProcessor
     @Autowired
     private lateinit var rabbitMqProperties: RabbitMqProperties
+    @Autowired
+    private lateinit var corsProperties: CorsProperties
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry
             .addEndpoint("/ws")
-            .setAllowedOrigins("http://localhost:5500", "http://jxy.me")
+            .setAllowedOrigins(*corsProperties.whitelists.toTypedArray())
             .withSockJS()
     }
 

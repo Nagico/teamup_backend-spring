@@ -88,6 +88,38 @@
       "type": "java.util.List<cn.net.ziqiang.teamup.backend.service.properties.SmsProperties.TemplateCode>",
       "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.SmsProperties",
       "description": "阿里云SMS 消息模板."
+    },
+
+    {
+      "name": "mq.rabbit.host",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.RabbitMqProperties",
+      "description": "RabbitMQ 主机."
+    },
+    {
+      "name": "mq.rabbit.port",
+      "type": "java.lang.Integer",
+      "defaultValue": 5672,
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.RabbitMqProperties",
+      "description": "RabbitMQ 端口."
+    },
+    {
+      "name": "mq.rabbit.virtualHost",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.RabbitMqProperties",
+      "description": "RabbitMQ 虚拟主机."
+    },
+    {
+      "name": "mq.rabbit.username",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.RabbitMqProperties",
+      "description": "RabbitMQ 用户名."
+    },
+    {
+      "name": "mq.rabbit.password",
+      "type": "java.lang.String",
+      "sourceType": "cn.net.ziqiang.teamup.backend.service.properties.RabbitMqProperties",
+      "description": "RabbitMQ 密码."
     }
   ]
 }
