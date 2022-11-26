@@ -5,6 +5,6 @@ import cn.net.ziqiang.teamup.backend.common.constant.type.MessageType
 data class Message (
     var type: MessageType,
     var content: String,
-    var sender: String,
+    var sender: String? = null,
     var receiver: String? = null,
 )

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.data.annotation.CreatedDate
 import java.io.Serializable
+import java.security.Principal
 import java.util.*
 import javax.persistence.*
 
@@ -42,9 +43,9 @@ class User(
     @Schema(description = "年级")
     var grade: String? = null,
 
-    @Column(name = "phone")
+    @Column(name = "phone", nullable = false)
     @Schema(description = "手机")
-    var phone: String? = null,
+    var phone: String = "",
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -71,12 +72,17 @@ class User(
     @Column(name = "create_time")
     @Schema(description = "创建时间")
     var createTime: Date? = null,
-
-//    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-//    @Schema(description = "文件")
-//    var files: MutableList<File> = mutableListOf(),
-): Serializable {
+): Serializable, Principal {
     override fun toString(): String {
         return "User(id=$id, username='$username', openid='$openid')"
+    }
+
+    /**
+     * 重写Principal的getName方法 ws鉴权使用
+     *
+     * @return
+     */
+    override fun getName(): String {
+        return username
     }
 }

@@ -25,7 +25,7 @@ class JwtAuthenticationFilter(
         SecurityContextHolder.getContext().authentication = null
 
         val header = request.getHeader(HttpHeaders.AUTHORIZATION)
-        if (Strings.isEmpty(header) || !header.startsWith("Bearer ")) {
+        if (Strings.isEmpty(header) || !header.startsWith("Bearer ") && !header.startsWith("bearer ")) {
             chain.doFilter(request, response)
             return
         }

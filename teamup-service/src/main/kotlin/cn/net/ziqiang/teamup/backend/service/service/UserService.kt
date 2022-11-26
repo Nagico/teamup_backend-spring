@@ -110,4 +110,8 @@ interface UserService {
      * @param changePhoneDto
      */
     fun changePhone(userId: Long, changePhoneDto: ChangePhoneDto)
+
+    fun messageLogin(userId: Long)
+
+    fun messageLogout(userId: Long)
 }

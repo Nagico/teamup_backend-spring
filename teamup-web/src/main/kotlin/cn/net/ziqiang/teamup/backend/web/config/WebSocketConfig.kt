@@ -1,5 +1,6 @@
-package cn.net.ziqiang.teamup.backend.web.config.websocket
+package cn.net.ziqiang.teamup.backend.web.config
 
+import cn.net.ziqiang.teamup.backend.web.websocket.WebSocketMessageProcessor
 import cn.net.ziqiang.teamup.backend.service.properties.RabbitMqProperties
 import cn.net.ziqiang.teamup.backend.web.properties.CorsProperties
 import org.springframework.beans.factory.annotation.Autowired
