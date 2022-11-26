@@ -1,6 +1,7 @@
 package cn.net.ziqiang.teamup.backend.service.cache
 
 
+import cn.net.ziqiang.teamup.backend.common.constant.status.UserStatus
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.service.constant.RedisKey
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,13 +19,24 @@ class UserCacheManager {
 
     fun setUserCache(user: User) {
         redisTemplate.opsForValue().set(
-            /* key = */ RedisKey.userKey(userId = user.id!!),
+            /* key = */ RedisKey.userKey(user.id!!),
             /* value = */ user,
             /* timeout = */ Duration.ofHours(1)
         )
     }
 
     fun getUserCache(userId: Long): User? {
-        return redisTemplate.opsForValue()[RedisKey.userKey(userId = userId)] as? User
+        return redisTemplate.opsForValue()[RedisKey.userKey(userId)] as? User
+    }
+
+    fun getUserStatusCache(userId: Long): UserStatus {
+        return redisTemplate.opsForValue()[RedisKey.userStatusKey(userId)] as? UserStatus ?: UserStatus.Offline
+    }
+
+    fun setUserStatusCache(userId: Long, status: UserStatus) {
+        redisTemplate.opsForValue().set(
+            /* key = */ RedisKey.userStatusKey(userId),
+            /* value = */ status
+        )
     }
 }

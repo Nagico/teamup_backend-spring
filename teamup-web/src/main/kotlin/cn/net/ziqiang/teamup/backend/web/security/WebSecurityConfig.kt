@@ -2,6 +2,7 @@ package cn.net.ziqiang.teamup.backend.web.security
 
 import cn.net.ziqiang.teamup.backend.service.properties.JwtProperties
 import cn.net.ziqiang.teamup.backend.service.service.AuthService
+import cn.net.ziqiang.teamup.backend.web.properties.CorsProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -27,7 +28,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 class WebSecurityConfig(
     private val failHandler: AuthenticationFailHandler,
     private val jwtProperties: JwtProperties,
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val corsProperties: CorsProperties,
 ): WebSecurityConfigurerAdapter() {
 
     //region override
@@ -70,10 +72,9 @@ class WebSecurityConfig(
 
     fun corsConfigurationSource(): CorsConfigurationSource {
         val corsConfiguration = CorsConfiguration().apply {
-            allowedHeaders = listOf("*")
-            allowedMethods = listOf("*")
-            allowedOrigins = listOf("*")
+            allowedOrigins = corsProperties.whitelists
             maxAge = 3600
+            allowCredentials = true
         }
         val source = UrlBasedCorsConfigurationSource().apply {
             registerCorsConfiguration("/**", corsConfiguration)

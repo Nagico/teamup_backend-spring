@@ -1,0 +1,13 @@
+{
+  "groups": [],
+  "hints": [],
+  "properties": [
+    {
+      "name": "host.cors.whitelists",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "cn.net.ziqiang.teamup.backend.web.properties.CorsProperties",
+      "defaultValue": "[\"*\"]",
+      "description": "CORS 白名单."
+    }
+  ]
+}

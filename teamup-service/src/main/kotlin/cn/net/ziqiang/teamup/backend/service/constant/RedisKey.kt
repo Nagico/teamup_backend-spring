@@ -8,6 +8,10 @@ object RedisKey {
         return "user::userId$userId"
     }
 
+    fun userStatusKey(userId: Long): String {
+        return "user.userStatus::userId$userId"
+    }
+
     //endregion
 
     //region auth

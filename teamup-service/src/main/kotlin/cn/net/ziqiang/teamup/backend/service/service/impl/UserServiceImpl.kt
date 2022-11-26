@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil
 import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j.Companion.logger
 import cn.net.ziqiang.teamup.backend.common.constant.FileConstant.DEFAULT_AVATAR
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
+import cn.net.ziqiang.teamup.backend.common.constant.status.UserStatus
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
@@ -192,6 +193,14 @@ class UserServiceImpl : UserService {
         user.phone = changePhoneDto.phone
         userRepository.save(user)
         userCacheManager.setUserCache(user)
+    }
+
+    override fun messageLogin(userId: Long) {
+        userCacheManager.setUserStatusCache(userId, UserStatus.Online)
+    }
+
+    override fun messageLogout(userId: Long) {
+        userCacheManager.setUserStatusCache(userId, UserStatus.Offline)
     }
 
     override fun changePassword(userId: Long, changePasswordDto: ChangePasswordDto) {

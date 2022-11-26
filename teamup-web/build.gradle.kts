@@ -5,6 +5,15 @@ dependencies {
     //Springboot Security
     implementation("org.springframework.boot:spring-boot-starter-security")
 
+    // Websocket
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
+
+    // rabbitmq
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
+
+    // stomp
+    implementation("org.springframework.boot:spring-boot-starter-reactor-netty")
+
     //Spring doc
     implementation("org.springdoc:springdoc-openapi-ui")
     runtimeOnly("org.springdoc:springdoc-openapi-kotlin")

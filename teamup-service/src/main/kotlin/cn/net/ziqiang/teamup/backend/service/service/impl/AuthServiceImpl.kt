@@ -96,7 +96,7 @@ class AuthServiceImpl: AuthService {
         val user = userRepository.findById(jwtPayload.userId).orElse(null) ?: throw ApiException(ResultType.TokenInvalid)
 
         //提取信息
-        val newTokenBean = generateToken(userId = jwtPayload.userId, role = jwtPayload.role)
+        val newTokenBean = generateToken(userId = jwtPayload.userId, role = jwtPayload.role, username = jwtPayload.username)
 
         newTokenBean.user = user
 
@@ -113,15 +113,15 @@ class AuthServiceImpl: AuthService {
 
     //region utils
 
-    fun generateToken(userId: Long, role: UserRole): TokenBean {
-        val authPayload = JwtPayload(userId = userId, role =role, jwtType = JwtType.Auth)
+    fun generateToken(userId: Long, role: UserRole, username: String): TokenBean {
+        val authPayload = JwtPayload(userId = userId, role =role, jwtType = JwtType.Auth, username = username)
         val bearerToken = JwtUtils.generateJwt(
             secretKey = jwtProperties.secret,
             expireOffset = 8 * 60,
             payload = authPayload
         )
 
-        val refreshPayload = JwtPayload(userId = userId, role = role, jwtType = JwtType.Refresh)
+        val refreshPayload = JwtPayload(userId = userId, role = role, jwtType = JwtType.Refresh, username = username)
         val refreshToken = JwtUtils.generateJwt(
             secretKey = jwtProperties.secret,
             expireOffset = 24 * 60 * 14,
@@ -132,7 +132,7 @@ class AuthServiceImpl: AuthService {
     }
 
     override fun generateToken(user: User): TokenBean {
-        return generateToken(userId = user.id!!, role = user.role).apply {
+        return generateToken(userId = user.id!!, role = user.role, username = user.username).apply {
             this.user = user
             authCacheManager.setToken(userId = user.id!!, tokenBean = this)
         }

@@ -39,3 +39,11 @@ aliyun:
 sentry:
   traces-sample-rate: 1.0
   send-default-pii: true
+
+mq:
+  rabbit:
+    host: 42.193.50.174
+    port: 5672
+    virtualHost: /teamup
+    username: teamup
+    password: ${RABBITMQ_PASSWORD}

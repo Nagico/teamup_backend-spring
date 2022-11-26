@@ -57,6 +57,7 @@ _✨ Author: [Nagico](https://github.com/Nagico/), [LSX-s-Software](https://gith
 - teamup-service 业务层
 - teamup-web 视图控制层，包括鉴权、异常处理、响应包装等
 
+- demo OSS直传、WS聊天示例
 
 ## 部署
 
