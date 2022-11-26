@@ -18,6 +18,15 @@ dependencies {
     // redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
+    // Websocket
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
+
+    // rabbitmq
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
+
+    // stomp
+    implementation("org.springframework.boot:spring-boot-starter-reactor-netty")
+
     // Wechat
     implementation("com.github.binarywang:weixin-java-miniapp:4.4.0")
 }
