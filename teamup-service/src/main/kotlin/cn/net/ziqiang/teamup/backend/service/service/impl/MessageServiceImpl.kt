@@ -72,11 +72,11 @@ class MessageServiceImpl : MessageService {
         sendToMQ(message)
     }
 
+    @Transactional
     override fun getOfflineMsg(receiver: Long): List<Message> {
         val messages = messageRepository.findAllByReceiverOrderByCreateTime(receiver)
-        thread {
-            messageRepository.deleteAllByReceiver(receiver)
-        }
+        messageRepository.deleteAllByReceiver(receiver)
+
         return messages
     }
 
