@@ -195,12 +195,20 @@ class UserServiceImpl : UserService {
         userCacheManager.setUserCache(user)
     }
 
-    override fun messageLogin(userId: Long) {
-        userCacheManager.setUserStatusCache(userId, UserStatus.Online)
+    override fun messageLogin(userId: Long) : User {
+        return getUserById(userId).apply {
+            logger.info("user login: $userId, $username")
+            userCacheManager.setUserStatusCache(userId, UserStatus.Online)
+        }
     }
 
-    override fun messageLogout(userId: Long) {
-        userCacheManager.setUserStatusCache(userId, UserStatus.Offline)
+    override fun messageLogout(user: User) {
+        logger.info("user logout: ${user.id}, ${user.username}")
+        userCacheManager.setUserStatusCache(user.id!!, UserStatus.Offline)
+    }
+
+    override fun getUserStatus(userId: Long): UserStatus {
+        return userCacheManager.getUserStatusCache(userId)
     }
 
     override fun changePassword(userId: Long, changePasswordDto: ChangePasswordDto) {

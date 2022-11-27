@@ -1,7 +1,6 @@
 package cn.net.ziqiang.teamup.backend.web.config
 
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.ResultVO
 import cn.net.ziqiang.teamup.backend.web.websocket.WebSocketMessageProcessor
 import cn.net.ziqiang.teamup.backend.service.properties.RabbitMqProperties
 import cn.net.ziqiang.teamup.backend.web.aop.exception.ApiExceptionHandler
@@ -24,13 +23,14 @@ import org.springframework.web.socket.messaging.StompSubProtocolErrorHandler
 @EnableWebSocketMessageBroker
 class WebSocketConfig : WebSocketMessageBrokerConfigurer {
     @Autowired
-    private lateinit var webSocketMessageProcessor: WebSocketMessageProcessor
-    @Autowired
     private lateinit var rabbitMqProperties: RabbitMqProperties
     @Autowired
     private lateinit var corsProperties: CorsProperties
     @Autowired
     private lateinit var apiExceptionHandler: ApiExceptionHandler
+
+    @Autowired
+    private lateinit var webSocketMessageProcessor: WebSocketMessageProcessor
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry

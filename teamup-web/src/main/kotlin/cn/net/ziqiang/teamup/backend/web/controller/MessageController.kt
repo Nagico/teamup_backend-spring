@@ -1,25 +1,39 @@
 package cn.net.ziqiang.teamup.backend.web.controller
 
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.Message
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.message.MessageVO
 import cn.net.ziqiang.teamup.backend.service.service.MessageService
+import cn.net.ziqiang.teamup.backend.web.annotation.user.NormalUser
+import cn.net.ziqiang.teamup.backend.web.security.SecurityContextUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
-import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import java.security.Principal
 import javax.annotation.security.PermitAll
 
-@Controller
+@RestController
+@RequestMapping("/messages")
 class MessageController {
     @Autowired
     private lateinit var messageService: MessageService
+
+    @NormalUser
+    @GetMapping("/offline")
+    fun getMessages() : List<Message> {
+        val user = SecurityContextUtils.user
+        return messageService.getOfflineMsg(user.id!!)
+    }
+
 
     /**
      * 接收 客户端传过来的消息
      * @param message
      */
     @PermitAll
-    @MessageMapping("/chat.sendMsg")
+    @MessageMapping("/send")
     fun sendMessageTest(principal: Principal, @Payload message: MessageVO) : String {
         messageService.sendMsg(principal.name.toLong(), message)
 

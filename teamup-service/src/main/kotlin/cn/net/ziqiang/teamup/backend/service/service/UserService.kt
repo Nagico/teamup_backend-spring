@@ -1,5 +1,6 @@
 package cn.net.ziqiang.teamup.backend.service.service
 
+import cn.net.ziqiang.teamup.backend.common.constant.status.UserStatus
 import cn.net.ziqiang.teamup.backend.common.pojo.auth.TokenBean
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.RegisterDto
@@ -111,7 +112,26 @@ interface UserService {
      */
     fun changePhone(userId: Long, changePhoneDto: ChangePhoneDto)
 
-    fun messageLogin(userId: Long)
+    /**
+     * ws登录
+     *
+     * @param userId
+     * @return
+     */
+    fun messageLogin(userId: Long) : User
 
-    fun messageLogout(userId: Long)
+    /**
+     * ws登出
+     *
+     * @param user
+     */
+    fun messageLogout(user: User)
+
+    /**
+     * 获取用户状态
+     *
+     * @param userId
+     * @return
+     */
+    fun getUserStatus(userId: Long): UserStatus
 }

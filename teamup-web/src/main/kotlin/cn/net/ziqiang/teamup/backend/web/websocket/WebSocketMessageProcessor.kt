@@ -5,10 +5,10 @@ import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.util.JwtUtils
-import cn.net.ziqiang.teamup.backend.service.business.MessageBusiness
 import cn.net.ziqiang.teamup.backend.service.properties.JwtProperties
+import cn.net.ziqiang.teamup.backend.service.service.MessageService
+import cn.net.ziqiang.teamup.backend.service.service.UserService
 import cn.net.ziqiang.teamup.backend.web.security.JwtAuthenticationToken
-import cn.net.ziqiang.teamup.backend.web.security.SecurityContextUtils
 import org.apache.logging.log4j.util.Strings
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
@@ -27,9 +27,9 @@ import org.springframework.stereotype.Component
 @Component
 class WebSocketMessageProcessor : ChannelInterceptor {
     @Autowired
-    private lateinit var messageBusiness: MessageBusiness
-    @Autowired
     private lateinit var jwtProperties: JwtProperties
+    @Autowired
+    private lateinit var userService: UserService
 
     override fun preSend(message: Message<*>, channel: MessageChannel): Message<*> {
         val accessor = MessageHeaderAccessor.getAccessor(
@@ -51,7 +51,7 @@ class WebSocketMessageProcessor : ChannelInterceptor {
                         JwtAuthenticationToken(authorities = AuthorityUtils.createAuthorityList("ROLE_${jwtPayload.role.name}")).apply {
                             details = jwtPayload
                         }
-                    accessor.user = messageBusiness.userLogin(jwtPayload.userId)
+                    accessor.user = userService.messageLogin(jwtPayload.userId)
                 }
                 catch (e: Exception) {
                     throw ApiException(ResultType.NotLogin)
@@ -60,7 +60,7 @@ class WebSocketMessageProcessor : ChannelInterceptor {
         }
 
         if (accessor.command == StompCommand.DISCONNECT) {
-            (accessor.user as? User)?.let { messageBusiness.userLogout(it) }
+            (accessor.user as? User)?.let { userService.messageLogout(it) }
         }
         return message
     }
