@@ -1,14 +1,18 @@
-package cn.net.ziqiang.teamup.backend.common.pojo.entity;
+package cn.net.ziqiang.teamup.backend.common.pojo.vo.competition;
 
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.Competition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
-@Entity(name = "competition")
 @Data
-public class Competition {
+@Schema(description = "比赛简要信息")
+public class CompetitionBriefVO {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -17,10 +21,6 @@ public class Competition {
     @Column(name = "name", nullable = false, length = 100)
     @Schema(description = "名称")
     String name;
-
-    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
-    @Schema(description = "描述")
-    String description = "";
 
     @Column(name = "verified", nullable = false)
     @Schema(description = "是否通过审核")
@@ -38,15 +38,12 @@ public class Competition {
     @Schema(description = "结束时间")
     Date endTime;
 
-    @Column(name = "finish", nullable = false)
-    @Schema(description = "是否结束")
-    Boolean finish = false;
-
-    @Column(name = "score")
-    @Schema(description = "比赛评分")
-    Integer score;
-
-    @Column(name = "team_count", nullable = false)
-    @Schema(description = "队伍数量")
-    Integer teamCount = 0;
+    public CompetitionBriefVO(Competition competition) {
+        this.id = competition.getId();
+        this.name = competition.getName();
+        this.verified = competition.getVerified();
+        this.logo = competition.getLogo();
+        this.startTime = competition.getStartTime();
+        this.endTime = competition.getEndTime();
+    }
 }
