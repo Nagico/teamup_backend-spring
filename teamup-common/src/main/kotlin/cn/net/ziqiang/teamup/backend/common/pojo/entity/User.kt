@@ -83,6 +83,6 @@ class User(
      * @return
      */
     override fun getName(): String {
-        return username
+        return id.toString()
     }
 }
