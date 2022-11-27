@@ -19,7 +19,7 @@ public class TeamMember {
     @Schema(description = "所属队伍")
     Team team;
 
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "role_id", nullable = false, referencedColumnName = "id")
     @Schema(description = "角色")
     List<Role> roles;

@@ -36,15 +36,15 @@ public class Team {
     @Schema(description = "点赞数")
     Long likeCount = 0L;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     @Schema(description = "队伍成员")
     List<TeamMember> members;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     @Schema(description = "招募信息")
     List<Recruitment> recruitments;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     @Schema(description = "标签")
     List<TeamTag> tags;
 

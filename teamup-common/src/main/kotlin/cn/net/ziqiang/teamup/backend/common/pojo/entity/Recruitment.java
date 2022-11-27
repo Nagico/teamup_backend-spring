@@ -24,7 +24,7 @@ public class Recruitment {
     @Schema(description = "角色")
     Role role;
 
-    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.ALL)
     @Schema(description = "需求")
     List<Requirement> requirements;
 }
