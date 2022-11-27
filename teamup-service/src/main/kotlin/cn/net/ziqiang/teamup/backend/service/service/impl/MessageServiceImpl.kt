@@ -24,7 +24,7 @@ class MessageServiceImpl : MessageService {
     @Autowired
     private lateinit var messageBusiness: MessageBusiness
 
-    override fun deliverToWS(message: String) : Boolean {
+    override fun deliverToUser(message: String) : Boolean {
         try {
             val msg = JSONObject.parseObject(message, Message::class.java)
             if (msg.receiver == null && msg.type == MessageType.Chat) {

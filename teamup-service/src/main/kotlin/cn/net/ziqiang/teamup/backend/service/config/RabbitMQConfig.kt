@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration
 
 @Slf4j
 @Configuration
-class MyRabbitConfig {
+class RabbitMQConfig {
     @Autowired
     private lateinit var messageService: MessageService
     @Autowired
@@ -91,7 +91,7 @@ class MyRabbitConfig {
             val body = message.body
             val msg = String(body)
             logger.info("rabbitmq收到消息 : $msg")
-            val sendToWebsocket = messageService.deliverToWS(msg)
+            val sendToWebsocket = messageService.deliverToUser(msg)
             if (sendToWebsocket) {
                 logger.debug("消息处理成功！ 已经推送到websocket！")
                 channel.basicAck(message.messageProperties.deliveryTag, true) //确认消息成功消费
