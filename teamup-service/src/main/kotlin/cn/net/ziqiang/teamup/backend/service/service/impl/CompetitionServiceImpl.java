@@ -4,6 +4,7 @@ import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType;
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Competition;
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionBriefVO;
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionVerificationVO;
 import cn.net.ziqiang.teamup.backend.dao.repository.CompetitionRepository;
 import cn.net.ziqiang.teamup.backend.service.service.CompetitionService;
 import org.jetbrains.annotations.NotNull;
@@ -89,5 +90,16 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public void deleteCompetitionById(Long id) {
         competitionRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean setVerified(Long id, boolean verified) throws ApiException {
+        Competition competition = competitionRepository.findById(id).orElse(null);
+        if (competition == null) {
+            throw new ApiException(ResultType.ResourceNotFound, "比赛不存在");
+        }
+        competition.setVerified(verified);
+        competitionRepository.save(competition);
+        return verified;
     }
 }

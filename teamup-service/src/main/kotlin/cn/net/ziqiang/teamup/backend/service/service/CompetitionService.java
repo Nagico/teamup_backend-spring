@@ -3,11 +3,17 @@ package cn.net.ziqiang.teamup.backend.service.service;
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Competition;
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionBriefVO;
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionVerificationVO;
 
 import java.util.List;
 
 public interface CompetitionService {
 
+    /**
+     * 判断比赛是否存在
+     * @param id 比赛id
+     * @return 是否存在
+     */
     boolean competitionExists(Long id);
 
     /**
@@ -48,4 +54,13 @@ public interface CompetitionService {
      * @param id 比赛id
      */
     void deleteCompetitionById(Long id);
+
+    /**
+     *
+     * @param id
+     * @param verified
+     * @return
+     * @throws ApiException
+     */
+    boolean setVerified(Long id, boolean verified) throws ApiException;
 }
