@@ -139,6 +139,14 @@ subprojects {
 	tasks.withType<Test> {
 		useJUnitPlatform()
 	}
+
+	sourceSets {
+		main {
+			java {
+				srcDirs("src/main/kotlin")
+			}
+		}
+	}
 }
 
 buildscript {
