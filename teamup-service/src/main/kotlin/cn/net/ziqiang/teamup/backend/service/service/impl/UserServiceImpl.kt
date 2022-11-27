@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
+import kotlin.concurrent.thread
 
 @Service
 class UserServiceImpl : UserService {
@@ -56,7 +57,9 @@ class UserServiceImpl : UserService {
         val user = getUserById(id)
         if (!user.active)
             throw ApiException(type = ResultType.ResourceNotFound, message = "用户不存在")
-        return UserInfoVO(user)
+        return UserInfoVO(user).apply {
+            status = userCacheManager.getUserStatusCache(userId = id)
+        }
     }
 
     override fun getUserProfileById(id: Long): UserProfileVO {
@@ -198,13 +201,24 @@ class UserServiceImpl : UserService {
     override fun messageLogin(userId: Long) : User {
         return getUserById(userId).apply {
             logger.info("user login: $userId, $username")
-            userCacheManager.setUserStatusCache(userId, UserStatus.Online)
+            thread {
+                lastLogin = Date()
+                userRepository.save(this)
+                userCacheManager.setUserCache(this)
+                userCacheManager.setUserStatusCache(userId, UserStatus.Online)
+            }
         }
     }
 
     override fun messageLogout(user: User) {
         logger.info("user logout: ${user.id}, ${user.username}")
-        userCacheManager.setUserStatusCache(user.id!!, UserStatus.Offline)
+        thread {
+            user.lastLogin = Date()
+            userRepository.save(user)
+            userCacheManager.setUserCache(user)
+            userCacheManager.setUserStatusCache(user.id!!, UserStatus.Offline)
+        }
+
     }
 
     override fun getUserStatus(userId: Long): UserStatus {

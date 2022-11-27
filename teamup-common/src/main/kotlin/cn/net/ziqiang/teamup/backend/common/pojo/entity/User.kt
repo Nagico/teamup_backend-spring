@@ -72,6 +72,10 @@ class User(
     @Column(name = "create_time")
     @Schema(description = "创建时间")
     var createTime: Date? = null,
+
+    @Column(name = "last_login")
+    @Schema(description = "最后登录时间")
+    var lastLogin: Date? = null
 ): Serializable, Principal {
     override fun toString(): String {
         return "User(id=$id, username='$username', openid='$openid')"
