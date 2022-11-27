@@ -1,15 +1,23 @@
 package cn.net.ziqiang.teamup.backend.web.config
 
+import cn.net.ziqiang.teamup.backend.common.exception.ApiException
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.ResultVO
 import cn.net.ziqiang.teamup.backend.web.websocket.WebSocketMessageProcessor
 import cn.net.ziqiang.teamup.backend.service.properties.RabbitMqProperties
+import cn.net.ziqiang.teamup.backend.web.aop.exception.ApiExceptionHandler
 import cn.net.ziqiang.teamup.backend.web.properties.CorsProperties
+import com.alibaba.fastjson.JSON
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
+import org.springframework.messaging.Message
 import org.springframework.messaging.simp.config.ChannelRegistration
 import org.springframework.messaging.simp.config.MessageBrokerRegistry
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor
+import org.springframework.messaging.support.MessageBuilder
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
+import org.springframework.web.socket.messaging.StompSubProtocolErrorHandler
 
 
 @Configuration
@@ -21,12 +29,34 @@ class WebSocketConfig : WebSocketMessageBrokerConfigurer {
     private lateinit var rabbitMqProperties: RabbitMqProperties
     @Autowired
     private lateinit var corsProperties: CorsProperties
+    @Autowired
+    private lateinit var apiExceptionHandler: ApiExceptionHandler
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry
             .addEndpoint("/ws")
             .setAllowedOrigins(*corsProperties.whitelists.toTypedArray())
             .withSockJS()
+
+        registry.setErrorHandler(object : StompSubProtocolErrorHandler() {
+            override fun handleInternal(
+                errorHeaderAccessor: StompHeaderAccessor,
+                errorPayload: ByteArray,
+                cause: Throwable?,
+                clientHeaderAccessor: StompHeaderAccessor?
+            ): Message<ByteArray> {
+                errorHeaderAccessor.message = null
+                val ex = cause?.cause ?:cause
+                val res = if (ex is ApiException) {
+                     apiExceptionHandler.handleApiException(ex)
+                }
+                else {
+                     apiExceptionHandler.handleException(ex!!)
+                }
+                val message = JSON.toJSONString(res)
+                return MessageBuilder.createMessage(message.toByteArray(), errorHeaderAccessor.messageHeaders)
+            }
+        })
     }
 
     override fun configureMessageBroker(registry: MessageBrokerRegistry) {

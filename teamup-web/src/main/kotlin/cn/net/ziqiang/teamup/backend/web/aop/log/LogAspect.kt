@@ -46,7 +46,8 @@ class LogAspect {
 
     //@AfterThrowing(pointcut = "execution(* cn.net.ziqiang.teamup.backend.web.controller.*.*(..))", throwing = "ex")
     fun logException(joinPoint: JoinPoint?, ex: Throwable, eid: String) {
-        val request = (RequestContextHolder.getRequestAttributes() as ServletRequestAttributes).request
+        val request = (RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes
+            ?: return).request
 
         thread {
             val log = ExceptionLog()

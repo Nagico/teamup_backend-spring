@@ -9,6 +9,8 @@ import cn.net.ziqiang.teamup.backend.web.aop.log.LogAspect
 import cn.net.ziqiang.teamup.backend.web.security.SecurityContextUtils
 import io.sentry.Sentry
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler
+import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -18,6 +20,7 @@ import kotlin.concurrent.thread
 
 @Slf4j
 @RestControllerAdvice
+@ControllerAdvice
 class ApiExceptionHandler {
     @Autowired
     private lateinit var logAspect: LogAspect
@@ -30,6 +33,7 @@ class ApiExceptionHandler {
      */
     @ResponseBody
     @ExceptionHandler(ApiException::class)
+    @MessageExceptionHandler(ApiException::class)
     fun handleApiException(e: ApiException): ResultVO<String> {
         logger.error(e.message)
 
@@ -49,8 +53,9 @@ class ApiExceptionHandler {
      * @return 标准API响应
      */
     @ResponseBody
-    @ExceptionHandler(Exception::class)
-    fun handleException(e: Exception): ResultVO<String> {
+    @ExceptionHandler(Throwable::class)
+    @MessageExceptionHandler(Throwable::class)
+    fun handleException(e: Throwable): ResultVO<String> {
         logger.error(e.message)
 
         if (e is org.springframework.security.access.AccessDeniedException) {
@@ -96,8 +101,9 @@ class ApiExceptionHandler {
         return ResultVO(ResultType.ServerError.code, ResultType.ServerError.message, e.message, ResultType.ServerError.httpStatus)
     }
 
+
     // region Utils
-    fun notifySentry(e: Exception) : String {
+    fun notifySentry(e: Throwable) : String {
         val user = SecurityContextUtils.userOrNull
         if (user == null) {
             Sentry.configureScope { scope -> scope.setTag("role", "Anonymous") }

@@ -39,23 +39,28 @@ class WebSocketMessageProcessor : ChannelInterceptor {
         if (accessor!!.command == StompCommand.CONNECT) {
             val raw = message.headers[SimpMessageHeaderAccessor.NATIVE_HEADERS]
             if (raw is Map<*, *>) {
-                val header = (raw[HttpHeaders.AUTHORIZATION] as List<String>)[0] //取出客户端携带的参数
-                if (Strings.isEmpty(header) || !header.startsWith("Bearer ") && !header.startsWith("bearer ")) {
+                try {
+                    val header = (raw[HttpHeaders.AUTHORIZATION] as List<String>)[0] //取出客户端携带的参数
+                    if (Strings.isEmpty(header) || !header.startsWith("Bearer ") && !header.startsWith("bearer ")) {
+                        throw ApiException(ResultType.NotLogin)
+                    }
+
+                    val jwtPayloadInfo = JwtUtils.parseJwtWithoutThrow(jwtProperties.secret, header.substring(7))
+                    val jwtPayload = jwtPayloadInfo.first ?: throw ApiException(ResultType.TokenInvalid)
+                    SecurityContextHolder.getContext().authentication =
+                        JwtAuthenticationToken(authorities = AuthorityUtils.createAuthorityList("ROLE_${jwtPayload.role.name}")).apply {
+                            details = jwtPayload
+                        }
+                    accessor.user = messageBusiness.userLogin(jwtPayload.userId)
+                }
+                catch (e: Exception) {
                     throw ApiException(ResultType.NotLogin)
                 }
-
-                val jwtPayloadInfo = JwtUtils.parseJwtWithoutThrow(jwtProperties.secret, header.substring(7))
-                val jwtPayload = jwtPayloadInfo.first ?: throw ApiException(ResultType.TokenInvalid)
-                SecurityContextHolder.getContext().authentication =
-                    JwtAuthenticationToken(authorities = AuthorityUtils.createAuthorityList("ROLE_${jwtPayload.role.name}")).apply {
-                        details = jwtPayload
-                    }
-                accessor.user = messageBusiness.userLogin(jwtPayload.userId)
             }
         }
 
         if (accessor.command == StompCommand.DISCONNECT) {
-            messageBusiness.userLogout(accessor.user as User)
+            (accessor.user as? User)?.let { messageBusiness.userLogout(it) }
         }
         return message
     }
