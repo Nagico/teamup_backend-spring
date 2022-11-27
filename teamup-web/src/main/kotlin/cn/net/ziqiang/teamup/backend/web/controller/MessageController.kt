@@ -1,9 +1,7 @@
 package cn.net.ziqiang.teamup.backend.web.controller
 
-import cn.net.ziqiang.teamup.backend.common.pojo.entity.Message
-import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.message.MessageVO
 import cn.net.ziqiang.teamup.backend.service.service.MessageService
-import cn.net.ziqiang.teamup.backend.web.security.SecurityContextUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
@@ -22,8 +20,9 @@ class MessageController {
      */
     @PermitAll
     @MessageMapping("/chat.sendMsg")
-    fun sendMessageTest(principal: Principal, @Payload message: Message) {
-        message.sender = principal.name
-        messageService.sendMsg(message)
+    fun sendMessageTest(principal: Principal, @Payload message: MessageVO) : String {
+        messageService.sendMsg(principal.name.toLong(), message)
+
+        return "success"
     }
 }
