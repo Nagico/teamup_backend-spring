@@ -1,24 +1,18 @@
-package cn.net.ziqiang.teamup.backend.common.pojo.entity;
+package cn.net.ziqiang.teamup.backend.common.pojo.entity
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import io.swagger.v3.oas.annotations.media.Schema
+import org.hibernate.annotations.TypeDef
+import javax.persistence.*
 
-import javax.persistence.*;
-
-@Entity(name = "team_tag")
-@Data
-public class TeamTag {
+@Entity
+@Table(name = "tag")
+class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false, referencedColumnName = "id")
-    @Schema(description = "所属队伍")
-    Team team;
+    var id: Long? = null
 
     @Column(name = "content", nullable = false, length = 30)
     @Schema(description = "标签内容")
-    String content;
+    var content: String? = null
 }

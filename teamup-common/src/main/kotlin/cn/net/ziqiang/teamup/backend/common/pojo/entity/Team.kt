@@ -1,54 +1,56 @@
-package cn.net.ziqiang.teamup.backend.common.pojo.entity;
+package cn.net.ziqiang.teamup.backend.common.pojo.entity
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import com.vladmihalcea.hibernate.type.json.JsonStringType
+import io.swagger.v3.oas.annotations.media.Schema
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.TypeDef
+import javax.persistence.*
 
-import javax.persistence.*;
-import java.util.List;
-
-@Entity(name = "team")
-@Data
-public class Team {
+@Entity
+@Table(name = "team")
+@TypeDef(name = "json", typeClass = JsonStringType::class)
+class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    Long id;
+    var id: Long? = null
 
     @Column(name = "name", nullable = false, length = 100)
     @Schema(description = "名称")
-    String name;
+    var name: String? = null
 
     @OneToOne
     @JoinColumn(name = "competition_id", nullable = false, referencedColumnName = "id")
     @Schema(description = "竞赛")
-    Competition competition;
+    var competition: Competition? = null
 
     @ManyToOne
     @JoinColumn(name = "leader_id", nullable = false, referencedColumnName = "id")
     @Schema(description = "队长")
-    User leader;
+    var leader: User? = null
 
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     @Schema(description = "队伍描述")
-    String description = "";
+    var description: String? = null
 
     @Column(name = "like_count", nullable = false)
     @Schema(description = "点赞数")
-    Long likeCount = 0L;
+    var likeCount: Long = 0
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL])
     @Schema(description = "队伍成员")
-    List<TeamMember> members;
+    var members: MutableList<TeamMember> = mutableListOf()
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL])
     @Schema(description = "招募信息")
-    List<Recruitment> recruitments;
+    var recruitments: MutableList<Recruitment> = mutableListOf()
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @Type(type = "json")
+    @Column(name = "tags", nullable = false, columnDefinition = "json")
     @Schema(description = "标签")
-    List<TeamTag> tags;
+    var tags: MutableList<Tag> = mutableListOf()
 
     @Column(name = "recruiting", nullable = false)
     @Schema(description = "是否招募中")
-    Boolean recruiting = true;
+    var recruiting: Boolean = true
 }

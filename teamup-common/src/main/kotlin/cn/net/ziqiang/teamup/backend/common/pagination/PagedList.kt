@@ -3,6 +3,16 @@ package cn.net.ziqiang.teamup.backend.common.pagination
 import org.springframework.data.domain.Page
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 
+/**
+ * 分页列表
+ *
+ * @param M 数据库实体
+ * @param T VO
+ * @property count 总数
+ * @property previous 上一页
+ * @property next 下一页
+ * @property results 结果列表
+ */
 class PagedList<M, T>(
     var count: Long = 0,
     var previous: String? = null,

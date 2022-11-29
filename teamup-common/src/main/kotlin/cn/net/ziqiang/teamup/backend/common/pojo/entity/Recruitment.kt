@@ -1,30 +1,32 @@
-package cn.net.ziqiang.teamup.backend.common.pojo.entity;
+package cn.net.ziqiang.teamup.backend.common.pojo.entity
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import com.vladmihalcea.hibernate.type.json.JsonStringType
+import io.swagger.v3.oas.annotations.media.Schema
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.TypeDef
+import javax.persistence.*
 
-import javax.persistence.*;
-import java.util.List;
-
-@Entity(name = "recruitment")
-@Data
-public class Recruitment {
+@Entity
+@Table(name = "recruitment")
+@TypeDef(name = "json", typeClass = JsonStringType::class)
+class Recruitment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    Long id;
+    var id: Long? = null
 
     @ManyToOne
     @JoinColumn(name = "team_id", nullable = false, referencedColumnName = "id")
     @Schema(description = "所属队伍")
-    Team team;
+    var team: Team? = null
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false, referencedColumnName = "id")
     @Schema(description = "角色")
-    Role role;
+    var role: Role? = null
 
-    @OneToMany(mappedBy = "recruitment", cascade = CascadeType.ALL)
+    @Type(type = "json")
+    @Column(name = "requirements", nullable = false, columnDefinition = "json")
     @Schema(description = "需求")
-    List<Requirement> requirements;
+    var requirements: MutableList<String> = mutableListOf()
 }

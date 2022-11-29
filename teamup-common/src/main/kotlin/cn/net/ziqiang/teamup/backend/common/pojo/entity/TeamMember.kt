@@ -1,34 +1,35 @@
-package cn.net.ziqiang.teamup.backend.common.pojo.entity;
+package cn.net.ziqiang.teamup.backend.common.pojo.entity
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import com.vladmihalcea.hibernate.type.json.JsonStringType
+import io.swagger.v3.oas.annotations.media.Schema
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.TypeDef
+import javax.persistence.*
 
-import javax.persistence.*;
-import java.util.List;
-
-@Entity(name = "team_member")
-@Data
-public class TeamMember {
+@Entity
+@Table(name = "team_member")
+@TypeDef(name = "json", typeClass = JsonStringType::class)
+class TeamMember {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    Long id;
+    var id: Long? = null
 
     @ManyToOne
     @JoinColumn(name = "team_id")
     @Schema(description = "所属队伍")
-    Team team;
+    var team: Team? = null
 
-    @ManyToMany
-    @JoinColumn(name = "role_id", nullable = false, referencedColumnName = "id")
+    @Type(type = "json")
+    @Column(name = "roles", nullable = false, columnDefinition = "json")
     @Schema(description = "角色")
-    List<Role> roles;
+    var roles: MutableList<Role> = mutableListOf()
 
     @Column(name = "faculty")
     @Schema(description = "学院")
-    String faculty;
+    var faculty: String? = null
 
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     @Schema(description = "成员描述")
-    String description = "";
+    var description: String? = null
 }
