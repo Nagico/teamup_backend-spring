@@ -3,7 +3,7 @@ package cn.net.ziqiang.teamup.backend.service.service;
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Competition;
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionBriefVO;
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionVerificationVO;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -20,6 +20,7 @@ public interface CompetitionService {
      * 获取比赛列表
      * @return
      */
+    @NotNull
     List<CompetitionBriefVO> getCompetitionList();
 
     /**
@@ -27,18 +28,21 @@ public interface CompetitionService {
      * @param id 比赛id
      * @return 比赛
      */
+    @NotNull
     Competition getCompetitionById(Long id) throws ApiException;
 
     /**
      * 根据名称获取比赛列表
      * @return 比赛列表
      */
+    @NotNull
     List<Competition> getCompetitionByName(String name);
 
     /**
      * 添加比赛
      * @return 新的比赛
      */
+    @NotNull
     Competition addCompetition(Competition competition);
 
     /**
@@ -47,6 +51,7 @@ public interface CompetitionService {
      * @param competition 比赛
      * @return 更新后的比赛
      */
+    @NotNull
     Competition updateCompetition(Long id, Competition competition) throws ApiException;
 
     /**

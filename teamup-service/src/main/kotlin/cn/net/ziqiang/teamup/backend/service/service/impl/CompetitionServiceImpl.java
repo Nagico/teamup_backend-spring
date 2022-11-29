@@ -4,11 +4,9 @@ import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType;
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Competition;
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionBriefVO;
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionVerificationVO;
 import cn.net.ziqiang.teamup.backend.dao.repository.CompetitionRepository;
 import cn.net.ziqiang.teamup.backend.service.service.CompetitionService;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,11 +36,13 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
+    @NotNull
     public List<Competition> getCompetitionByName(String name) {
         return competitionRepository.findAllByName(name);
     }
 
     @Override
+    @NotNull
     public Competition addCompetition(Competition competition) {
         return competitionRepository.save(competition);
     }
