@@ -1,6 +1,6 @@
 package cn.net.ziqiang.teamup.backend.service.service.impl
 
-import cn.hutool.core.bean.BeanUtil
+import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j
 import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j.Companion.logger
 import cn.net.ziqiang.teamup.backend.common.constant.FileConstant.DEFAULT_AVATAR
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.util.*
 import kotlin.concurrent.thread
 
+@Slf4j
 @Service
 class UserServiceImpl : UserService {
     @Autowired
@@ -70,33 +71,30 @@ class UserServiceImpl : UserService {
 
     override fun updateUser(id: Long, dto: UpdateUserProfileDto) : UserProfileVO {
         val user = getUserById(id = id)
-        val copiedUser = User()
-        BeanUtil.copyProperties(user, copiedUser)
 
         // 检测激活
-        if (dto.realName.isNotEmpty() && dto.faculty.isNotEmpty() && dto.grade.isNotEmpty() && dto.username.isNotEmpty()
+        if (dto.realName.isNullOrBlank() && dto.faculty.isNullOrBlank() &&
+            dto.grade.isNullOrBlank() && dto.username.isNullOrBlank()
         ) {
-            copiedUser.active = true
-        } else {
-            copiedUser.active = user.active
+            user.active = true
         }
 
         // 更新
-        if (dto.realName.isNotEmpty() && dto.realName != user.realName)
-            copiedUser.realName = dto.realName
-        if (dto.username.isNotEmpty() && dto.username != user.username) {
-            copiedUser.username = dto.username
-            if (countByUsername(dto.username) > 0)  // 检测重复
+        dto.realName?.let { user.realName = it }
+        dto.username?.let {
+            if (countByUsername(it) > 0)  // 检测重复
                 throw ApiException(type = ResultType.ParamValidationFailed, message = "用户名已存在")
+            user.username = it
         }
-        if (dto.faculty.isNotEmpty() && dto.faculty != user.faculty)
-            copiedUser.faculty = dto.faculty
-        if (dto.grade.isNotEmpty() && dto.grade != user.grade)
-            copiedUser.grade = dto.grade
-        userRepository.save(copiedUser)
-        userCacheManager.setUserCache(copiedUser)
+        dto.faculty?.let { user.faculty = it }
+        dto.grade?.let { user.grade = it }
+        dto.studentId?.let { user.studentId = it }
+        dto.introduction?.let { user.introduction = it }
 
-        return UserProfileVO(copiedUser)
+        userRepository.save(user)
+        userCacheManager.setUserCache(user)
+
+        return UserProfileVO(user)
     }
 
     @Transactional

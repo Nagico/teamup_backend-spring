@@ -18,6 +18,8 @@ data class UserProfileVO(
     var studentId: String? = null,
     @Schema(description = "学院")
     override var faculty: String? = null,
+    @Schema(description = "个人介绍")
+    var introduction: String? = null,
     @Schema(description = "手机号")
     var phone: String? = null,
     @Schema(description = "年级")
@@ -37,6 +39,7 @@ data class UserProfileVO(
         phone = user.phone,
         avatar = user.avatar,
         role = user.role,
-        grade = user.grade
+        grade = user.grade,
+        introduction = user.introduction
     )
 }

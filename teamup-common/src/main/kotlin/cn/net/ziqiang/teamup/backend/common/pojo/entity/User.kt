@@ -47,6 +47,10 @@ class User(
     @Schema(description = "手机")
     var phone: String = "",
 
+    @Column(name = "introduction")
+    @Schema(description = "个人介绍")
+    var introduction: String? = null,
+
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     @Schema(description = "角色")
