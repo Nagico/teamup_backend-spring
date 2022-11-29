@@ -23,13 +23,6 @@ interface FileService {
     fun deleteFile(id: Long)
 
     /**
-     * 文件过期
-     *
-     * @param id
-     */
-    fun expireFile(id: Long)
-
-    /**
      * 生成直传Token
      *
      * @param user
@@ -47,4 +40,6 @@ interface FileService {
      * @return
      */
     fun callback(fileId: Long, ossCallbackVO: OssCallbackVO): File
+
+    fun fileExpireScheduler()
 }
