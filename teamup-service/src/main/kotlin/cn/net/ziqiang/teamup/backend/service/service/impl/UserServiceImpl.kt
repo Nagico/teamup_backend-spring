@@ -82,7 +82,7 @@ class UserServiceImpl : UserService {
         // 更新
         dto.realName?.let { user.realName = it }
         dto.username?.let {
-            if (countByUsername(it) > 0)  // 检测重复
+            if (it != user.username && countByUsername(it) > 0)  // 检测重复
                 throw ApiException(type = ResultType.ParamValidationFailed, message = "用户名已存在")
             user.username = it
         }
