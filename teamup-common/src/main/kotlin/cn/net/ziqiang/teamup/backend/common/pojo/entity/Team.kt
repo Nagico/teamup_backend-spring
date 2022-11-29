@@ -9,48 +9,54 @@ import javax.persistence.*
 @Entity
 @Table(name = "team")
 @TypeDef(name = "json", typeClass = JsonStringType::class)
-class Team {
+class Team (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    var id: Long? = null
+    var id: Long? = null,
 
     @Column(name = "name", nullable = false, length = 100)
     @Schema(description = "名称")
-    var name: String? = null
+    var name: String? = null,
 
     @OneToOne
     @JoinColumn(name = "competition_id", nullable = false, referencedColumnName = "id")
     @Schema(description = "竞赛")
-    var competition: Competition? = null
+    var competition: Competition? = null,
 
     @ManyToOne
     @JoinColumn(name = "leader_id", nullable = false, referencedColumnName = "id")
     @Schema(description = "队长")
-    var leader: User? = null
+    var leader: User? = null,
 
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     @Schema(description = "队伍描述")
-    var description: String? = null
+    var description: String? = null,
 
     @Column(name = "like_count", nullable = false)
     @Schema(description = "点赞数")
-    var likeCount: Long = 0
+    var likeCount: Long = 0,
 
-    @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL])
+    @Type(type = "json")
+    @Column(name = "members", nullable = false, columnDefinition = "json")
     @Schema(description = "队伍成员")
-    var members: MutableList<TeamMember> = mutableListOf()
+    var members: MutableList<TeamMember> = mutableListOf(),
 
-    @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @Schema(description = "招募信息")
-    var recruitments: MutableList<Recruitment> = mutableListOf()
+    var recruitments: MutableList<Recruitment> = mutableListOf(),
 
     @Type(type = "json")
     @Column(name = "tags", nullable = false, columnDefinition = "json")
     @Schema(description = "标签")
-    var tags: MutableList<Tag> = mutableListOf()
+    var tags: MutableList<Tag> = mutableListOf(),
 
     @Column(name = "recruiting", nullable = false)
     @Schema(description = "是否招募中")
-    var recruiting: Boolean = true
+    var recruiting: Boolean = false,
+): PermissionChecker<Team>("team", "leader") {
+    override fun toString(): String {
+        return "Team(id=$id, name=$name)"
+    }
+
 }

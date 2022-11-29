@@ -1,35 +1,37 @@
 package cn.net.ziqiang.teamup.backend.common.pojo.entity
 
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.role.RoleVO
 import com.vladmihalcea.hibernate.type.json.JsonStringType
 import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
-import javax.persistence.*
 
-@Entity
-@Table(name = "team_member")
 @TypeDef(name = "json", typeClass = JsonStringType::class)
 class TeamMember {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    var id: Long? = null
-
-    @ManyToOne
-    @JoinColumn(name = "team_id")
-    @Schema(description = "所属队伍")
-    var team: Team? = null
-
     @Type(type = "json")
-    @Column(name = "roles", nullable = false, columnDefinition = "json")
     @Schema(description = "角色")
-    var roles: MutableList<Role> = mutableListOf()
+    var roles: MutableList<RoleVO> = mutableListOf()
 
-    @Column(name = "faculty")
     @Schema(description = "学院")
     var faculty: String? = null
 
-    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     @Schema(description = "成员描述")
     var description: String? = null
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is TeamMember) return false
+
+        if (roles != other.roles) return false
+        if (faculty != other.faculty) return false
+        if (description != other.description) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = roles.hashCode()
+        result = 31 * result + (faculty?.hashCode() ?: 0)
+        result = 31 * result + (description?.hashCode() ?: 0)
+        return result
+    }
 }

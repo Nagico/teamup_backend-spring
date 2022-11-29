@@ -1,7 +1,12 @@
-package cn.net.ziqiang.teamup.backend.dao.repository;
+package cn.net.ziqiang.teamup.backend.dao.repository
 
-import cn.net.ziqiang.teamup.backend.common.pojo.entity.TeamTag;
-import org.springframework.data.jpa.repository.JpaRepository;
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.Tag
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 
-public interface TeamTagRepository extends JpaRepository<TeamTag, Long> {
+interface TagRepository : JpaRepository<Tag, Long>, JpaSpecificationExecutor<Tag> {
+    fun findByContent(content: String): Tag?
+
+    fun findAllByContentIn(content: List<String>): List<Tag>
+
 }

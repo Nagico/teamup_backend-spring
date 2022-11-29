@@ -100,6 +100,7 @@ subprojects {
 
 		//JPA
 		implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+		implementation("com.vladmihalcea:hibernate-types-52:2.20.0")
 
 		//hutool
 		implementation("cn.hutool:hutool-all:5.8.7")
