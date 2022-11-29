@@ -2,8 +2,8 @@ package cn.net.ziqiang.teamup.backend.common.pojo.entity
 
 import javax.persistence.*
 
-@Entity(name = "role")
-class Role (
+@Entity(name = "team_role")
+class TeamRole (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

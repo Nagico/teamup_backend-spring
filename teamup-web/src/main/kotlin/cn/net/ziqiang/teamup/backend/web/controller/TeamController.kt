@@ -7,6 +7,7 @@ import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamInfoVO
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamRoleTreeVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamVO
 import cn.net.ziqiang.teamup.backend.service.service.TeamService
 import cn.net.ziqiang.teamup.backend.web.annotation.permission.OwnerOrManager
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.web.bind.annotation.*
+import javax.annotation.security.PermitAll
 
 @RestController
 @Tag(name = "队伍")
@@ -34,6 +36,13 @@ class TeamController {
     ): PagedList<Team, TeamInfoVO> {
         val pageRequest = PageRequest.of(page - 1, pageSize)
         return teamService.getUserTeams(SecurityContextUtils.user.id!!, pageRequest)
+    }
+
+    @PermitAll
+    @GetMapping("/roles")
+    @Operation(summary = "获取角色树")
+    fun getTeamRoleTree(): List<TeamRoleTreeVO> {
+        return teamService.getRoleTree()
     }
 
     @ActiveUser

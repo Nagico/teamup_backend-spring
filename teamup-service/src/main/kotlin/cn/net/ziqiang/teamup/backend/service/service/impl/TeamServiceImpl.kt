@@ -9,11 +9,8 @@ import cn.net.ziqiang.teamup.backend.common.pojo.entity.Team
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.TeamMember
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.role.RoleVO
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamDto
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamInfoVO
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamVO
-import cn.net.ziqiang.teamup.backend.dao.repository.RoleRepository
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.*
+import cn.net.ziqiang.teamup.backend.dao.repository.TeamRoleRepository
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRepository
 import cn.net.ziqiang.teamup.backend.service.service.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,7 +23,7 @@ class TeamServiceImpl : TeamService {
     @Autowired
     private lateinit var teamRepository: TeamRepository
     @Autowired
-    private lateinit var roleRepository: RoleRepository
+    private lateinit var teamRoleRepository: TeamRoleRepository
     @Autowired
     private lateinit var competitionService: CompetitionService
     @Autowired
@@ -57,7 +54,7 @@ class TeamServiceImpl : TeamService {
 
         val members = dto.members!!.map {
             TeamMember(
-                roles = roleRepository.getAllByIdIn(it.roles!!).map { role -> RoleVO(role) } as MutableList<RoleVO>,
+                roles = teamRoleRepository.getAllByIdIn(it.roles!!).map { role -> TeamRoleVO(role) } as MutableList<TeamRoleVO>,
                 faculty = it.faculty,
                 description = it.description,
             )
@@ -81,7 +78,7 @@ class TeamServiceImpl : TeamService {
 
         val members = dto.members?.map {
             TeamMember(
-                roles = roleRepository.getAllByIdIn(it.roles!!).map { role -> RoleVO(role) } as MutableList<RoleVO>,
+                roles = teamRoleRepository.getAllByIdIn(it.roles!!).map { role -> TeamRoleVO(role) } as MutableList<TeamRoleVO>,
                 faculty = it.faculty,
                 description = it.description,
             )
@@ -119,5 +116,24 @@ class TeamServiceImpl : TeamService {
     override fun deleteTeamRecruitment(teamId: Long, recruitmentId: Long) {
         getTeam(teamId)
         recruitmentService.deleteRecruitment(recruitmentId)
+    }
+
+    override fun getRoleTree() : List<TeamRoleTreeVO> {
+        val roles = teamRoleRepository.findAll()
+
+        val res = mutableListOf<TeamRoleTreeVO>()
+
+        roles.forEach {
+            if (it.pid == null) {
+                res.add(TeamRoleTreeVO(it))
+            } else {
+                val parent = res.find { role -> role.id == it.pid }!!
+                if (parent.children == null) parent.children = mutableListOf()
+
+                parent.children!!.add(TeamRoleTreeVO(it))
+            }
+        }
+
+        return res
     }
 }

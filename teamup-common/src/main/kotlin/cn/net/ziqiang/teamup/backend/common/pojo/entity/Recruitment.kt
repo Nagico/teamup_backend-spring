@@ -23,7 +23,7 @@ class Recruitment (
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false, referencedColumnName = "id")
     @Schema(description = "角色")
-    var role: Role? = null,
+    var role: TeamRole? = null,
 
     @Type(type = "json")
     @Column(name = "requirements", nullable = false, columnDefinition = "json")
