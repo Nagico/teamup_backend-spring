@@ -1,5 +1,7 @@
 package cn.net.ziqiang.teamup.backend.service.service.impl
 
+import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
+import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Recruitment
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentDto
@@ -38,7 +40,7 @@ class RecruitmentServiceImpl : RecruitmentService {
     override fun createRecruitment(dto: RecruitmentDto): RecruitmentVO {
         val recruitment = Recruitment(
             team = dto.team!!,
-            role = roleRepository.getById(dto.role!!),
+            role = roleRepository.findById(dto.role!!).orElseThrow { ApiException(ResultType.ResourceNotFound, "角色不存在") },
             requirements = dto.requirements!! as MutableList<String>,
         )
 
@@ -47,13 +49,14 @@ class RecruitmentServiceImpl : RecruitmentService {
 
     override fun updateRecruitment(id: Long, dto: RecruitmentDto): RecruitmentVO {
         val recruitment = recruitmentRepository.getById(id)
-        dto.role?.let { recruitment.role = roleRepository.getById(id) }
+        dto.role?.let { recruitment.role = roleRepository.findById(it).orElseThrow { ApiException(ResultType.ResourceNotFound, "角色不存在")} }
         dto.requirements?.let { recruitment.requirements = it as MutableList<String> }
 
         return RecruitmentVO(recruitmentRepository.save(recruitment))
     }
 
     override fun deleteRecruitment(id: Long) {
-        recruitmentRepository.deleteById(id)
+        val recruitment = recruitmentRepository.findById(id).orElseThrow { ApiException(ResultType.ResourceNotFound, "招募不存在") }
+        recruitmentRepository.delete(recruitment)
     }
 }
