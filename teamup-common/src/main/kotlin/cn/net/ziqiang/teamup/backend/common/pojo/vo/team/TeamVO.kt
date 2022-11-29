@@ -21,8 +21,6 @@ data class TeamVO (
     var tags: List<Tag>,
 
     var recruiting: Boolean,
-
-    var recruitments: List<Recruitment>,
 ) {
     constructor(team: Team) : this(
         team.id!!,
@@ -34,6 +32,5 @@ data class TeamVO (
         team.members,
         team.tags,
         team.recruiting,
-        team.recruitments,
     )
 }

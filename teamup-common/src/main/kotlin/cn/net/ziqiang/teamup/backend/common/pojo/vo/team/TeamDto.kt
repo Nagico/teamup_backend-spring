@@ -1,7 +1,5 @@
 package cn.net.ziqiang.teamup.backend.common.pojo.vo.team
 
-import cn.net.ziqiang.teamup.backend.common.pojo.entity.TeamMember
-
 class TeamDto (
     var name: String? = null,
 
@@ -11,7 +9,7 @@ class TeamDto (
 
     var tags: List<String>? = null,
 
-    var members: List<TeamMember>? = null,
+    var members: List<TeamMemberDto>? = null,
 
     var recruiting: Boolean? = null,
 )

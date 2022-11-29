@@ -7,16 +7,17 @@ import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
 
 @TypeDef(name = "json", typeClass = JsonStringType::class)
-class TeamMember {
+class TeamMember (
     @Type(type = "json")
     @Schema(description = "角色")
-    var roles: MutableList<RoleVO> = mutableListOf()
+    var roles: MutableList<RoleVO> = mutableListOf(),
 
     @Schema(description = "学院")
-    var faculty: String? = null
+    var faculty: String? = null,
 
     @Schema(description = "成员描述")
-    var description: String? = null
+    var description: String? = null,
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is TeamMember) return false

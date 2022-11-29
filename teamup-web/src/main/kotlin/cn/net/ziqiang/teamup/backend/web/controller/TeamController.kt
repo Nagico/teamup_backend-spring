@@ -1,7 +1,10 @@
 package cn.net.ziqiang.teamup.backend.web.controller
 
 import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.Recruitment
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Team
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentDto
+import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamInfoVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamVO
@@ -61,5 +64,45 @@ class TeamController {
     @Operation(summary = "删除队伍")
     fun deleteTeam(@PathVariable id: Long) {
         teamService.deleteTeam(id)
+    }
+
+    @ActiveUser
+    @GetMapping("/{id}/recruitments")
+    @Operation(summary = "获取队伍招募信息")
+    fun getTeamRecruitments(
+        @PathVariable id: Long,
+        @RequestParam(defaultValue = "1") page: Int,
+        @RequestParam(defaultValue = "10") pageSize: Int,
+    ): PagedList<Recruitment, RecruitmentVO> {
+        val pageRequest = PageRequest.of(page - 1, pageSize)
+        return teamService.getTeamRecruitments(id, pageRequest)
+    }
+
+    @ActiveUser
+    @OwnerOrManager("team")
+    @PostMapping("/{id}/recruitments")
+    @Operation(summary = "创建招募")
+    fun createRecruitment(@PathVariable id: Long, @RequestBody recruitment: RecruitmentDto): RecruitmentVO {
+        return teamService.createTeamRecruitment(id, recruitment)
+    }
+
+    @ActiveUser
+    @OwnerOrManager("team")
+    @PutMapping("/{id}/recruitments/{recruitmentId}")
+    @Operation(summary = "修改招募")
+    fun updateRecruitment(
+        @PathVariable id: Long,
+        @PathVariable recruitmentId: Long,
+        @RequestBody recruitment: RecruitmentDto
+    ): RecruitmentVO {
+        return teamService.updateTeamRecruitment(id, recruitmentId, recruitment)
+    }
+
+    @ActiveUser
+    @OwnerOrManager("team")
+    @DeleteMapping("/{id}/recruitments/{recruitmentId}")
+    @Operation(summary = "删除招募")
+    fun deleteRecruitment(@PathVariable id: Long, @PathVariable recruitmentId: Long) {
+        teamService.deleteTeamRecruitment(id, recruitmentId)
     }
 }

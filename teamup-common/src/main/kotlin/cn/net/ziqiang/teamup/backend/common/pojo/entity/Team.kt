@@ -42,10 +42,6 @@ class Team (
     @Schema(description = "队伍成员")
     var members: MutableList<TeamMember> = mutableListOf(),
 
-    @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    @Schema(description = "招募信息")
-    var recruitments: MutableList<Recruitment> = mutableListOf(),
-
     @Type(type = "json")
     @Column(name = "tags", nullable = false, columnDefinition = "json")
     @Schema(description = "标签")
