@@ -42,4 +42,10 @@ object RedisKey {
     fun teamRoleTree(rootId: Long) = "team::teamRoleTree:rootId=$rootId"
 
     // endregion
+
+    // region competition
+    fun competitionKey(comId: Long) = "competition:competition:id=$comId"
+    fun competitionListKey() = "competition:competitionList:all"
+
+    // endregion
 }

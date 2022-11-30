@@ -5,9 +5,9 @@ import cn.net.ziqiang.teamup.backend.common.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Competition;
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionBriefVO;
 import cn.net.ziqiang.teamup.backend.dao.repository.CompetitionRepository;
+import cn.net.ziqiang.teamup.backend.service.cache.CompetitionCacheManager;
 import cn.net.ziqiang.teamup.backend.service.service.CompetitionService;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,24 +15,50 @@ import java.util.List;
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
 
-    @Autowired
+    final
     CompetitionRepository competitionRepository;
+
+    final
+    CompetitionCacheManager competitionCacheManager;
+
+    public CompetitionServiceImpl(CompetitionRepository competitionRepository, CompetitionCacheManager competitionCacheManager) {
+        this.competitionRepository = competitionRepository;
+        this.competitionCacheManager = competitionCacheManager;
+    }
 
     @Override
     public boolean competitionExists(Long id) {
-        return competitionRepository.existsById(id);
+        Competition cached = competitionCacheManager.getCompetitionCache(id);
+
+        if (cached == null) {
+            return competitionRepository.existsById(id);
+        }
+        return true;
     }
 
     @Override
     @NotNull
     public List<CompetitionBriefVO> getCompetitionList() {
-        return competitionRepository.findAll().stream().map(CompetitionBriefVO::new).toList();
+        List<Competition> cached = competitionCacheManager.getCompetitionListCache();
+
+        if (cached == null) {
+            cached = competitionRepository.findAll();
+            competitionCacheManager.setCompetitionListCache(cached);
+        }
+        return cached.stream().map(CompetitionBriefVO::new).toList();
     }
 
     @Override
     @NotNull
     public Competition getCompetitionById(Long id) throws ApiException {
-        return competitionRepository.findById(id).orElseThrow(() -> new ApiException(ResultType.ResourceNotFound, "比赛不存在"));
+        Competition cached = competitionCacheManager.getCompetitionCache(id);
+
+        if (cached == null) {
+            cached = competitionRepository.findById(id).orElseThrow(() -> new ApiException(ResultType.ResourceNotFound, "比赛不存在"));
+            competitionCacheManager.setCompetitionCache(cached);
+        }
+
+        return cached;
     }
 
     @Override
@@ -44,7 +70,9 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     @NotNull
     public Competition addCompetition(Competition competition) {
-        return competitionRepository.save(competition);
+        Competition res = competitionRepository.save(competition);
+        competitionCacheManager.setCompetitionCache(res);
+        return res;
     }
 
     @Override
@@ -84,12 +112,17 @@ public class CompetitionServiceImpl implements CompetitionService {
         if (competition.getScore() != null) {
             newCompetition.setScore(competition.getScore());
         }
-        return competitionRepository.save(newCompetition);
+        Competition res = competitionRepository.save(newCompetition);
+        competitionCacheManager.setCompetitionCache(res);
+        competitionCacheManager.deleteCompetitionListCache();
+        return res;
     }
 
     @Override
     public void deleteCompetitionById(Long id) {
         competitionRepository.deleteById(id);
+        competitionCacheManager.deleteCompetitionCache(id);
+        competitionCacheManager.deleteCompetitionListCache();
     }
 
     @Override
@@ -100,6 +133,8 @@ public class CompetitionServiceImpl implements CompetitionService {
         }
         competition.setVerified(verified);
         competitionRepository.save(competition);
+        competitionCacheManager.setCompetitionCache(competition);
+        competitionCacheManager.deleteCompetitionListCache();
         return verified;
     }
 }
