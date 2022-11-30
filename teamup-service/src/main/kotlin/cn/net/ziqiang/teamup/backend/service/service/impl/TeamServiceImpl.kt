@@ -64,7 +64,7 @@ class TeamServiceImpl : TeamService {
     }
 
     override fun getTeamDetail(teamId: Long): TeamVO {
-        return TeamVO(getTeam(teamId))
+        return TeamVO(getTeam(teamId, useCache = true))
     }
 
     @Transactional
@@ -134,22 +134,22 @@ class TeamServiceImpl : TeamService {
     }
 
     override fun getTeamRecruitments(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment, RecruitmentVO> {
-        val team = getTeam(teamId)
+        val team = getTeam(teamId, useCache = true)
         return recruitmentService.getRecruitmentListByTeamId(team.id!!, pageRequest)
     }
 
     override fun createTeamRecruitment(teamId: Long, dto: RecruitmentDto): RecruitmentVO {
-        dto.team = getTeam(teamId)
+        dto.team = getTeam(teamId, useCache = true)
         return recruitmentService.createRecruitment(dto)
     }
 
     override fun updateTeamRecruitment(teamId: Long, recruitmentId: Long, dto: RecruitmentDto): RecruitmentVO {
-        dto.team = getTeam(teamId)
+        dto.team = getTeam(teamId, useCache = true)
         return recruitmentService.updateRecruitment(recruitmentId, dto)
     }
 
     override fun deleteTeamRecruitment(teamId: Long, recruitmentId: Long) {
-        getTeam(teamId)
+        getTeam(teamId, useCache = true)
         recruitmentService.deleteRecruitment(recruitmentId)
     }
 
