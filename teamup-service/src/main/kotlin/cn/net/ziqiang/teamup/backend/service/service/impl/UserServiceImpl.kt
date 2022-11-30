@@ -73,8 +73,8 @@ class UserServiceImpl : UserService {
         val user = getUserById(id = id)
 
         // 检测激活
-        if (dto.realName.isNullOrBlank() && dto.faculty.isNullOrBlank() &&
-            dto.grade.isNullOrBlank() && dto.username.isNullOrBlank()
+        if (!dto.realName.isNullOrBlank() && !dto.faculty.isNullOrBlank() &&
+            !dto.grade.isNullOrBlank() && !dto.username.isNullOrBlank()
         ) {
             user.active = true
         }
