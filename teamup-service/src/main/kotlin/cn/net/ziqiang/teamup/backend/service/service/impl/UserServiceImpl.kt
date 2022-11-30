@@ -163,6 +163,7 @@ class UserServiceImpl : UserService {
 
         //更新资料
         userRepository.save(newUser)
+        userCacheManager.setUserCache(newUser)
 
         logger.info("新用户: $newUser")
 
@@ -180,6 +181,7 @@ class UserServiceImpl : UserService {
 
         user.password = SecurityUtils.encryptPassword(password = resetPasswordDto.password)
         userRepository.save(user)
+        userCacheManager.setUserCache(user)
     }
 
     override fun changePhone(userId: Long, changePhoneDto: ChangePhoneDto) {
