@@ -3,6 +3,7 @@ package cn.net.ziqiang.teamup.backend.common.pagination
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import kotlin.math.min
 
 /**
  * 分页列表
@@ -57,9 +58,13 @@ class PagedList<M, T>(
 
     constructor(data: List<M>, pageable: Pageable, func: (M) -> T = { m -> m as T }) : this() {
         count = data.size.toLong()
-        results = data.subList(pageable.offset.toInt(), (pageable.offset + pageable.pageSize).toInt()).map(func)
-        val page = pageable.pageNumber
+        val page = pageable.pageNumber + 1
         val pageSize = pageable.pageSize
+        results = if (page > 0 && (page - 1) * pageSize < count) {
+            data.subList(pageable.offset.toInt(), min((pageable.offset + pageable.pageSize), count).toInt()).map(func)
+        } else {
+            emptyList()
+        }
 
         val baseUrl = getBaseUrlString()
 

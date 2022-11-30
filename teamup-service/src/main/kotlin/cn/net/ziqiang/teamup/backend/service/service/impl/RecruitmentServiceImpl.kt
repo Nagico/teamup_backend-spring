@@ -70,9 +70,10 @@ class RecruitmentServiceImpl : RecruitmentService {
         )
 
         return RecruitmentVO(recruitmentRepository.save(recruitment).apply {
+            val teamId = team!!.id!!
             thread {
                 recruitmentCacheManager.setRecruitmentCache(this)
-                recruitmentCacheManager.setRecruitmentListByTeamIdCache(team!!.id!!, recruitmentRepository.findByTeamId(team!!.id!!))
+                recruitmentCacheManager.setRecruitmentListByTeamIdCache(teamId, recruitmentRepository.findByTeamId(teamId))
             }
         })
     }
@@ -83,9 +84,10 @@ class RecruitmentServiceImpl : RecruitmentService {
         dto.requirements?.let { recruitment.requirements = it as MutableList<String> }
 
         return RecruitmentVO(recruitmentRepository.save(recruitment).apply {
+            val teamId = team!!.id!!
             thread {
                 recruitmentCacheManager.setRecruitmentCache(this)
-                recruitmentCacheManager.setRecruitmentListByTeamIdCache(team!!.id!!, recruitmentRepository.findByTeamId(team!!.id!!))
+                recruitmentCacheManager.setRecruitmentListByTeamIdCache(teamId, recruitmentRepository.findByTeamId(teamId))
             }
         })
     }

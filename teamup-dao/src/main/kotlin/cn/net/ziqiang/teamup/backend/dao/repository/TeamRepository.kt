@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 interface TeamRepository : JpaRepository<Team, Long>, JpaSpecificationExecutor<Team> {
     fun findAllByCompetitionId(competitionId: Long, pageable: Pageable): Page<Team>
     fun findAllByLeaderId(creatorId: Long, pageable: Pageable): Page<Team>
+
+    fun findAllByLeaderId(creatorId: Long): List<Team>
 }

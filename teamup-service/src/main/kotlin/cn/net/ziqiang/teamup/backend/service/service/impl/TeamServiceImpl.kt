@@ -12,11 +12,13 @@ import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.*
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRoleRepository
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRepository
+import cn.net.ziqiang.teamup.backend.service.cache.TeamCacheManager
 import cn.net.ziqiang.teamup.backend.service.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlin.concurrent.thread
 
 @Service
 class TeamServiceImpl : TeamService {
@@ -32,15 +34,33 @@ class TeamServiceImpl : TeamService {
     private lateinit var tagService: TagService
     @Autowired
     private lateinit var recruitmentService: RecruitmentService
+    @Autowired
+    private lateinit var teamCacheManager: TeamCacheManager
 
 
-    private fun getTeam(teamId: Long): Team {
-        return teamRepository.findById(teamId).orElseThrow { ApiException(ResultType.ResourceNotFound) }.checkPermission()
+    private fun getTeam(teamId: Long, useCache: Boolean = false): Team {
+        return if (useCache) {
+            teamCacheManager.getTeamCache(teamId) ?: run {
+                teamRepository.findById(teamId).orElseThrow { ApiException(ResultType.ResourceNotFound) }.apply {
+                    teamCacheManager.setTeamCache(this)
+                }.checkPermission()
+            }
+        } else {
+            teamRepository.findById(teamId).orElseThrow { ApiException(ResultType.ResourceNotFound) }.checkPermission()
+        }
     }
 
     override fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, TeamInfoVO> {
-        val teams = teamRepository.findAllByLeaderId(userId, pageRequest)
-        return PagedList(teams) { TeamInfoVO(it) }
+        val cachedList = teamCacheManager.getTeamListByUserIdCache(userId)
+        return if (cachedList != null) {
+            PagedList(cachedList, pageRequest) { TeamInfoVO(it) }
+        } else {
+            val teams = teamRepository.findAllByLeaderId(userId, pageRequest)
+            thread {
+                teamCacheManager.setTeamListByUserIdCache(userId, teamRepository.findAllByLeaderId(userId))
+            }
+            PagedList(teams) { TeamInfoVO(it) }
+        }
     }
 
     override fun getTeamDetail(teamId: Long): TeamVO {
@@ -70,7 +90,12 @@ class TeamServiceImpl : TeamService {
             recruiting = dto.recruiting ?: false
         )
 
-        return TeamVO(teamRepository.save(team))
+        return TeamVO(teamRepository.save(team)).apply {
+            thread {
+                teamCacheManager.setTeamCache(team)
+                teamCacheManager.setTeamListByUserIdCache(userId, teamRepository.findAllByLeaderId(userId))
+            }
+        }
     }
 
     override fun updateTeam(teamId: Long, dto: TeamDto): TeamVO {
@@ -90,12 +115,22 @@ class TeamServiceImpl : TeamService {
         members?.let { team.members = it as MutableList<TeamMember> }
         dto.recruiting?.let { team.recruiting = it }
 
-        return TeamVO(teamRepository.save(team))
+        return TeamVO(teamRepository.save(team)).apply {
+            val userId = team.leader!!.id!!
+            thread {
+                teamCacheManager.setTeamCache(team)
+                teamCacheManager.setTeamListByUserIdCache(userId, teamRepository.findAllByLeaderId(userId))
+            }
+        }
     }
 
     override fun deleteTeam(teamId: Long) {
-        val team = getTeam(teamId)
-        teamRepository.delete(team)
+        val userId = getTeam(teamId).leader!!.id!!
+        thread {
+            teamRepository.deleteById(teamId)
+            teamCacheManager.deleteTeamCache(teamId)
+            teamCacheManager.deleteTeamListByUserIdCache(userId)
+        }
     }
 
     override fun getTeamRecruitments(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment, RecruitmentVO> {
@@ -119,21 +154,25 @@ class TeamServiceImpl : TeamService {
     }
 
     override fun getRoleTree() : List<TeamRoleTreeVO> {
-        val roles = teamRoleRepository.findAll()
+        return teamCacheManager.getTeamRoleTreeCache() ?: run {
+            val roles = teamRoleRepository.findAll()
 
-        val res = mutableListOf<TeamRoleTreeVO>()
+            val res = mutableListOf<TeamRoleTreeVO>()
 
-        roles.forEach {
-            if (it.pid == null) {
-                res.add(TeamRoleTreeVO(it))
-            } else {
-                val parent = res.find { role -> role.id == it.pid }!!
-                if (parent.children == null) parent.children = mutableListOf()
+            roles.forEach {
+                if (it.pid == null) {
+                    res.add(TeamRoleTreeVO(it))
+                } else {
+                    val parent = res.find { role -> role.id == it.pid }!!
+                    if (parent.children == null) parent.children = mutableListOf()
 
-                parent.children!!.add(TeamRoleTreeVO(it))
+                    parent.children!!.add(TeamRoleTreeVO(it))
+                }
+            }
+
+            res.apply {
+                teamCacheManager.setTeamRoleTreeCache(this)
             }
         }
-
-        return res
     }
 }

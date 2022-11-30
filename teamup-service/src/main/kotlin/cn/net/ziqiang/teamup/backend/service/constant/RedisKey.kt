@@ -35,9 +35,11 @@ object RedisKey {
 
     // region team
 
-    fun teamKey(team: Team) = "team:team:id=$team.id"
+    fun teamKey(teamId: Long) = "team:team:id=$teamId"
 
     fun teamListByUserIdKey(userId: Long) = "team:teamListByUserId:userId=$userId"
+
+    fun teamRoleTree(rootId: Long) = "team::teamRoleTree:rootId=$rootId"
 
     // endregion
 }
