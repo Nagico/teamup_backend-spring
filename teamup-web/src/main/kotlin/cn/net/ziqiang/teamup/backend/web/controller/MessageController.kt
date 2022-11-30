@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.security.Principal
 import javax.annotation.security.PermitAll
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/messages")
@@ -34,7 +35,7 @@ class MessageController {
      */
     @PermitAll
     @MessageMapping("/send")
-    fun sendMessageTest(principal: Principal, @Payload message: MessageVO) : String {
+    fun sendMessageTest(principal: Principal,@Valid @Payload message: MessageVO) : String {
         messageService.sendMsg(principal.name.toLong(), message)
 
         return "success"
