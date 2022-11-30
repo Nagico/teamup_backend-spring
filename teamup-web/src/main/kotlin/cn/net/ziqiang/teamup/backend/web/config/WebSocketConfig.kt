@@ -38,6 +38,10 @@ class WebSocketConfig : WebSocketMessageBrokerConfigurer {
             .setAllowedOrigins(*corsProperties.whitelists.toTypedArray())
             .withSockJS()
 
+        registry
+            .addEndpoint("/ws")
+            .setAllowedOrigins(*corsProperties.whitelists.toTypedArray())
+
         registry.setErrorHandler(object : StompSubProtocolErrorHandler() {
             override fun handleInternal(
                 errorHeaderAccessor: StompHeaderAccessor,
