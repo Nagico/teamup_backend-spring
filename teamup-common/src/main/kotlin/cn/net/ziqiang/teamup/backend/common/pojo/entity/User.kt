@@ -11,7 +11,6 @@ import java.util.*
 import javax.persistence.*
 
 @Entity(name = "user")
-@JsonIgnoreProperties(value= ["handler"])
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +27,6 @@ class User(
 
     @Column(name = "password", nullable = false)
     @Schema(description = "密码")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     var password: String = "",
 
     @Column(name = "student_id")
