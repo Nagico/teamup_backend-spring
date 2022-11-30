@@ -11,7 +11,7 @@ class OssCacheManager {
     @Autowired
     private lateinit var redisTemplate: RedisTemplate<String, Any>
 
-    private val _keyPrefix = "OSS_CALLBACK_VERIFY_PUBKEY"
+    private val _keyPrefix = "oss:pubkey:callback:url="
 
     //OSS callback 验证 缓存
 
@@ -23,6 +23,6 @@ class OssCacheManager {
     }
 
     fun getKeyCache(url: String): String? {
-        return redisTemplate.opsForValue()["$_keyPrefix:$url"] as? String
+        return redisTemplate.opsForValue()["$_keyPrefix$url"] as? String
     }
 }
