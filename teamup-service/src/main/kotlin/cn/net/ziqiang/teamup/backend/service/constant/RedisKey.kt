@@ -1,5 +1,7 @@
 package cn.net.ziqiang.teamup.backend.service.constant
 
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.Team
+
 
 object RedisKey {
     //region user
@@ -26,6 +28,14 @@ object RedisKey {
     // region recruitment
 
     fun recruitmentKey(id: Long): String = "recruitment.recruitment::id=$id"
+
+    fun recruitmentListByTeamIdKey(teamId: Long) = "recruitment.recruitmentListByTeamId::teamId=$teamId"
+
+    // endregion
+
+    // region team
+
+    fun teamKey(team: Team) = "team.team::id=$team.id"
 
     // endregion
 }

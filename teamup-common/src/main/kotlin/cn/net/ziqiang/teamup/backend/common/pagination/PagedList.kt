@@ -1,6 +1,7 @@
 package cn.net.ziqiang.teamup.backend.common.pagination
 
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 
 /**
@@ -35,6 +36,30 @@ class PagedList<M, T>(
         results = pageData.content.map(func)
         val page = pageData.number
         val pageSize = pageData.size
+
+        val baseUrl = getBaseUrlString()
+
+        previous = if (page > 1)
+        {
+            "$baseUrl?page=${page - 1}&pageSize=$pageSize"
+        } else
+        {
+            null
+        }
+        next = if (page * pageSize < count)
+        {
+            "$baseUrl?page=${page + 1}&pageSize=$pageSize"
+        } else
+        {
+            null
+        }
+    }
+
+    constructor(data: List<M>, pageable: Pageable, func: (M) -> T = { m -> m as T }) : this() {
+        count = data.size.toLong()
+        results = data.subList(pageable.offset.toInt(), (pageable.offset + pageable.pageSize).toInt()).map(func)
+        val page = pageable.pageNumber
+        val pageSize = pageable.pageSize
 
         val baseUrl = getBaseUrlString()
 

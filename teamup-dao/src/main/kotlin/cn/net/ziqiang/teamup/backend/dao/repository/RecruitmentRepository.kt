@@ -10,5 +10,5 @@ interface RecruitmentRepository : JpaRepository<Recruitment, Long>, JpaSpecifica
     fun findByTeam_RecruitingTrue(pageRequest: Pageable): Page<Recruitment>
 
     fun findByTeamId(teamId: Long, pageRequest: Pageable): Page<Recruitment>
-
+    fun findByTeamId(teamId: Long): List<Recruitment>
 }

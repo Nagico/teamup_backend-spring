@@ -13,6 +13,7 @@ import cn.net.ziqiang.teamup.backend.service.service.RecruitmentService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import kotlin.concurrent.thread
 
 @Service
 class RecruitmentServiceImpl : RecruitmentService {
@@ -42,10 +43,19 @@ class RecruitmentServiceImpl : RecruitmentService {
 
     override fun getRecruitmentListByTeamId(
         teamId: Long,
-        pageRequest: PageRequest,
+        pageRequest: PageRequest
     ): PagedList<Recruitment, RecruitmentVO> {
-        val recruitmentList = recruitmentRepository.findByTeamId(teamId, pageRequest)
-        return PagedList(recruitmentList) { RecruitmentVO(it) }
+        val cachedList = recruitmentCacheManager.getRecruitmentListByTeamIdCache(teamId)
+
+        return if (cachedList != null) {
+            PagedList(cachedList, pageRequest) { RecruitmentVO(it) }
+        } else {
+            val recruitmentList = recruitmentRepository.findByTeamId(teamId, pageRequest)
+            thread {
+                recruitmentCacheManager.setRecruitmentListByTeamIdCache(teamId, recruitmentRepository.findByTeamId(teamId))
+            }
+            PagedList(recruitmentList) { RecruitmentVO(it) }
+        }
     }
 
     override fun getRecruitmentById(id: Long): RecruitmentVO {
@@ -59,7 +69,12 @@ class RecruitmentServiceImpl : RecruitmentService {
             requirements = dto.requirements!! as MutableList<String>,
         )
 
-        return RecruitmentVO(recruitmentRepository.save(recruitment))
+        return RecruitmentVO(recruitmentRepository.save(recruitment).apply {
+            thread {
+                recruitmentCacheManager.setRecruitmentCache(this)
+                recruitmentCacheManager.setRecruitmentListByTeamIdCache(team!!.id!!, recruitmentRepository.findByTeamId(team!!.id!!))
+            }
+        })
     }
 
     override fun updateRecruitment(id: Long, dto: RecruitmentDto): RecruitmentVO {
@@ -67,11 +82,20 @@ class RecruitmentServiceImpl : RecruitmentService {
         dto.role?.let { recruitment.role = teamRoleRepository.findById(it).orElseThrow { ApiException(ResultType.ResourceNotFound, "角色不存在")} }
         dto.requirements?.let { recruitment.requirements = it as MutableList<String> }
 
-        return RecruitmentVO(recruitmentRepository.save(recruitment))
+        return RecruitmentVO(recruitmentRepository.save(recruitment).apply {
+            thread {
+                recruitmentCacheManager.setRecruitmentCache(this)
+                recruitmentCacheManager.setRecruitmentListByTeamIdCache(team!!.id!!, recruitmentRepository.findByTeamId(team!!.id!!))
+            }
+        })
     }
 
     override fun deleteRecruitment(id: Long) {
-        val recruitment = getRecruitment(id, false)
-        recruitmentRepository.delete(recruitment)
+        val teamId = getRecruitment(id, false).team!!.id!!
+        thread {
+            recruitmentRepository.deleteById(id)
+            recruitmentCacheManager.deleteRecruitmentCache(id)
+            recruitmentCacheManager.setRecruitmentListByTeamIdCache(teamId, recruitmentRepository.findByTeamId(teamId))
+        }
     }
 }

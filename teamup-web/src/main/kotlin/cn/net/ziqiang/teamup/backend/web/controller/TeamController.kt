@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.annotation.security.PermitAll
 
@@ -71,6 +72,7 @@ class TeamController {
     @OwnerOrManager("team")
     @DeleteMapping("/{id}")
     @Operation(summary = "删除队伍")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     fun deleteTeam(@PathVariable id: Long) {
         teamService.deleteTeam(id)
     }
@@ -111,6 +113,7 @@ class TeamController {
     @OwnerOrManager("team")
     @DeleteMapping("/{id}/recruitments/{recruitmentId}")
     @Operation(summary = "删除招募")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     fun deleteRecruitment(@PathVariable id: Long, @PathVariable recruitmentId: Long) {
         teamService.deleteTeamRecruitment(id, recruitmentId)
     }

@@ -24,4 +24,24 @@ class RecruitmentCacheManager {
     fun getRecruitmentCache(id: Long): Recruitment? {
         return redisTemplate.opsForValue()[RedisKey.recruitmentKey(id)] as? Recruitment
     }
+
+    fun deleteRecruitmentCache(id: Long) {
+        redisTemplate.delete(RedisKey.recruitmentKey(id))
+    }
+
+    fun getRecruitmentListByTeamIdCache(teamId: Long): List<Recruitment>? {
+        return redisTemplate.opsForValue()[RedisKey.recruitmentListByTeamIdKey(teamId)] as? List<Recruitment>
+    }
+
+    fun setRecruitmentListByTeamIdCache(teamId: Long, recruitmentList: List<Recruitment>) {
+        redisTemplate.opsForValue().set(
+            /* key = */ RedisKey.recruitmentListByTeamIdKey(teamId),
+            /* value = */ recruitmentList,
+            /* timeout = */ Duration.ofDays(1)
+        )
+    }
+
+    fun deleteRecruitmentListByTeamIdCache(teamId: Long) {
+        redisTemplate.delete(RedisKey.recruitmentListByTeamIdKey(teamId))
+    }
 }
