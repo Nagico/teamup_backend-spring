@@ -8,6 +8,7 @@ import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
 import cn.net.ziqiang.teamup.backend.dao.repository.RecruitmentRepository
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRoleRepository
+import cn.net.ziqiang.teamup.backend.service.cache.RecruitmentCacheManager
 import cn.net.ziqiang.teamup.backend.service.service.RecruitmentService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
@@ -19,6 +20,20 @@ class RecruitmentServiceImpl : RecruitmentService {
     private lateinit var recruitmentRepository: RecruitmentRepository
     @Autowired
     private lateinit var teamRoleRepository: TeamRoleRepository
+    @Autowired
+    private lateinit var recruitmentCacheManager: RecruitmentCacheManager
+
+    private fun getRecruitment(id: Long, useCache: Boolean = true): Recruitment {
+        return if (useCache) {
+            recruitmentCacheManager.getRecruitmentCache(id) ?: run {
+                recruitmentRepository.findById(id).orElseThrow { ApiException(ResultType.ResourceNotFound, "招募不存在") }.apply {
+                    recruitmentCacheManager.setRecruitmentCache(this)
+                }
+            }
+        } else {
+            recruitmentRepository.findById(id).orElseThrow { ApiException(ResultType.ResourceNotFound, "招募不存在") }
+        }
+    }
 
     override fun getRecruitmentList(pageRequest: PageRequest): PagedList<Recruitment, RecruitmentVO> {
         val recruitmentList = recruitmentRepository.findByTeam_RecruitingTrue(pageRequest)
@@ -34,7 +49,7 @@ class RecruitmentServiceImpl : RecruitmentService {
     }
 
     override fun getRecruitmentById(id: Long): RecruitmentVO {
-        return RecruitmentVO(recruitmentRepository.getById(id))
+        return RecruitmentVO(getRecruitment(id))
     }
 
     override fun createRecruitment(dto: RecruitmentDto): RecruitmentVO {
@@ -48,7 +63,7 @@ class RecruitmentServiceImpl : RecruitmentService {
     }
 
     override fun updateRecruitment(id: Long, dto: RecruitmentDto): RecruitmentVO {
-        val recruitment = recruitmentRepository.getById(id)
+        val recruitment = getRecruitment(id, false)
         dto.role?.let { recruitment.role = teamRoleRepository.findById(it).orElseThrow { ApiException(ResultType.ResourceNotFound, "角色不存在")} }
         dto.requirements?.let { recruitment.requirements = it as MutableList<String> }
 
@@ -56,7 +71,7 @@ class RecruitmentServiceImpl : RecruitmentService {
     }
 
     override fun deleteRecruitment(id: Long) {
-        val recruitment = recruitmentRepository.findById(id).orElseThrow { ApiException(ResultType.ResourceNotFound, "招募不存在") }
+        val recruitment = getRecruitment(id, false)
         recruitmentRepository.delete(recruitment)
     }
 }
