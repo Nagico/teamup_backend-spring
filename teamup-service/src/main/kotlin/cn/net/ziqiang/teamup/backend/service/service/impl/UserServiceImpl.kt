@@ -40,17 +40,21 @@ class UserServiceImpl : UserService {
     @Autowired
     private lateinit var authService: AuthService
 
-    override fun getUserById(id: Long): User {
-        return getUserByIdOrNull(id) ?: throw ApiException(type = ResultType.ResourceNotFound, message = "用户不存在")
+    override fun getUserById(id: Long, useCache: Boolean): User {
+        return getUserByIdOrNull(id, useCache) ?: throw ApiException(type = ResultType.ResourceNotFound, message = "用户不存在")
     }
 
-    override fun getUserByIdOrNull(id: Long): User? {
-        return userCacheManager.getUserCache(userId = id) ?: run {
-            val query = userRepository.findById(id).orElse(null)
-            query?.let {
-                userCacheManager.setUserCache(user = query)
+    override fun getUserByIdOrNull(id: Long, useCache: Boolean): User? {
+        return if (useCache) {
+            userCacheManager.getUserCache(userId = id) ?: run {
+                val query = userRepository.findById(id).orElse(null)
+                query?.let {
+                    userCacheManager.setUserCache(user = query)
+                }
+                query
             }
-            query
+        } else {
+            userRepository.findById(id).orElse(null)
         }
     }
 
@@ -70,7 +74,7 @@ class UserServiceImpl : UserService {
     }
 
     override fun updateUser(id: Long, dto: UpdateUserProfileDto) : UserProfileVO {
-        val user = getUserById(id = id)
+        val user = getUserById(id = id, useCache = false)
 
         // 检测激活
         if (!dto.realName.isNullOrBlank() && !dto.faculty.isNullOrBlank() &&
@@ -104,7 +108,7 @@ class UserServiceImpl : UserService {
         if (avatar.contentType != "image/jpeg" && avatar.contentType != "image/png")
             throw ApiException(type = ResultType.ParamValidationFailed, message = "头像仅支持jpg与png格式的图片")
 
-        val user = getUserById(id)
+        val user = getUserById(id, useCache = false)
 
         if (!user.avatar.isNullOrEmpty() && user.avatar != DEFAULT_AVATAR) {
             ossBusiness.deleteFileByUrl(user.avatar!!)
@@ -185,7 +189,7 @@ class UserServiceImpl : UserService {
     }
 
     override fun changePhone(userId: Long, changePhoneDto: ChangePhoneDto) {
-        val user = getUserById(userId)
+        val user = getUserById(userId, useCache = false)
 
         if (userRepository.findByPhone(changePhoneDto.phone) != null)
             throw ApiException(type = ResultType.ParamValidationFailed, message = "手机号已被注册")
@@ -226,7 +230,7 @@ class UserServiceImpl : UserService {
     }
 
     override fun changePassword(userId: Long, changePasswordDto: ChangePasswordDto) {
-        val user = userRepository.findById(userId).orElseThrow { ApiException(ResultType.ResourceNotFound, "用户不存在") }
+        val user = getUserById(userId, useCache = false)
 
         if (!SecurityUtils.matches(password = changePasswordDto.oldPassword, encodedPassword = user.password)) {
             throw ApiException(ResultType.PasswordWrong)

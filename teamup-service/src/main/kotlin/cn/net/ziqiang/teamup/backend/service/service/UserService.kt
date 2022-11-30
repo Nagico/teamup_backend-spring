@@ -14,14 +14,14 @@ interface UserService {
      * @param id
      * @return
      */
-    fun getUserById(id: Long): User
+    fun getUserById(id: Long, useCache: Boolean = true): User
 
     /**
      * 通过id获取用户，没有则返回Null
      * @param id
      * @return
      */
-    fun getUserByIdOrNull(id: Long): User?
+    fun getUserByIdOrNull(id: Long, useCache: Boolean = true): User?
 
     /**
      * 通过id获取用户简要信息
