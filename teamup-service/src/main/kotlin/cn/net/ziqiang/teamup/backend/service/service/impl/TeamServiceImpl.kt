@@ -12,7 +12,6 @@ import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.*
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRoleRepository
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRepository
-import cn.net.ziqiang.teamup.backend.service.business.EsBusiness
 import cn.net.ziqiang.teamup.backend.service.cache.TeamCacheManager
 import cn.net.ziqiang.teamup.backend.service.service.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -53,8 +52,20 @@ class TeamServiceImpl : TeamService {
         }
     }
 
-    override fun getTeamList(): List<TeamInfoVO> {
-        return teamRepository.findAll().map { TeamInfoVO(it) }
+    override fun searchTeams(
+        competition: String?,
+        role: String?,
+        id: Long?,
+    ): List<TeamInfoVO> {
+        return if (competition != null) {
+            esService.getTeamDocListByCompetition(competition).map { TeamInfoVO(getTeam(it.id!!)) }
+        } else if (role != null) {
+            esService.getTeamDocListByRole(role).map { TeamInfoVO(getTeam(it.id!!)) }
+        } else if (id != null) {
+            listOf(TeamInfoVO(getTeam(esService.getTeamDocById(id).id!!)))
+        } else {
+            teamRepository.findAll().map { TeamInfoVO(it) }
+        }
     }
 
     override fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, TeamInfoVO> {
@@ -110,7 +121,7 @@ class TeamServiceImpl : TeamService {
             thread {
                 teamCacheManager.setTeamCache(team)
                 teamCacheManager.setTeamListByUserIdCache(userId, teamRepository.findAllByLeaderId(userId))
-                esService.addTeam(team)
+                esService.addTeamDoc(team)
             }
         }
     }
@@ -137,7 +148,7 @@ class TeamServiceImpl : TeamService {
             thread {
                 teamCacheManager.setTeamCache(team)
                 teamCacheManager.setTeamListByUserIdCache(userId, teamRepository.findAllByLeaderId(userId))
-                esService.updateTeam(team)
+                esService.updateTeamDoc(team)
             }
         }
     }
@@ -148,7 +159,7 @@ class TeamServiceImpl : TeamService {
             teamRepository.deleteById(teamId)
             teamCacheManager.deleteTeamCache(teamId)
             teamCacheManager.deleteTeamListByUserIdCache(userId)
-            esService.deleteTeam(teamId)
+            esService.deleteTeamDoc(teamId)
         }
     }
 
@@ -168,7 +179,7 @@ class TeamServiceImpl : TeamService {
                 teamRepository.save(team)
                 teamCacheManager.setTeamCache(team)
             }
-            esService.updateTeam(team)
+            esService.updateTeamDoc(team)
         }
     }
 
@@ -196,7 +207,7 @@ class TeamServiceImpl : TeamService {
                 teamRepository.save(team)
                 teamCacheManager.setTeamCache(team)
             }
-            esService.updateTeam(team)
+            esService.updateTeamDoc(team)
         }
     }
 
@@ -211,7 +222,7 @@ class TeamServiceImpl : TeamService {
                 teamRepository.save(team)
                 teamCacheManager.setTeamCache(team)
             }
-            esService.deleteTeam(teamId)
+            esService.deleteTeamDoc(teamId)
         }
     }
 
