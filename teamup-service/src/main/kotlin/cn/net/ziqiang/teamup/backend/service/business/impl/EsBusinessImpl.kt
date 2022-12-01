@@ -7,11 +7,11 @@ import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j.Companion.logger
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.service.annotation.Business
-import cn.net.ziqiang.teamup.backend.service.annotation.DocId
-import cn.net.ziqiang.teamup.backend.service.annotation.EsClass
-import cn.net.ziqiang.teamup.backend.service.annotation.EsField
+import cn.net.ziqiang.teamup.backend.common.annotation.DocId
+import cn.net.ziqiang.teamup.backend.common.annotation.EsClass
+import cn.net.ziqiang.teamup.backend.common.annotation.EsField
 import cn.net.ziqiang.teamup.backend.service.business.EsBusiness
-import cn.net.ziqiang.teamup.backend.service.constant.EsDataType
+import cn.net.ziqiang.teamup.backend.common.constant.type.EsDataType
 import co.elastic.clients.elasticsearch.ElasticsearchAsyncClient
 import co.elastic.clients.elasticsearch.ElasticsearchClient
 import co.elastic.clients.elasticsearch._types.InlineScript

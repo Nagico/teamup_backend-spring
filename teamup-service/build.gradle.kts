@@ -30,7 +30,4 @@ dependencies {
     // Wechat
     implementation("com.github.binarywang:weixin-java-miniapp:4.4.0")
 
-    // es
-    implementation("co.elastic.clients:elasticsearch-java:8.5.2")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.0")
 }

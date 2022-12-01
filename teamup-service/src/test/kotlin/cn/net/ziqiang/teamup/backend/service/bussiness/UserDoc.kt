@@ -1,9 +1,9 @@
 package cn.net.ziqiang.teamup.backend.service.bussiness
 
-import cn.net.ziqiang.teamup.backend.service.annotation.DocId
-import cn.net.ziqiang.teamup.backend.service.annotation.EsClass
-import cn.net.ziqiang.teamup.backend.service.annotation.EsField
-import cn.net.ziqiang.teamup.backend.service.constant.EsDataType
+import cn.net.ziqiang.teamup.backend.common.annotation.DocId
+import cn.net.ziqiang.teamup.backend.common.annotation.EsClass
+import cn.net.ziqiang.teamup.backend.common.annotation.EsField
+import cn.net.ziqiang.teamup.backend.common.constant.type.EsDataType
 
 
 @EsClass

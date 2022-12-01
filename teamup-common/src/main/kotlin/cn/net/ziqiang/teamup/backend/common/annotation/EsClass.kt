@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.service.annotation
+package cn.net.ziqiang.teamup.backend.common.annotation
 
 import org.springframework.stereotype.Component
 

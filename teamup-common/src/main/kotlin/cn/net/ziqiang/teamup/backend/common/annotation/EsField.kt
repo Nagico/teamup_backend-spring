@@ -1,6 +1,6 @@
-package cn.net.ziqiang.teamup.backend.service.annotation
+package cn.net.ziqiang.teamup.backend.common.annotation
 
-import cn.net.ziqiang.teamup.backend.service.constant.EsDataType
+import cn.net.ziqiang.teamup.backend.common.constant.type.EsDataType
 import org.springframework.stereotype.Component
 
 

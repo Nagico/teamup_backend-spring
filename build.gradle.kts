@@ -80,6 +80,7 @@ subprojects {
 			// MyBatis Plus Generator
 			mavenBom("com.baomidou:mybatis-plus-generator:3.5.3")
 			mavenBom("org.freemarker:freemarker:2.3.31")
+
 		}
 	}
 
@@ -110,6 +111,13 @@ subprojects {
 
 		// Sentry
 		implementation("io.sentry:sentry-spring-boot-starter:6.8.0")
+
+		// es
+		implementation("jakarta.json:jakarta.json-api:2.0.1")
+		implementation("com.fasterxml.jackson.core:jackson-databind:2.12.3")
+		implementation("com.fasterxml.jackson.core:jackson-annotations:2.12.3")
+		implementation("com.fasterxml.jackson.core:jackson-core:2.12.3")
+		implementation("co.elastic.clients:elasticsearch-java:8.5.2")
 
 		// 测试
 		testImplementation("org.springframework.boot:spring-boot-starter-test")

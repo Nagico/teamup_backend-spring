@@ -12,6 +12,7 @@ import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.*
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRoleRepository
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRepository
+import cn.net.ziqiang.teamup.backend.service.business.EsBusiness
 import cn.net.ziqiang.teamup.backend.service.cache.TeamCacheManager
 import cn.net.ziqiang.teamup.backend.service.service.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,6 +37,8 @@ class TeamServiceImpl : TeamService {
     private lateinit var recruitmentService: RecruitmentService
     @Autowired
     private lateinit var teamCacheManager: TeamCacheManager
+    @Autowired
+    private lateinit var esService: EsService
 
 
     private fun getTeam(teamId: Long, useCache: Boolean = false): Team {
@@ -107,6 +110,7 @@ class TeamServiceImpl : TeamService {
             thread {
                 teamCacheManager.setTeamCache(team)
                 teamCacheManager.setTeamListByUserIdCache(userId, teamRepository.findAllByLeaderId(userId))
+                esService.addTeam(team)
             }
         }
     }
@@ -133,6 +137,7 @@ class TeamServiceImpl : TeamService {
             thread {
                 teamCacheManager.setTeamCache(team)
                 teamCacheManager.setTeamListByUserIdCache(userId, teamRepository.findAllByLeaderId(userId))
+                esService.updateTeam(team)
             }
         }
     }
@@ -143,6 +148,7 @@ class TeamServiceImpl : TeamService {
             teamRepository.deleteById(teamId)
             teamCacheManager.deleteTeamCache(teamId)
             teamCacheManager.deleteTeamListByUserIdCache(userId)
+            esService.deleteTeam(teamId)
         }
     }
 
@@ -162,6 +168,7 @@ class TeamServiceImpl : TeamService {
                 teamRepository.save(team)
                 teamCacheManager.setTeamCache(team)
             }
+            esService.updateTeam(team)
         }
     }
 
@@ -189,6 +196,7 @@ class TeamServiceImpl : TeamService {
                 teamRepository.save(team)
                 teamCacheManager.setTeamCache(team)
             }
+            esService.updateTeam(team)
         }
     }
 
@@ -203,6 +211,7 @@ class TeamServiceImpl : TeamService {
                 teamRepository.save(team)
                 teamCacheManager.setTeamCache(team)
             }
+            esService.deleteTeam(teamId)
         }
     }
 

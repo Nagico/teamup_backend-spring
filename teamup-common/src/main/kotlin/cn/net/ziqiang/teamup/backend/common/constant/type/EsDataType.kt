@@ -1,4 +1,4 @@
-package cn.net.ziqiang.teamup.backend.service.constant
+package cn.net.ziqiang.teamup.backend.common.constant.type
 
 enum class EsDataType(val type: String) {
     TEXT("text"),
