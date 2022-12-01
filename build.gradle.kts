@@ -118,6 +118,7 @@ subprojects {
 		implementation("com.fasterxml.jackson.core:jackson-annotations:2.12.3")
 		implementation("com.fasterxml.jackson.core:jackson-core:2.12.3")
 		implementation("co.elastic.clients:elasticsearch-java:8.5.2")
+		implementation("org.elasticsearch.client:elasticsearch-rest-client:8.5.2")
 
 		// 测试
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
