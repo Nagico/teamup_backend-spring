@@ -22,6 +22,19 @@ services:
       net-spring:
         ipv4_address: 10.10.10.3
 
+  ### ElasticSearch container ##########################################
+  elasticsearch:
+    image: ccr.ccs.tencentyun.com/ziqiang/teamup-backend-test:elasticsearch
+    container_name: zq-teamup-backend-test-elasticsearch
+    restart: always #系统重启后容器自动启动
+    privileged: true   #容器启动后是否有系统权限
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms64m -Xmx256m"
+    networks: #定义该容器的网桥名称和IP地址
+      net-django:
+        ipv4_address: 10.10.10.4
+
 ### Add Network Bridge info #########################################
 networks: #定义整个docker-compose编排的容器使用的网桥名称和IP地址网段，注意 x.x.x.1不能使用
   net-spring:
