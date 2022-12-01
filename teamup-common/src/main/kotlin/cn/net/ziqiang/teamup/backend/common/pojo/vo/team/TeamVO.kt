@@ -20,6 +20,8 @@ data class TeamVO (
 
     var tags: List<Tag>,
 
+    var roles: Set<TeamRoleVO>,
+
     var recruiting: Boolean,
 ) {
     constructor(team: Team) : this(
@@ -31,6 +33,7 @@ data class TeamVO (
         team.likeCount,
         team.members,
         team.tags,
+        team.recruitmentRoles,
         team.recruiting,
     )
 }

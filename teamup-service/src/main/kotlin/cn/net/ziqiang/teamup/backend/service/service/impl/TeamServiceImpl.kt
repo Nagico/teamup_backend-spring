@@ -139,18 +139,53 @@ class TeamServiceImpl : TeamService {
     }
 
     override fun createTeamRecruitment(teamId: Long, dto: RecruitmentDto): RecruitmentVO {
-        dto.team = getTeam(teamId, useCache = true)
-        return recruitmentService.createRecruitment(dto)
+        val team = getTeam(teamId, useCache = false).apply {
+            dto.team = this
+        }
+
+        return recruitmentService.createRecruitment(dto).apply {
+            if (!team.recruitmentRoles.contains(this.role)) {
+                team.recruitmentRoles.add(this.role)
+                teamRepository.save(team)
+                teamCacheManager.setTeamCache(team)
+            }
+        }
     }
 
     override fun updateTeamRecruitment(teamId: Long, recruitmentId: Long, dto: RecruitmentDto): RecruitmentVO {
-        dto.team = getTeam(teamId, useCache = true)
-        return recruitmentService.updateRecruitment(recruitmentId, dto)
+        val team = getTeam(teamId, useCache = false).apply {
+            dto.team = this
+        }
+
+        return recruitmentService.updateRecruitment(recruitmentId, dto).apply {
+            var refresh = false
+
+            if (team.recruitmentRoles.contains(this.role)) {
+                team.recruitmentRoles.remove(this.role)
+                refresh = true
+            }
+
+            if (!team.recruitmentRoles.contains(this.role)) {
+                team.recruitmentRoles.add(this.role)
+                refresh = true
+            }
+
+            if (refresh) {
+                teamRepository.save(team)
+                teamCacheManager.setTeamCache(team)
+            }
+        }
     }
 
     override fun deleteTeamRecruitment(teamId: Long, recruitmentId: Long) {
-        getTeam(teamId, useCache = true)
-        recruitmentService.deleteRecruitment(recruitmentId)
+        val team = getTeam(teamId, useCache = false)
+        recruitmentService.deleteRecruitment(recruitmentId).apply {
+            if (team.recruitmentRoles.contains(this.role)) {
+                team.recruitmentRoles.remove(this.role)
+                teamRepository.save(team)
+                teamCacheManager.setTeamCache(team)
+            }
+        }
     }
 
     override fun getRoleTree() : List<TeamRoleTreeVO> {

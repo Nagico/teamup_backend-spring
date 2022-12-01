@@ -92,12 +92,14 @@ class RecruitmentServiceImpl : RecruitmentService {
         })
     }
 
-    override fun deleteRecruitment(id: Long) {
+    override fun deleteRecruitment(id: Long) : RecruitmentVO {
         val teamId = getRecruitment(id, false).team!!.id!!
+        val recruitment = recruitmentRepository.findById(id).orElseThrow { ApiException(ResultType.ResourceNotFound, "招募不存在") }
         thread {
             recruitmentRepository.deleteById(id)
             recruitmentCacheManager.deleteRecruitmentCache(id)
             recruitmentCacheManager.setRecruitmentListByTeamIdCache(teamId, recruitmentRepository.findByTeamId(teamId))
         }
+        return RecruitmentVO(recruitment)
     }
 }

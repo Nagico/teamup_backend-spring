@@ -54,5 +54,5 @@ interface RecruitmentService {
      *
      * @param id
      */
-    fun deleteRecruitment(id: Long)
+    fun deleteRecruitment(id: Long) : RecruitmentVO
 }

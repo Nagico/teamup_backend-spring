@@ -19,6 +19,8 @@ data class TeamInfoVO(
     var likeCount: Long,
 
     var tags: List<Tag>,
+
+    var roles: Set<TeamRoleVO>,
 ) {
     constructor(team: Team) : this(
         team.id!!,
@@ -27,6 +29,7 @@ data class TeamInfoVO(
         team.description!!,
         UserInfoVO(team.leader!!),
         team.likeCount,
-        team.tags
+        team.tags,
+        team.recruitmentRoles
     )
 }
