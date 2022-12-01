@@ -30,7 +30,9 @@ services:
     privileged: true   #容器启动后是否有系统权限
     environment:
       - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms64m -Xmx256m"
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - ES_JAVA_OPTS="-Xms64m -Xmx256m --enable-preview"
     networks: #定义该容器的网桥名称和IP地址
       net-django:
         ipv4_address: 10.10.10.4

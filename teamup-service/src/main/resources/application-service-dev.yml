@@ -47,3 +47,8 @@ mq:
     virtualHost: /teamup
     username: teamup
     password: ${RABBITMQ_PASSWORD}
+
+es:
+  port: 9200
+  hostname:  server
+  alias: true  # 是否使用别名的方式访问
