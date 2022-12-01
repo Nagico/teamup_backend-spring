@@ -54,6 +54,13 @@ class TeamController {
     }
 
     @ActiveUser
+    @GetMapping("/{id}/refresh")
+    @Operation(summary = "刷新队伍招募角色信息")
+    fun refreshTeamRoles(@PathVariable id: Long): TeamVO {
+        return teamService.refreshTeamRoles(id)
+    }
+
+    @ActiveUser
     @PostMapping
     @Operation(summary = "创建队伍")
     fun createTeam(@RequestBody team: TeamDto): TeamVO {

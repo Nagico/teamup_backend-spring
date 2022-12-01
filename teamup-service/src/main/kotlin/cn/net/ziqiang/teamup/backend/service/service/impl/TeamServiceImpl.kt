@@ -67,6 +67,15 @@ class TeamServiceImpl : TeamService {
         return TeamVO(getTeam(teamId, useCache = true))
     }
 
+    override fun refreshTeamRoles(teamId: Long): TeamVO {
+        val team = getTeam(teamId, useCache = false)
+        val roleSet = recruitmentService.getRecruitmentListByTeamId(teamId).map { TeamRoleVO(it.role!!) }.toSet()
+        team.recruitmentRoles = roleSet as MutableSet<TeamRoleVO>
+        teamRepository.save(team)
+        teamCacheManager.setTeamCache(team)
+        return TeamVO(team)
+    }
+
     @Transactional
     override fun createTeam(userId: Long, dto: TeamDto): TeamVO {
         val competition = competitionService.getCompetitionById(dto.competition!!).takeIf { it.verified }
@@ -157,11 +166,13 @@ class TeamServiceImpl : TeamService {
             dto.team = this
         }
 
+        val oldRole = recruitmentService.getRecruitmentById(recruitmentId).role
+
         return recruitmentService.updateRecruitment(recruitmentId, dto).apply {
             var refresh = false
 
-            if (team.recruitmentRoles.contains(this.role)) {
-                team.recruitmentRoles.remove(this.role)
+            if (team.recruitmentRoles.contains(oldRole)) {
+                team.recruitmentRoles.remove(oldRole)
                 refresh = true
             }
 
@@ -179,9 +190,12 @@ class TeamServiceImpl : TeamService {
 
     override fun deleteTeamRecruitment(teamId: Long, recruitmentId: Long) {
         val team = getTeam(teamId, useCache = false)
+
+        val oldRole = recruitmentService.getRecruitmentById(recruitmentId).role
+
         recruitmentService.deleteRecruitment(recruitmentId).apply {
-            if (team.recruitmentRoles.contains(this.role)) {
-                team.recruitmentRoles.remove(this.role)
+            if (team.recruitmentRoles.contains(oldRole)) {
+                team.recruitmentRoles.remove(oldRole)
                 teamRepository.save(team)
                 teamCacheManager.setTeamCache(team)
             }

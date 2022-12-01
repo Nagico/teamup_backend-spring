@@ -58,6 +58,14 @@ class RecruitmentServiceImpl : RecruitmentService {
         }
     }
 
+    override fun getRecruitmentListByTeamId(teamId: Long): List<Recruitment> {
+        return recruitmentCacheManager.getRecruitmentListByTeamIdCache(teamId) ?: run {
+            recruitmentRepository.findByTeamId(teamId).apply {
+                recruitmentCacheManager.setRecruitmentListByTeamIdCache(teamId, this)
+            }
+        }
+    }
+
     override fun getRecruitmentById(id: Long): RecruitmentVO {
         return RecruitmentVO(getRecruitment(id))
     }

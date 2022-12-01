@@ -30,6 +30,14 @@ interface TeamService {
     fun getTeamDetail(teamId: Long): TeamVO
 
     /**
+     * 刷新队伍招募角色
+     *
+     * @param teamId
+     * @return
+     */
+    fun refreshTeamRoles(teamId: Long): TeamVO
+
+    /**
      * 创建队伍
      *
      * @param userId

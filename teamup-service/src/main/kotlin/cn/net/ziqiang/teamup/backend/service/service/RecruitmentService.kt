@@ -24,6 +24,8 @@ interface RecruitmentService {
      */
     fun getRecruitmentListByTeamId(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment, RecruitmentVO>
 
+    fun getRecruitmentListByTeamId(teamId: Long): List<Recruitment>
+
     /**
      * 根据id获取招募信息
      *
