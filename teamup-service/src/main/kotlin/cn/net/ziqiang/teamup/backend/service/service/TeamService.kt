@@ -12,6 +12,8 @@ import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamVO
 import org.springframework.data.domain.PageRequest
 
 interface TeamService {
+    fun getTeamList(): List<TeamInfoVO>
+
     /**
      * 获取用户创建的队伍列表
      *

@@ -50,6 +50,10 @@ class TeamServiceImpl : TeamService {
         }
     }
 
+    override fun getTeamList(): List<TeamInfoVO> {
+        return teamRepository.findAll().map { TeamInfoVO(it) }
+    }
+
     override fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, TeamInfoVO> {
         val cachedList = teamCacheManager.getTeamListByUserIdCache(userId)
         return if (cachedList != null) {
