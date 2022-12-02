@@ -15,8 +15,9 @@ interface TeamService {
     fun searchTeams(
         competition: String?,
         role: String?,
-        id: Long?,
-    ): List<TeamInfoVO>
+        searchText: String?,
+        pageRequest: PageRequest
+    ): PagedList<Team, TeamInfoVO>
 
     /**
      * 获取用户创建的队伍列表
@@ -104,5 +105,16 @@ interface TeamService {
      */
     fun deleteTeamRecruitment(teamId: Long, recruitmentId: Long)
 
+    /**
+     * 获取队伍角色树
+     *
+     * @return
+     */
     fun getRoleTree() : List<TeamRoleTreeVO>
+
+    /**
+     * 重建队伍索引
+     *
+     */
+    fun rebuildTeamDoc()
 }

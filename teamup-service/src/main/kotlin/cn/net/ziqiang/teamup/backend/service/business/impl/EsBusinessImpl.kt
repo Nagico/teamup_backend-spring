@@ -260,7 +260,7 @@ class EsBusinessImpl : EsBusiness, InitializingBean {
     override fun <T> updateByDocId(docId: String, o: T, async: Boolean) {
         if (o == null) throw NullPointerException("doc is null")
         //先查询出来
-        val docId1: Any = getByDocId(docId, o.javaClass) ?: throw Exception("没有docId:" + docId + "这条数据")
+        val docId1: Any = getByDocId(docId, o.javaClass)
         //进行对象拷贝
         BeanUtil.copyProperties(o, docId1)
         val index = getClassAliasOrIndex(o.javaClass)
@@ -395,8 +395,6 @@ class EsBusinessImpl : EsBusiness, InitializingBean {
         }
         return list
     }
-
-
     // region Utils
     /**
      * 使用索引还是使用别名

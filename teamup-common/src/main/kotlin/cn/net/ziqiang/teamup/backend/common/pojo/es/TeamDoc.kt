@@ -19,11 +19,22 @@ class TeamDoc (
 
     @EsField(type = EsDataType.BOOLEAN)
     var recruiting: Boolean? = null,
+
+    @EsField(type = EsDataType.TEXT, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    var searchField: String? = null,
 ) {
     constructor(team: Team) : this(
         id = team.id,
         competitionField = team.competition!!.name,
-        roleField = team.recruitmentRoles.map { it.name }.joinToString(","),
-        recruiting = team.recruiting
+        roleField = team.recruitmentRoles.map { it.name }.joinToString(" "),
+        recruiting = team.recruiting,
+        searchField = """
+            ${team.name}
+            ${team.competition!!.name}
+            ${team.recruitmentRoles.map { it.name }.joinToString(" ")}
+            ${team.tags.map { it.content }.joinToString(" ")}
+            ${team.description}
+            ${team.members.map { it.description }.joinToString(" ")}
+        """.trimIndent()
     )
 }

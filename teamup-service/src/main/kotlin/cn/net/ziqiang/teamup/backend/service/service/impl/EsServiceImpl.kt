@@ -22,11 +22,22 @@ class EsServiceImpl(@Autowired private val esBusiness: EsBusiness) : EsService {
     }
 
     override fun updateTeamDoc(team: Team) {
-        esBusiness.updateByDocId(team.id.toString(), TeamDoc(team), true)
+        if (esBusiness.checkDocId(team.id.toString(), TeamDoc::class.java)) {
+            esBusiness.deleteByDocId(team.id.toString(), TeamDoc::class.java)
+        }
+        esBusiness.addData(TeamDoc(team), true)
     }
 
     override fun deleteTeamDoc(teamId: Long) {
-        esBusiness.deleteByDocId(teamId.toString(), TeamDoc::class.java)
+        if (esBusiness.checkDocId(teamId.toString(), TeamDoc::class.java)) {
+            esBusiness.deleteByDocId(teamId.toString(), TeamDoc::class.java)
+        }
+    }
+
+    override fun getAllTeamDocs(): List<TeamDoc> {
+        return (esBusiness.queryAll(TeamDoc::class.java) as MutableList<TeamDoc?>).apply {
+            this.removeIf { it == null }
+        }.map { it!! }
     }
 
     override fun getTeamDocById(teamId: Long): TeamDoc {
@@ -55,5 +66,22 @@ class EsServiceImpl(@Autowired private val esBusiness: EsBusiness) : EsService {
         return (res as MutableList<TeamDoc?>).apply {
             removeAll { it == null || it.recruiting == false }
         }.map { it!! }
+    }
+
+    override fun getTeamDocListBySearch(search: String): List<TeamDoc> {
+        val query = Query.of {
+                q -> q.match {
+                m->m.field("searchField").query(search)
+            }
+        }
+        val res = esBusiness.complexQuery(query, TeamDoc::class.java)
+        return (res as MutableList<TeamDoc?>).apply {
+            removeAll { it == null }
+        }.map { it!! }
+    }
+
+    override fun rebuildIndex(items: List<TeamDoc>) {
+        esBusiness.deleteByQuery(Query.of { q -> q.matchAll { m -> m } }, TeamDoc::class.java)
+        esBusiness.addDataList(items, true)
     }
 }

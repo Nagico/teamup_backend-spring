@@ -7,6 +7,7 @@ import cn.net.ziqiang.teamup.backend.common.pojo.entity.Recruitment
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Tag
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Team
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.TeamMember
+import cn.net.ziqiang.teamup.backend.common.pojo.es.TeamDoc
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.*
@@ -55,17 +56,19 @@ class TeamServiceImpl : TeamService {
     override fun searchTeams(
         competition: String?,
         role: String?,
-        id: Long?,
-    ): List<TeamInfoVO> {
-        return if (competition != null) {
-            esService.getTeamDocListByCompetition(competition).map { TeamInfoVO(getTeam(it.id!!)) }
+        searchText: String?,
+        pageRequest: PageRequest
+    ): PagedList<Team, TeamInfoVO> {
+        val idList =  if (competition != null) {
+            esService.getTeamDocListByCompetition(competition).map { it.id!! }
         } else if (role != null) {
-            esService.getTeamDocListByRole(role).map { TeamInfoVO(getTeam(it.id!!)) }
-        } else if (id != null) {
-            listOf(TeamInfoVO(getTeam(esService.getTeamDocById(id).id!!)))
+            esService.getTeamDocListByRole(role).map { it.id!! }
+        } else if (searchText != null) {
+            esService.getTeamDocListBySearch(searchText).map { it.id!! }
         } else {
-            teamRepository.findAll().map { TeamInfoVO(it) }
+            esService.getAllTeamDocs().map { it.id!! }
         }
+        return PagedList(teamRepository.findAllByIdIn(idList, pageRequest)) { TeamInfoVO(it) }
     }
 
     override fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, TeamInfoVO> {
@@ -247,5 +250,10 @@ class TeamServiceImpl : TeamService {
                 teamCacheManager.setTeamRoleTreeCache(this)
             }
         }
+    }
+
+    override fun rebuildTeamDoc() {
+        val teams = teamRepository.findAll().map { TeamDoc(it) }
+        esService.rebuildIndex(teams)
     }
 }
