@@ -1,5 +1,8 @@
 package cn.net.ziqiang.teamup.backend.web.controller
 
+import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
+import cn.net.ziqiang.teamup.backend.common.exception.ApiException
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.auth.*
 import cn.net.ziqiang.teamup.backend.service.service.AuthService
 import io.swagger.v3.oas.annotations.Operation
@@ -33,7 +36,10 @@ class AuthController {
     @Deprecated("暂停微信登录")
     @Operation(summary = "微信openid登录")
     @PostMapping("/openid")
-    fun loginOpenId(@Valid @RequestBody dto: OpenidLoginDto): AuthVO {
+    fun loginOpenId(@Valid @RequestBody dto: User): AuthVO {
+        if (dto.openid.isBlank()) {
+            throw ApiException(ResultType.ParamEmpty)
+        }
         val tokenBean = authService.loginOpenid(dto.openid)
 
         return AuthVO(tokenBean)
@@ -42,14 +48,20 @@ class AuthController {
     @PermitAll
     @Operation(summary = "手机号密码登录")
     @PostMapping("/login")
-    fun loginPassword(@Valid @RequestBody dto: PasswordLoginDto): AuthVO {
+    fun loginPassword(@Valid @RequestBody dto: User): AuthVO {
+        if (dto.phone.isBlank() || dto.password.isBlank()) {
+            throw ApiException(ResultType.ParamEmpty)
+        }
         return AuthVO(authService.loginPassword(dto.phone, dto.password))
     }
 
     @PermitAll
     @Operation(summary = "刷新token")
     @PostMapping("/refresh")
-    fun refresh(@Valid @RequestBody dto: RefreshLoginDto): AuthVO {
+    fun refresh(@Valid @RequestBody dto: AuthVO): AuthVO {
+        if (dto.refresh.isBlank()) {
+            throw ApiException(ResultType.ParamEmpty)
+        }
         val tokenBean = authService.refreshToken(refreshToken = dto.refresh)
         return AuthVO(tokenBean)
     }
