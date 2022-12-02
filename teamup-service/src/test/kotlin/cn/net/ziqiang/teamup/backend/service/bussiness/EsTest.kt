@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import java.io.IOException
 
 @Slf4j
-@SpringBootTest
 class EsTest {
     @Autowired
     private lateinit var esClient: EsBusiness
