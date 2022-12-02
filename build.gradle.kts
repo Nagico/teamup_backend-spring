@@ -123,10 +123,6 @@ subprojects {
 		// 测试
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
 		testImplementation("org.springframework.security:spring-security-test")
-
-		// Lombok
-		implementation("org.projectlombok:lombok:1.18.22")
-		annotationProcessor("org.projectlombok:lombok:1.18.22")
 	}
 
 	tasks.withType<KotlinCompile> {

@@ -1,7 +1,0 @@
-pagehelper:
-  reasonable: false
-  defaultCount: true
-
-spring:
-  redis:
-    port: 10101

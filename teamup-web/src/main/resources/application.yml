@@ -11,9 +11,7 @@ spring:
         - web-dev
         - dao-dev
         - common-dev
-        - service-dev
       prod:
         - web-prod
         - dao-prod
         - common-prod
-        - service-prod

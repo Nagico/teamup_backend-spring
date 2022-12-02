@@ -26,8 +26,8 @@ function connect(event) {
         //////////////////////////////////////////////////////////////////////////////////////
         // ws (sockjs) url
         //////////////////////////////////////////////////////////////////////////////////////
-        var socket = new SockJS('https://api.teamup.nagico.cn/ws');
-        //var socket = new SockJS('http://localhost:8080/ws');
+        //var socket = new SockJS('https://api.teamup.nagico.cn/ws');
+        var socket = new SockJS('http://localhost:8080/ws');
         stompClient = Stomp.over(socket);
  
         stompClient.connect({
