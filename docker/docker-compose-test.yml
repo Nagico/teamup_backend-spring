@@ -34,7 +34,7 @@ services:
       - xpack.security.http.ssl.enabled=false
       - ES_JAVA_OPTS="-Xms64m -Xmx256m --enable-preview"
     networks: #定义该容器的网桥名称和IP地址
-      net-django:
+      net-spring:
         ipv4_address: 10.10.10.4
 
 ### Add Network Bridge info #########################################
