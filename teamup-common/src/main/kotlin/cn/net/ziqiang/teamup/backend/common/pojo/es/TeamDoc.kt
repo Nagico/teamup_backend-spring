@@ -26,12 +26,12 @@ class TeamDoc (
     constructor(team: Team) : this(
         id = team.id,
         competitionField = team.competition!!.name,
-        roleField = team.recruitmentRoles.map { it.name }.joinToString(" "),
+        roleField = team.roles.map { it.name }.joinToString(" "),
         recruiting = team.recruiting,
         searchField = """
             ${team.name}
             ${team.competition!!.name}
-            ${team.recruitmentRoles.map { it.name }.joinToString(" ")}
+            ${team.roles.map { it.name }.joinToString(" ")}
             ${team.tags.map { it.content }.joinToString(" ")}
             ${team.description}
             ${team.members.map { it.description }.joinToString(" ")}

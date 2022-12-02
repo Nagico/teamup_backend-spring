@@ -1,6 +1,5 @@
 package cn.net.ziqiang.teamup.backend.common.pojo.entity
 
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamRoleVO
 import com.vladmihalcea.hibernate.type.json.JsonStringType
 import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.annotations.Type
@@ -10,7 +9,7 @@ import org.hibernate.annotations.TypeDef
 class TeamMember (
     @Type(type = "json")
     @Schema(description = "角色")
-    var roles: MutableList<TeamRoleVO> = mutableListOf(),
+    var roles: MutableList<TeamRole> = mutableListOf(),
 
     @Schema(description = "学院")
     var faculty: String? = null,

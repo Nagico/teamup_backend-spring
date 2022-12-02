@@ -6,9 +6,7 @@ import cn.net.ziqiang.teamup.backend.common.pojo.entity.Team
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamDto
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamInfoVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamRoleTreeVO
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamVO
 import cn.net.ziqiang.teamup.backend.service.service.TeamService
 import cn.net.ziqiang.teamup.backend.web.annotation.permission.OwnerOrManager
 import cn.net.ziqiang.teamup.backend.web.annotation.user.ActiveUser
@@ -34,7 +32,7 @@ class TeamController {
     fun getUserTeams(
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") pageSize: Int,
-    ): PagedList<Team, TeamInfoVO> {
+    ): PagedList<Team, Team> {
         val pageRequest = PageRequest.of(page - 1, pageSize)
         return teamService.getUserTeams(SecurityContextUtils.user.id!!, pageRequest)
     }
@@ -49,21 +47,21 @@ class TeamController {
     @ActiveUser
     @GetMapping("/{id}")
     @Operation(summary = "获取队伍详情")
-    fun getTeamDetail(@PathVariable id: Long): TeamVO {
+    fun getTeamDetail(@PathVariable id: Long): Team {
         return teamService.getTeamDetail(id)
     }
 
     @ActiveUser
     @GetMapping("/{id}/refresh")
     @Operation(summary = "刷新队伍招募角色信息")
-    fun refreshTeamRoles(@PathVariable id: Long): TeamVO {
+    fun refreshTeamRoles(@PathVariable id: Long): Team {
         return teamService.refreshTeamRoles(id)
     }
 
     @ActiveUser
     @PostMapping
     @Operation(summary = "创建队伍")
-    fun createTeam(@RequestBody team: TeamDto): TeamVO {
+    fun createTeam(@RequestBody team: TeamDto): Team {
         return teamService.createTeam(SecurityContextUtils.user.id!!, team)
     }
 
@@ -71,7 +69,7 @@ class TeamController {
     @OwnerOrManager("team")
     @PutMapping("/{id}")
     @Operation(summary = "修改队伍信息")
-    fun updateTeam(@PathVariable id: Long, @RequestBody team: TeamDto): TeamVO {
+    fun updateTeam(@PathVariable id: Long, @RequestBody team: TeamDto): Team {
         return teamService.updateTeam(id, team)
     }
 

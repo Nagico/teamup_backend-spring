@@ -15,6 +15,7 @@ import cn.net.ziqiang.teamup.backend.service.business.OssBusiness
 import cn.net.ziqiang.teamup.backend.service.cache.UserCacheManager
 import cn.net.ziqiang.teamup.backend.service.service.UserService
 import cn.net.ziqiang.teamup.backend.common.util.SecurityUtils
+import cn.net.ziqiang.teamup.backend.common.util.getInfo
 import cn.net.ziqiang.teamup.backend.service.service.AuthService
 import cn.net.ziqiang.teamup.backend.service.service.SmsService
 import org.springframework.beans.factory.annotation.Autowired
@@ -62,6 +63,7 @@ class UserServiceImpl : UserService {
             throw ApiException(type = ResultType.ResourceNotFound, message = "用户不存在")
         return user.apply {
             status = userCacheManager.getUserStatusCache(userId = id)
+            getInfo()
         }
     }
 

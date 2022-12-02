@@ -30,6 +30,6 @@ data class TeamInfoVO(
         UserInfoVO(team.leader!!),
         team.likeCount,
         team.tags,
-        team.recruitmentRoles
+        team.roles
     )
 }

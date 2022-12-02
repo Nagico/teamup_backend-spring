@@ -11,6 +11,7 @@ import cn.net.ziqiang.teamup.backend.common.pojo.es.TeamDoc
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.*
+import cn.net.ziqiang.teamup.backend.common.util.getInfo
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRoleRepository
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRepository
 import cn.net.ziqiang.teamup.backend.service.cache.TeamCacheManager
@@ -58,7 +59,7 @@ class TeamServiceImpl : TeamService {
         role: String?,
         searchText: String?,
         pageRequest: PageRequest
-    ): PagedList<Team, TeamInfoVO> {
+    ): PagedList<Team, Team> {
         val idList =  if (competition != null) {
             esService.getTeamDocListByCompetition(competition).map { it.id!! }
         } else if (role != null) {
@@ -68,37 +69,41 @@ class TeamServiceImpl : TeamService {
         } else {
             esService.getAllTeamDocs().map { it.id!! }
         }
-        return PagedList(teamRepository.findAllByIdIn(idList, pageRequest)) { TeamInfoVO(it) }
+        return PagedList(teamRepository.findAllByIdIn(idList, pageRequest)) { it.apply { it.leader?.getInfo() } }
     }
 
-    override fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, TeamInfoVO> {
+    override fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, Team> {
         val cachedList = teamCacheManager.getTeamListByUserIdCache(userId)
         return if (cachedList != null) {
-            PagedList(cachedList, pageRequest) { TeamInfoVO(it) }
+            PagedList(cachedList, pageRequest) { it.apply { it.leader!!.getInfo() } }
         } else {
             val teams = teamRepository.findAllByLeaderId(userId, pageRequest)
             thread {
                 teamCacheManager.setTeamListByUserIdCache(userId, teamRepository.findAllByLeaderId(userId))
             }
-            PagedList(teams) { TeamInfoVO(it) }
+            PagedList(teams) { it.apply { it.leader!!.getInfo() } }
         }
     }
 
-    override fun getTeamDetail(teamId: Long): TeamVO {
-        return TeamVO(getTeam(teamId, useCache = true))
+    override fun getTeamDetail(teamId: Long): Team {
+        return getTeam(teamId, useCache = true).apply {
+            leader?.getInfo()
+        }
     }
 
-    override fun refreshTeamRoles(teamId: Long): TeamVO {
+    override fun refreshTeamRoles(teamId: Long): Team {
         val team = getTeam(teamId, useCache = false)
         val roleSet = recruitmentService.getRecruitmentListByTeamId(teamId).map { TeamRoleVO(it.role!!) }.toSet()
-        team.recruitmentRoles = roleSet as MutableSet<TeamRoleVO>
+        team.roles = roleSet as MutableSet<TeamRoleVO>
         teamRepository.save(team)
         teamCacheManager.setTeamCache(team)
-        return TeamVO(team)
+        return team.apply {
+            leader?.getInfo()
+        }
     }
 
     @Transactional
-    override fun createTeam(userId: Long, dto: TeamDto): TeamVO {
+    override fun createTeam(userId: Long, dto: TeamDto): Team {
         val competition = competitionService.getCompetitionById(dto.competition!!).takeIf { it.verified }
                 ?: throw ApiException(ResultType.ParamValidationFailed, "比赛暂未通过审核")
 
@@ -120,7 +125,8 @@ class TeamServiceImpl : TeamService {
             recruiting = dto.recruiting ?: false
         )
 
-        return TeamVO(teamRepository.save(team)).apply {
+        return teamRepository.save(team).apply {
+            leader?.getInfo()
             thread {
                 teamCacheManager.setTeamCache(team)
                 teamCacheManager.setTeamListByUserIdCache(userId, teamRepository.findAllByLeaderId(userId))
@@ -129,7 +135,7 @@ class TeamServiceImpl : TeamService {
         }
     }
 
-    override fun updateTeam(teamId: Long, dto: TeamDto): TeamVO {
+    override fun updateTeam(teamId: Long, dto: TeamDto): Team {
         val team = getTeam(teamId)
 
         val members = dto.members?.map {
@@ -146,7 +152,8 @@ class TeamServiceImpl : TeamService {
         members?.let { team.members = it as MutableList<TeamMember> }
         dto.recruiting?.let { team.recruiting = it }
 
-        return TeamVO(teamRepository.save(team)).apply {
+        return teamRepository.save(team).apply {
+            leader?.getInfo()
             val userId = team.leader!!.id!!
             thread {
                 teamCacheManager.setTeamCache(team)
@@ -177,8 +184,8 @@ class TeamServiceImpl : TeamService {
         }
 
         return recruitmentService.createRecruitment(dto).apply {
-            if (!team.recruitmentRoles.contains(this.role)) {
-                team.recruitmentRoles.add(this.role)
+            if (!team.roles.contains(this.role)) {
+                team.roles.add(this.role)
                 teamRepository.save(team)
                 teamCacheManager.setTeamCache(team)
             }
@@ -196,13 +203,13 @@ class TeamServiceImpl : TeamService {
         return recruitmentService.updateRecruitment(recruitmentId, dto).apply {
             var refresh = false
 
-            if (team.recruitmentRoles.contains(oldRole)) {
-                team.recruitmentRoles.remove(oldRole)
+            if (team.roles.contains(oldRole)) {
+                team.roles.remove(oldRole)
                 refresh = true
             }
 
-            if (!team.recruitmentRoles.contains(this.role)) {
-                team.recruitmentRoles.add(this.role)
+            if (!team.roles.contains(this.role)) {
+                team.roles.add(this.role)
                 refresh = true
             }
 
@@ -220,8 +227,8 @@ class TeamServiceImpl : TeamService {
         val oldRole = recruitmentService.getRecruitmentById(recruitmentId).role
 
         recruitmentService.deleteRecruitment(recruitmentId).apply {
-            if (team.recruitmentRoles.contains(oldRole)) {
-                team.recruitmentRoles.remove(oldRole)
+            if (team.roles.contains(oldRole)) {
+                team.roles.remove(oldRole)
                 teamRepository.save(team)
                 teamCacheManager.setTeamCache(team)
             }

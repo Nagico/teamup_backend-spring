@@ -6,9 +6,7 @@ import cn.net.ziqiang.teamup.backend.common.pojo.entity.Team
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamDto
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamInfoVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamRoleTreeVO
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamVO
 import org.springframework.data.domain.PageRequest
 
 interface TeamService {
@@ -17,7 +15,7 @@ interface TeamService {
         role: String?,
         searchText: String?,
         pageRequest: PageRequest
-    ): PagedList<Team, TeamInfoVO>
+    ): PagedList<Team, Team>
 
     /**
      * 获取用户创建的队伍列表
@@ -26,7 +24,7 @@ interface TeamService {
      * @param pageRequest
      * @return
      */
-    fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, TeamInfoVO>
+    fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, Team>
 
     /**
      * 获取队伍详情
@@ -34,7 +32,7 @@ interface TeamService {
      * @param teamId
      * @return
      */
-    fun getTeamDetail(teamId: Long): TeamVO
+    fun getTeamDetail(teamId: Long): Team
 
     /**
      * 刷新队伍招募角色
@@ -42,7 +40,7 @@ interface TeamService {
      * @param teamId
      * @return
      */
-    fun refreshTeamRoles(teamId: Long): TeamVO
+    fun refreshTeamRoles(teamId: Long): Team
 
     /**
      * 创建队伍
@@ -51,7 +49,7 @@ interface TeamService {
      * @param dto
      * @return
      */
-    fun createTeam(userId: Long, dto: TeamDto): TeamVO
+    fun createTeam(userId: Long, dto: TeamDto): Team
 
     /**
      * 更新队伍信息
@@ -60,7 +58,7 @@ interface TeamService {
      * @param dto
      * @return
      */
-    fun updateTeam(teamId: Long, dto: TeamDto): TeamVO
+    fun updateTeam(teamId: Long, dto: TeamDto): Team
 
     /**
      * 删除队伍

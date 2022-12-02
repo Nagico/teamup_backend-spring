@@ -1,6 +1,7 @@
 package cn.net.ziqiang.teamup.backend.common.pojo.entity
 
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
+import cn.net.ziqiang.teamup.backend.common.constant.status.UserStatus
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.data.annotation.CreatedDate
@@ -77,7 +78,11 @@ class User(
 
     @Column(name = "last_login")
     @Schema(description = "最后登录时间")
-    var lastLogin: Date? = null
+    var lastLogin: Date? = null,
+
+    @Transient
+    @Schema(description = "当前状态")
+    var status: UserStatus? = null
 ): Serializable, Principal {
     override fun toString(): String {
         return "User(id=$id, username='$username', openid='$openid')"
