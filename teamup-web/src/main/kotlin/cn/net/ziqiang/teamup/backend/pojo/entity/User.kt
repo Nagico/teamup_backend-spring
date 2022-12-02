@@ -11,7 +11,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity(name = "user")
-@JsonIgnoreProperties(ignoreUnknown = true, value = ["password"])
+@JsonIgnoreProperties(ignoreUnknown = true, value = ["password"], allowSetters = true)
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
