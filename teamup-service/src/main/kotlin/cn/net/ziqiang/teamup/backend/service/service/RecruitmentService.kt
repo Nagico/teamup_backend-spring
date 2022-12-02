@@ -2,8 +2,6 @@ package cn.net.ziqiang.teamup.backend.service.service
 
 import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Recruitment
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentDto
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
 import org.springframework.data.domain.PageRequest
 
 interface RecruitmentService {
@@ -13,7 +11,7 @@ interface RecruitmentService {
      * @param pageRequest
      * @return
      */
-    fun getRecruitmentList(pageRequest: PageRequest): PagedList<Recruitment, RecruitmentVO>
+    fun getRecruitmentList(pageRequest: PageRequest): PagedList<Recruitment, Recruitment>
 
     /**
      * 根据队伍id获取招聘列表
@@ -22,7 +20,7 @@ interface RecruitmentService {
      * @param pageRequest
      * @return
      */
-    fun getRecruitmentListByTeamId(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment, RecruitmentVO>
+    fun getRecruitmentListByTeamId(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment, Recruitment>
 
     fun getRecruitmentListByTeamId(teamId: Long): List<Recruitment>
 
@@ -32,7 +30,7 @@ interface RecruitmentService {
      * @param id
      * @return
      */
-    fun getRecruitmentById(id: Long): RecruitmentVO
+    fun getRecruitmentById(id: Long): Recruitment
 
     /**
      * 创建招募
@@ -40,7 +38,7 @@ interface RecruitmentService {
      * @param dto
      * @return
      */
-    fun createRecruitment(dto: RecruitmentDto): RecruitmentVO
+    fun createRecruitment(dto: Recruitment): Recruitment
 
     /**
      * 更新招募
@@ -49,12 +47,12 @@ interface RecruitmentService {
      * @param dto
      * @return
      */
-    fun updateRecruitment(id: Long, dto: RecruitmentDto): RecruitmentVO
+    fun updateRecruitment(id: Long, dto: Recruitment): Recruitment
 
     /**
      *
      *
      * @param id
      */
-    fun deleteRecruitment(id: Long) : RecruitmentVO
+    fun deleteRecruitment(id: Long) : Recruitment
 }

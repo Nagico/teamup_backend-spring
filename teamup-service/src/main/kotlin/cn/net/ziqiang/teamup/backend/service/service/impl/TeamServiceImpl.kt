@@ -3,13 +3,8 @@ package cn.net.ziqiang.teamup.backend.service.service.impl
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
-import cn.net.ziqiang.teamup.backend.common.pojo.entity.Recruitment
-import cn.net.ziqiang.teamup.backend.common.pojo.entity.Tag
-import cn.net.ziqiang.teamup.backend.common.pojo.entity.Team
-import cn.net.ziqiang.teamup.backend.common.pojo.entity.TeamMember
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.*
 import cn.net.ziqiang.teamup.backend.common.pojo.es.TeamDoc
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentDto
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.*
 import cn.net.ziqiang.teamup.backend.common.util.getInfo
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRoleRepository
@@ -93,8 +88,8 @@ class TeamServiceImpl : TeamService {
 
     override fun refreshTeamRoles(teamId: Long): Team {
         val team = getTeam(teamId, useCache = false)
-        val roleSet = recruitmentService.getRecruitmentListByTeamId(teamId).map { TeamRoleVO(it.role!!) }.toSet()
-        team.roles = roleSet as MutableSet<TeamRoleVO>
+        val roleSet = recruitmentService.getRecruitmentListByTeamId(teamId).map { it.role!! }.toSet()
+        team.roles = roleSet as MutableSet<TeamRole>
         teamRepository.save(team)
         teamCacheManager.setTeamCache(team)
         return team.apply {
@@ -103,13 +98,13 @@ class TeamServiceImpl : TeamService {
     }
 
     @Transactional
-    override fun createTeam(userId: Long, dto: TeamDto): Team {
-        val competition = competitionService.getCompetitionById(dto.competition!!).takeIf { it.verified }
+    override fun createTeam(userId: Long, dto: Team): Team {
+        val competition = competitionService.getCompetitionById(dto.competition!!.id!!).takeIf { it.verified }
                 ?: throw ApiException(ResultType.ParamValidationFailed, "比赛暂未通过审核")
 
-        val members = dto.members!!.map {
+        val members = dto.members.map {
             TeamMember(
-                roles = teamRoleRepository.getAllByIdIn(it.roles!!).map { role -> TeamRoleVO(role) } as MutableList<TeamRoleVO>,
+                roles = teamRoleRepository.getAllByIdIn(it.roles.map { role -> role.id!! }) as MutableList<TeamRole>,
                 faculty = it.faculty,
                 description = it.description,
             )
@@ -119,10 +114,10 @@ class TeamServiceImpl : TeamService {
             name = dto.name!!,
             competition = competition,
             description = dto.description!!,
-            tags = tagService.getOrCreateTags(dto.tags!!) as MutableList<Tag>,
+            tags = tagService.getOrCreateTags(dto.tags.map { it.content!! }) as MutableList<Tag>,
             leader = userService.getUserById(userId),
             members = members as MutableList<TeamMember>,
-            recruiting = dto.recruiting ?: false
+            recruiting = dto.recruiting
         )
 
         return teamRepository.save(team).apply {
@@ -135,12 +130,12 @@ class TeamServiceImpl : TeamService {
         }
     }
 
-    override fun updateTeam(teamId: Long, dto: TeamDto): Team {
+    override fun updateTeam(teamId: Long, dto: Team): Team {
         val team = getTeam(teamId)
 
-        val members = dto.members?.map {
+        val members = dto.members.map {
             TeamMember(
-                roles = teamRoleRepository.getAllByIdIn(it.roles!!).map { role -> TeamRoleVO(role) } as MutableList<TeamRoleVO>,
+                roles = teamRoleRepository.getAllByIdIn(it.roles.map { role -> role.id!! }) as MutableList<TeamRole>,
                 faculty = it.faculty,
                 description = it.description,
             )
@@ -148,9 +143,9 @@ class TeamServiceImpl : TeamService {
 
         dto.name?.let { team.name = it }
         dto.description?.let { team.description = it }
-        dto.tags?.let { team.tags = tagService.getOrCreateTags(it) as MutableList<Tag> }
-        members?.let { team.members = it as MutableList<TeamMember> }
-        dto.recruiting?.let { team.recruiting = it }
+        dto.tags.let { team.tags = tagService.getOrCreateTags(it.map{ tag -> tag.content!!} ) as MutableList<Tag> }
+        members.let { team.members = it as MutableList<TeamMember> }
+        dto.recruiting.let { team.recruiting = it }
 
         return teamRepository.save(team).apply {
             leader?.getInfo()
@@ -173,19 +168,19 @@ class TeamServiceImpl : TeamService {
         }
     }
 
-    override fun getTeamRecruitments(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment, RecruitmentVO> {
+    override fun getTeamRecruitments(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment, Recruitment> {
         val team = getTeam(teamId, useCache = true)
         return recruitmentService.getRecruitmentListByTeamId(team.id!!, pageRequest)
     }
 
-    override fun createTeamRecruitment(teamId: Long, dto: RecruitmentDto): RecruitmentVO {
+    override fun createTeamRecruitment(teamId: Long, dto: Recruitment): Recruitment {
         val team = getTeam(teamId, useCache = false).apply {
             dto.team = this
         }
 
         return recruitmentService.createRecruitment(dto).apply {
-            if (!team.roles.contains(this.role)) {
-                team.roles.add(this.role)
+            if (!team.roles.contains(this.role!!)) {
+                team.roles.add(this.role!!)
                 teamRepository.save(team)
                 teamCacheManager.setTeamCache(team)
             }
@@ -193,7 +188,7 @@ class TeamServiceImpl : TeamService {
         }
     }
 
-    override fun updateTeamRecruitment(teamId: Long, recruitmentId: Long, dto: RecruitmentDto): RecruitmentVO {
+    override fun updateTeamRecruitment(teamId: Long, recruitmentId: Long, dto: Recruitment): Recruitment {
         val team = getTeam(teamId, useCache = false).apply {
             dto.team = this
         }
@@ -203,13 +198,13 @@ class TeamServiceImpl : TeamService {
         return recruitmentService.updateRecruitment(recruitmentId, dto).apply {
             var refresh = false
 
-            if (team.roles.contains(oldRole)) {
+            if (team.roles.contains(oldRole!!)) {
                 team.roles.remove(oldRole)
                 refresh = true
             }
 
-            if (!team.roles.contains(this.role)) {
-                team.roles.add(this.role)
+            if (!team.roles.contains(this.role!!)) {
+                team.roles.add(this.role!!)
                 refresh = true
             }
 
@@ -227,7 +222,7 @@ class TeamServiceImpl : TeamService {
         val oldRole = recruitmentService.getRecruitmentById(recruitmentId).role
 
         recruitmentService.deleteRecruitment(recruitmentId).apply {
-            if (team.roles.contains(oldRole)) {
+            if (team.roles.contains(oldRole!!)) {
                 team.roles.remove(oldRole)
                 teamRepository.save(team)
                 teamCacheManager.setTeamCache(team)

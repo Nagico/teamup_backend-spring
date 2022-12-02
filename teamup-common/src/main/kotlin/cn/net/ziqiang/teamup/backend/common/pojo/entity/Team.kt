@@ -1,6 +1,5 @@
 package cn.net.ziqiang.teamup.backend.common.pojo.entity
 
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamRoleVO
 import com.vladmihalcea.hibernate.type.json.JsonStringType
 import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.annotations.Type
@@ -51,7 +50,7 @@ class Team (
     @Type(type = "json")
     @Column(name = "roles", nullable = false, columnDefinition = "json")
     @Schema(description = "招募角色")
-    var recruitmentRoles: MutableSet<TeamRoleVO> = mutableSetOf(),
+    var roles: MutableSet<TeamRole> = mutableSetOf(),
 
     @Column(name = "recruiting", nullable = false)
     @Schema(description = "是否招募中")

@@ -3,9 +3,6 @@ package cn.net.ziqiang.teamup.backend.web.controller
 import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Recruitment
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Team
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentDto
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.recruitment.RecruitmentVO
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.team.TeamRoleTreeVO
 import cn.net.ziqiang.teamup.backend.service.service.TeamService
 import cn.net.ziqiang.teamup.backend.web.annotation.permission.OwnerOrManager
@@ -61,7 +58,7 @@ class TeamController {
     @ActiveUser
     @PostMapping
     @Operation(summary = "创建队伍")
-    fun createTeam(@RequestBody team: TeamDto): Team {
+    fun createTeam(@RequestBody team: Team): Team {
         return teamService.createTeam(SecurityContextUtils.user.id!!, team)
     }
 
@@ -69,7 +66,7 @@ class TeamController {
     @OwnerOrManager("team")
     @PutMapping("/{id}")
     @Operation(summary = "修改队伍信息")
-    fun updateTeam(@PathVariable id: Long, @RequestBody team: TeamDto): Team {
+    fun updateTeam(@PathVariable id: Long, @RequestBody team: Team): Team {
         return teamService.updateTeam(id, team)
     }
 
@@ -89,7 +86,7 @@ class TeamController {
         @PathVariable id: Long,
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") pageSize: Int,
-    ): PagedList<Recruitment, RecruitmentVO> {
+    ): PagedList<Recruitment, Recruitment> {
         val pageRequest = PageRequest.of(page - 1, pageSize)
         return teamService.getTeamRecruitments(id, pageRequest)
     }
@@ -98,7 +95,7 @@ class TeamController {
     @OwnerOrManager("team")
     @PostMapping("/{id}/recruitments")
     @Operation(summary = "创建招募")
-    fun createRecruitment(@PathVariable id: Long, @RequestBody recruitment: RecruitmentDto): RecruitmentVO {
+    fun createRecruitment(@PathVariable id: Long, @RequestBody recruitment: Recruitment): Recruitment {
         return teamService.createTeamRecruitment(id, recruitment)
     }
 
@@ -109,8 +106,8 @@ class TeamController {
     fun updateRecruitment(
         @PathVariable id: Long,
         @PathVariable recruitmentId: Long,
-        @RequestBody recruitment: RecruitmentDto
-    ): RecruitmentVO {
+        @RequestBody recruitment: Recruitment
+    ): Recruitment {
         return teamService.updateTeamRecruitment(id, recruitmentId, recruitment)
     }
 
