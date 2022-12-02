@@ -3,9 +3,7 @@ package cn.net.ziqiang.teamup.backend.service.service.impl
 import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j
 import cn.net.ziqiang.teamup.backend.common.annotation.Slf4j.Companion.logger
 import cn.net.ziqiang.teamup.backend.common.constant.status.UserStatus
-import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Message
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.message.MessageVO
 import cn.net.ziqiang.teamup.backend.dao.repository.MessageRepository
 import cn.net.ziqiang.teamup.backend.service.service.MessageService
 import cn.net.ziqiang.teamup.backend.service.service.UserService
@@ -60,15 +58,8 @@ class MessageServiceImpl : MessageService {
         }
     }
 
-    override fun sendMsg(senderId: Long, vo: MessageVO) {
-        val message = Message(
-            id = vo.id,
-            type = vo.type,
-            content = vo.content,
-            sender = senderId,
-            receiver = vo.receiver
-        )
-
+    override fun sendMsg(senderId: Long, message: Message) {
+        message.sender = senderId
         sendToMQ(message)
     }
 

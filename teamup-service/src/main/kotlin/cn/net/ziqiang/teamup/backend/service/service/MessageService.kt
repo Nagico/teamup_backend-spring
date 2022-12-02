@@ -1,9 +1,6 @@
 package cn.net.ziqiang.teamup.backend.service.service
 
-import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Message
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.message.MessageVO
-import org.springframework.data.domain.PageRequest
 
 interface MessageService {
     /**
@@ -25,9 +22,9 @@ interface MessageService {
      * 客户端发送消息
      *
      * @param senderId
-     * @param vo
+     * @param message
      */
-    fun sendMsg(senderId: Long, vo: MessageVO)
+    fun sendMsg(senderId: Long, message: Message)
 
     /**
      * 获取离线消息列表

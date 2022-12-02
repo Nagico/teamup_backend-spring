@@ -1,7 +1,6 @@
 package cn.net.ziqiang.teamup.backend.web.controller
 
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Message
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.message.MessageVO
 import cn.net.ziqiang.teamup.backend.service.service.MessageService
 import cn.net.ziqiang.teamup.backend.web.annotation.user.NormalUser
 import cn.net.ziqiang.teamup.backend.web.security.SecurityContextUtils
@@ -35,7 +34,7 @@ class MessageController {
      */
     @PermitAll
     @MessageMapping("/send")
-    fun sendMessageTest(principal: Principal,@Valid @Payload message: MessageVO) : String {
+    fun sendMessageTest(principal: Principal,@Valid @Payload message: Message) : String {
         messageService.sendMsg(principal.name.toLong(), message)
 
         return "success"
