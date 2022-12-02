@@ -2,7 +2,6 @@ package cn.net.ziqiang.teamup.backend.common.pojo.entity
 
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.data.annotation.CreatedDate
 import java.io.Serializable
@@ -11,6 +10,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity(name = "user")
+@JsonIgnoreProperties(ignoreUnknown = true, value = ["password"])
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
