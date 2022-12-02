@@ -1,9 +1,7 @@
 package cn.net.ziqiang.teamup.backend.common.pojo.entity
 
-import cn.net.ziqiang.teamup.backend.common.pojo.entity.PermissionChecker
 import cn.net.ziqiang.teamup.backend.common.constant.status.ReportStatus
 import cn.net.ziqiang.teamup.backend.common.constant.type.ReportType
-import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
 import java.util.Date
 import javax.persistence.*
@@ -40,7 +38,6 @@ class Report(
     @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.MERGE, CascadeType.REFRESH], optional = false)
     @JoinColumn(name = "user_id")
     @Schema(description = "用户")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     var user: User? = null,
 
     @Column(name = "create_time")

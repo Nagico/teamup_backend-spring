@@ -3,8 +3,6 @@ package cn.net.ziqiang.teamup.backend.service.service.impl
 import cn.net.ziqiang.teamup.backend.common.constant.status.ReportStatus
 import cn.net.ziqiang.teamup.backend.common.constant.type.ReportType
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.report.ReportManagerDto
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.report.ReportUserDto
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Report
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
@@ -22,11 +20,11 @@ class ReportServiceImpl : ReportService {
     @Autowired
     private lateinit var reportRepository: ReportRepository
 
-    override fun createReport(createUser: User, reportUserDto: ReportUserDto): Report {
+    override fun createReport(createUser: User, reportUser: Report): Report {
         val report = Report(
-            type = reportUserDto.type,
-            objectId = reportUserDto.objectId,
-            detail = reportUserDto.detail,
+            type = reportUser.type,
+            objectId = reportUser.objectId,
+            detail = reportUser.detail,
             status = ReportStatus.Pending,
             result = "",
             user = createUser,
@@ -43,11 +41,11 @@ class ReportServiceImpl : ReportService {
         reportRepository.delete(report)
     }
 
-    override fun updateReport(reportId: Long, reportManagerDto: ReportManagerDto): Report {
+    override fun updateReport(reportId: Long, reportManager: Report): Report {
         val report = reportRepository.findById(reportId).get()
 
-        report.status = reportManagerDto.status
-        report.result = reportManagerDto.result
+        report.status = reportManager.status
+        report.result = reportManager.result
         reportRepository.save(report)
 
         return report

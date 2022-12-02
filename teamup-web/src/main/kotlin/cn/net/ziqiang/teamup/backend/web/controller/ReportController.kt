@@ -3,8 +3,6 @@ package cn.net.ziqiang.teamup.backend.web.controller
 import cn.net.ziqiang.teamup.backend.common.constant.UserRole
 import cn.net.ziqiang.teamup.backend.common.constant.status.ReportStatus
 import cn.net.ziqiang.teamup.backend.common.constant.type.ReportType
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.report.ReportManagerDto
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.report.ReportUserDto
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Report
 import cn.net.ziqiang.teamup.backend.common.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.common.util.handleSort
@@ -76,7 +74,7 @@ class ReportController {
     @ActiveUser
     @Operation(summary = "添加举报")
     @PostMapping
-    fun addReport(@RequestBody report: ReportUserDto) : Report {
+    fun addReport(@RequestBody report: Report) : Report {
         val user = SecurityContextUtils.user
         return reportService.createReport(user, report)
     }
@@ -85,7 +83,7 @@ class ReportController {
     @Operation(summary = "处理举报")
     @AllowRole(UserRole.Manager)
     @PutMapping("/{id}")
-    fun updateReport(@PathVariable id: Long, @RequestBody report: ReportManagerDto) : Report {
+    fun updateReport(@PathVariable id: Long, @RequestBody report: Report) : Report {
         return reportService.updateReport(id, report)
     }
 
