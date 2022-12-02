@@ -1,8 +1,9 @@
 package cn.net.ziqiang.teamup.backend.web.controller
 
+import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
+import cn.net.ziqiang.teamup.backend.common.exception.ApiException
+import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.auth.AuthVO
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.RegisterDto
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.ResetPasswordDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.*
 import cn.net.ziqiang.teamup.backend.service.service.UserService
 import cn.net.ziqiang.teamup.backend.web.annotation.user.NormalUser
@@ -26,34 +27,44 @@ class UserController {
     @NormalUser
     @Operation(summary = "获取个人信息")
     @GetMapping("")
-    fun getCurrentUser() : UserProfileVO {
+    fun getCurrentUser() : User {
         return userService.getUserProfileById(SecurityContextUtils.userId)
     }
 
     @ActiveUser
     @Operation(summary = "获取用户简要信息")
     @GetMapping("/{id}")
-    fun getUserProfileById(@PathVariable id: Long) : UserInfo {
-        val currentUserId = SecurityContextUtils.userId
-
-        return if (currentUserId == id) {
-            userService.getUserProfileById(id)
-        } else {
-            userService.getUserInfoById(id)
-        }
+    fun getUserProfileById(@PathVariable id: Long) : User {
+        return userService.getUserInfoById(SecurityContextUtils.userId)
     }
 
     @PermitAll
     @Operation(summary = "注册")
     @PostMapping
-    fun register(@Valid @RequestBody dto: RegisterDto): AuthVO {
+    fun register(@Valid @RequestBody dto: UserDto): AuthVO {
+        if (dto.phone.isEmpty() || dto.verifyCode.isEmpty() || dto.password.isEmpty()) {
+            throw ApiException(ResultType.ParamEmpty)
+        }
+
+        if (!dto.phone.matches(Regex("^1[3-9]\\d{9}$"))) {
+            throw ApiException(ResultType.ParamValidationFailed, "手机号码格式不正确")
+        }
+
         return AuthVO(userService.register(dto))
     }
 
     @PermitAll
     @Operation(summary = "重置密码")
     @PostMapping("/password/reset")
-    fun resetPassword(@Valid @RequestBody dto: ResetPasswordDto): Map<String, String> {
+    fun resetPassword(@Valid @RequestBody dto: UserDto): Map<String, String> {
+        if (dto.phone.isEmpty() || dto.verifyCode.isEmpty() || dto.password.isEmpty()) {
+            throw ApiException(ResultType.ParamEmpty)
+        }
+
+        if (!dto.phone.matches(Regex("^1[3-9]\\d{9}$"))) {
+            throw ApiException(ResultType.ParamValidationFailed, "手机号码格式不正确")
+        }
+
         userService.resetPassword(dto)
         return mapOf("status" to "success")
     }
@@ -78,7 +89,11 @@ class UserController {
     @NormalUser
     @Operation(summary = "修改密码")
     @PutMapping("/password")
-    fun changePassword(@Valid @RequestBody dto: ChangePasswordDto) : Map<String, String> {
+    fun changePassword(@Valid @RequestBody dto: UserDto) : Map<String, String> {
+        if (dto.password.isEmpty() || dto.oldPassword.isEmpty()) {
+            throw ApiException(ResultType.ParamEmpty)
+        }
+
         userService.changePassword(SecurityContextUtils.userId, dto)
         return mapOf("status" to "success")
     }
@@ -86,7 +101,15 @@ class UserController {
     @NormalUser
     @Operation(summary = "修改手机号")
     @PutMapping("/phone")
-    fun changePhone(@Valid @RequestBody dto: ChangePhoneDto) : Map<String, String> {
+    fun changePhone(@Valid @RequestBody dto: UserDto) : Map<String, String> {
+        if (dto.phone.isEmpty() || dto.verifyCode.isEmpty()) {
+            throw ApiException(ResultType.ParamEmpty)
+        }
+
+        if (!dto.phone.matches(Regex("^1[3-9]\\d{9}$"))) {
+            throw ApiException(ResultType.ParamValidationFailed, "手机号码格式不正确")
+        }
+
         userService.changePhone(SecurityContextUtils.userId, dto)
         return mapOf("status" to "success")
     }
@@ -94,14 +117,14 @@ class UserController {
     @NormalUser
     @Operation(summary = "更新个人资料")
     @PutMapping("")
-    fun updateProfile(@Valid @RequestBody userProfile: UpdateUserProfileDto) : UserProfileVO {
+    fun updateProfile(@Valid @RequestBody userProfile: User) : User {
         return userService.updateUser(SecurityContextUtils.userId, userProfile)
     }
 
     @NormalUser
     @Operation(summary = "上传头像")
     @PostMapping("/avatar")
-    fun uploadAvatar(@RequestParam avatar: MultipartFile) : UserProfileVO {
+    fun uploadAvatar(@RequestParam avatar: MultipartFile) : User {
         return userService.updateUserAvatar(SecurityContextUtils.userId, avatar)
     }
 }

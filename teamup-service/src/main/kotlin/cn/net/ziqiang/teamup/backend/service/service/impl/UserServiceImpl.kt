@@ -9,8 +9,6 @@ import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException
 import cn.net.ziqiang.teamup.backend.common.pojo.auth.TokenBean
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.RegisterDto
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.ResetPasswordDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.*
 import cn.net.ziqiang.teamup.backend.dao.repository.UserRepository
 import cn.net.ziqiang.teamup.backend.service.business.OssBusiness
@@ -58,22 +56,20 @@ class UserServiceImpl : UserService {
         }
     }
 
-    override fun getUserInfoById(id: Long): UserInfoVO {
+    override fun getUserInfoById(id: Long): User {
         val user = getUserById(id)
         if (!user.active)
             throw ApiException(type = ResultType.ResourceNotFound, message = "用户不存在")
-        return UserInfoVO(user).apply {
+        return user.apply {
             status = userCacheManager.getUserStatusCache(userId = id)
         }
     }
 
-    override fun getUserProfileById(id: Long): UserProfileVO {
-        val user = getUserById(id)
-
-        return UserProfileVO(user)
+    override fun getUserProfileById(id: Long): User {
+        return getUserById(id)
     }
 
-    override fun updateUser(id: Long, dto: UpdateUserProfileDto) : UserProfileVO {
+    override fun updateUser(id: Long, dto: User) : User {
         val user = getUserById(id = id, useCache = false)
 
         // 检测激活
@@ -84,8 +80,8 @@ class UserServiceImpl : UserService {
         }
 
         // 更新
-        dto.realName?.let { user.realName = it }
-        dto.username?.let {
+        dto.realName.let { user.realName = it }
+        dto.username.let {
             if (it != user.username && countByUsername(it) > 0)  // 检测重复
                 throw ApiException(type = ResultType.ParamValidationFailed, message = "用户名已存在")
             user.username = it
@@ -98,11 +94,11 @@ class UserServiceImpl : UserService {
         userRepository.save(user)
         userCacheManager.setUserCache(user)
 
-        return UserProfileVO(user)
+        return user
     }
 
     @Transactional
-    override fun updateUserAvatar(id: Long, avatar: MultipartFile): UserProfileVO {
+    override fun updateUserAvatar(id: Long, avatar: MultipartFile): User {
         if (avatar.isEmpty)
             throw ApiException(type = ResultType.ParamValidationFailed, message = "头像不能为空")
         if (avatar.contentType != "image/jpeg" && avatar.contentType != "image/png")
@@ -118,7 +114,7 @@ class UserServiceImpl : UserService {
         userRepository.save(user)
         userCacheManager.setUserCache(user)
 
-        return UserProfileVO(user)
+        return user
     }
 
     override fun checkNormalUserOrThrow(user: User) {
@@ -145,7 +141,7 @@ class UserServiceImpl : UserService {
         return userRepository.countByPhone(phone)
     }
 
-    override fun register(registerDto: RegisterDto): TokenBean {
+    override fun register(registerDto: UserDto): TokenBean {
         if (!smsService.checkVerifyCode(phone = registerDto.phone, code = registerDto.verifyCode)) {
             throw ApiException(ResultType.ParamValidationFailed, "验证码错误")
         }
@@ -175,7 +171,7 @@ class UserServiceImpl : UserService {
         return authService.generateToken(newUser)
     }
 
-    override fun resetPassword(resetPasswordDto: ResetPasswordDto) {
+    override fun resetPassword(resetPasswordDto: UserDto) {
         if (!smsService.checkVerifyCode(phone = resetPasswordDto.phone, code = resetPasswordDto.verifyCode)) {
             throw ApiException(ResultType.ParamValidationFailed, "验证码错误")
         }
@@ -188,7 +184,7 @@ class UserServiceImpl : UserService {
         userCacheManager.setUserCache(user)
     }
 
-    override fun changePhone(userId: Long, changePhoneDto: ChangePhoneDto) {
+    override fun changePhone(userId: Long, changePhoneDto: UserDto) {
         val user = getUserById(userId, useCache = false)
 
         if (userRepository.findByPhone(changePhoneDto.phone) != null)
@@ -229,14 +225,14 @@ class UserServiceImpl : UserService {
         return userCacheManager.getUserStatusCache(userId)
     }
 
-    override fun changePassword(userId: Long, changePasswordDto: ChangePasswordDto) {
+    override fun changePassword(userId: Long, changePasswordDto: UserDto) {
         val user = getUserById(userId, useCache = false)
 
         if (!SecurityUtils.matches(password = changePasswordDto.oldPassword, encodedPassword = user.password)) {
             throw ApiException(ResultType.PasswordWrong)
         }
 
-        user.password = SecurityUtils.encryptPassword(password = changePasswordDto.newPassword)
+        user.password = SecurityUtils.encryptPassword(password = changePasswordDto.password)
         userRepository.save(user)
         userCacheManager.setUserCache(user)
     }

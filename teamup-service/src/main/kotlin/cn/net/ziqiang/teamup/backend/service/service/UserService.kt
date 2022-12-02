@@ -3,8 +3,6 @@ package cn.net.ziqiang.teamup.backend.service.service
 import cn.net.ziqiang.teamup.backend.common.constant.status.UserStatus
 import cn.net.ziqiang.teamup.backend.common.pojo.auth.TokenBean
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.User
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.RegisterDto
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.ResetPasswordDto
 import cn.net.ziqiang.teamup.backend.common.pojo.vo.user.*
 import org.springframework.web.multipart.MultipartFile
 
@@ -29,7 +27,7 @@ interface UserService {
      * @param id
      * @return
      */
-    fun getUserInfoById(id: Long): UserInfoVO
+    fun getUserInfoById(id: Long): User
 
     /**
      * 通过id获取用户详细资料
@@ -37,14 +35,14 @@ interface UserService {
      * @param id
      * @return
      */
-    fun getUserProfileById(id: Long): UserProfileVO
+    fun getUserProfileById(id: Long): User
 
     /**
      * 更新用户信息
      * @param id
      * @param dto
      */
-    fun updateUser(id: Long, dto: UpdateUserProfileDto): UserProfileVO
+    fun updateUser(id: Long, dto: User): User
 
     /**
      * 更新用户头像
@@ -53,7 +51,7 @@ interface UserService {
      * @param avatar 头像文件
      * @return
      */
-    fun updateUserAvatar(id: Long, avatar: MultipartFile): UserProfileVO
+    fun updateUserAvatar(id: Long, avatar: MultipartFile): User
 
     /**
      * 是否是可以正常使用的用户
@@ -88,21 +86,21 @@ interface UserService {
      *
      * @return
      */
-    fun register(registerDto: RegisterDto): TokenBean
+    fun register(registerDto: UserDto): TokenBean
 
     /**
      * 重置密码
      *
      * @param resetPasswordDto
      */
-    fun resetPassword(resetPasswordDto: ResetPasswordDto)
+    fun resetPassword(resetPasswordDto: UserDto)
 
     /**
      * 修改密码
      *
      * @param changePasswordDto
      */
-    fun changePassword(userId: Long, changePasswordDto: ChangePasswordDto)
+    fun changePassword(userId: Long, changePasswordDto: UserDto)
 
     /**
      * 修改手机号
@@ -110,7 +108,7 @@ interface UserService {
      * @param userId
      * @param changePhoneDto
      */
-    fun changePhone(userId: Long, changePhoneDto: ChangePhoneDto)
+    fun changePhone(userId: Long, changePhoneDto: UserDto)
 
     /**
      * ws登录
