@@ -19,22 +19,18 @@ class EsTest {
     @Autowired
     private lateinit var esClient: EsBusiness
     
-    @Test
     fun createIndexSettingsMappings() {
         esClient.createIndexSettingsMappings(UserDoc::class.java)
     }
-
-    @Test
+    
     fun aliases() {
         logger.info(esClient.getAllAliases().toString())
     }
-
-    @Test
+    
     fun indexes() {
         logger.info(esClient.getAllIndexes().toString())
     }
 
-    @Test
     @Throws(Exception::class)
     fun selectDocIdExists() {
         if (esClient.checkDocId("1", UserDoc::class.java)) {
@@ -42,13 +38,13 @@ class EsTest {
         }
     }
 
-    @Test
+
     fun queryAll() {
         val queries: List<UserDoc?> = esClient.queryAll(UserDoc::class.java)
         logger.info(queries.toString())
     }
 
-    @Test
+
     @Throws(IOException::class)
     fun addData() {
         val userDoc = UserDoc(
@@ -63,7 +59,7 @@ class EsTest {
         logger.info(s)
     }
 
-    @Test
+
     @Throws(IOException::class)
     fun addDatas() {
         val userDoc1 = UserDoc(
@@ -93,7 +89,7 @@ class EsTest {
             logger.info(docId.toString())
         }
 
-    @Test
+
     fun complexQuery_MatchAll() {
         val query = Query.of { q: Query.Builder ->
             q.matchAll { m: MatchAllQuery.Builder? -> m }
@@ -102,7 +98,7 @@ class EsTest {
         logger.info(userDocs.toString())
     }
 
-    @Test
+
     fun complexQuery_MatchAll_Alias() {
         val query = Query.of { q: Query.Builder ->
             q.matchAll { m: MatchAllQuery.Builder? -> m }
@@ -111,7 +107,7 @@ class EsTest {
         logger.info(userDocs.toString())
     }
 
-    @Test
+
     fun complexQuery_MatchQuery() {
         val query = Query.of { q: Query.Builder ->
             q.match { m: MatchQuery.Builder ->
@@ -124,7 +120,7 @@ class EsTest {
         logger.info(userDocs.toString())
     }
 
-    @Test
+
     fun complexQuery_query_bool_must() {
         val age = Query.of { q: Query.Builder ->
             q.match { m: MatchQuery.Builder ->
@@ -151,7 +147,7 @@ class EsTest {
         logger.info(userDocs.toString())
     }
 
-    @Test
+
     fun complexQueryHighlight() {
         val dec = Query.of { q: Query.Builder ->
             q.matchPhrase { m: MatchPhraseQuery.Builder ->
@@ -167,7 +163,7 @@ class EsTest {
         logger.info(maps.toString())
     }
 
-    @Test
+
     fun complexQuery_query_complexQueryAggregations() {
         val query = Query.of { q: Query.Builder ->
             q.matchAll { m: MatchAllQuery.Builder? -> m }
@@ -214,12 +210,12 @@ class EsTest {
         logger.info(price!!.avg().value().toString())
     }
 
-    @Test
+
     fun delDocId() {
         esClient.deleteByDocId("23", UserDoc::class.java)
     }
 
-    @Test
+
     fun delQuery() {
         val price = Query.of { q: Query.Builder ->
             q.match { m: MatchQuery.Builder ->
@@ -231,7 +227,7 @@ class EsTest {
         esClient.deleteByQuery(price, UserDoc::class.java)
     }
 
-    @Test
+
     fun upDocId() {
         val userDoc = UserDoc(
             age = 21,
@@ -242,7 +238,7 @@ class EsTest {
         esClient.updateByDocId<Any>("241", userDoc, true)
     }
 
-    @Test
+
     fun upQuery() {
         val userDoc = UserDoc(
             dec = "123123123",
