@@ -3,7 +3,6 @@ package cn.net.ziqiang.teamup.backend.service.service.impl;
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType;
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Competition;
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionBriefVO;
 import cn.net.ziqiang.teamup.backend.dao.repository.CompetitionRepository;
 import cn.net.ziqiang.teamup.backend.service.cache.CompetitionCacheManager;
 import cn.net.ziqiang.teamup.backend.service.service.CompetitionService;
@@ -38,14 +37,14 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     @NotNull
-    public List<CompetitionBriefVO> getCompetitionList() {
+    public List<Competition> getCompetitionList() {
         List<Competition> cached = competitionCacheManager.getCompetitionListCache();
 
         if (cached == null) {
             cached = competitionRepository.findAll();
             competitionCacheManager.setCompetitionListCache(cached);
         }
-        return cached.stream().map(CompetitionBriefVO::new).toList();
+        return cached.stream().toList();
     }
 
     @Override
@@ -126,7 +125,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
     @Override
-    public boolean setVerified(Long id, boolean verified) throws ApiException {
+    public Competition setVerified(Long id, boolean verified) throws ApiException {
         Competition competition = competitionRepository.findById(id).orElse(null);
         if (competition == null) {
             throw new ApiException(ResultType.ResourceNotFound, "比赛不存在");
@@ -135,6 +134,6 @@ public class CompetitionServiceImpl implements CompetitionService {
         competitionRepository.save(competition);
         competitionCacheManager.setCompetitionCache(competition);
         competitionCacheManager.deleteCompetitionListCache();
-        return verified;
+        return competition;
     }
 }

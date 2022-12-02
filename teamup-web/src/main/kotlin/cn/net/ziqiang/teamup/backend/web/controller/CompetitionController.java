@@ -4,8 +4,6 @@ import cn.net.ziqiang.teamup.backend.common.constant.UserRole;
 import cn.net.ziqiang.teamup.backend.common.constant.type.ResultType;
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Competition;
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionBriefVO;
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionVerificationVO;
 import cn.net.ziqiang.teamup.backend.service.service.CompetitionService;
 import cn.net.ziqiang.teamup.backend.web.annotation.role.AllowRole;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +26,7 @@ public class CompetitionController {
     @PermitAll
     @Operation(summary = "获取比赛列表")
     @GetMapping("")
-    public List<CompetitionBriefVO> getCompetitionList() {
+    public List<Competition> getCompetitionList() {
         return competitionService.getCompetitionList();
     }
 
@@ -67,14 +65,14 @@ public class CompetitionController {
     @AllowRole(role = UserRole.Manager)
     @Operation(summary = "比赛审核通过")
     @PostMapping("/{id}/verify")
-    public CompetitionVerificationVO verifyCompetition(@PathVariable Long id) throws ApiException {
-        return new CompetitionVerificationVO(competitionService.setVerified(id, true));
+    public Competition verifyCompetition(@PathVariable Long id) throws ApiException {
+        return competitionService.setVerified(id, true);
     }
 
     @AllowRole(role = UserRole.Manager)
     @Operation(summary = "比赛审核不通过")
     @DeleteMapping("/{id}/verify")
-    public CompetitionVerificationVO unVerifyCompetition(@PathVariable Long id) throws ApiException {
-        return new CompetitionVerificationVO(competitionService.setVerified(id, false));
+    public Competition unVerifyCompetition(@PathVariable Long id) throws ApiException {
+        return competitionService.setVerified(id, false);
     }
 }

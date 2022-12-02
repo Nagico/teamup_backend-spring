@@ -2,7 +2,6 @@ package cn.net.ziqiang.teamup.backend.service.service;
 
 import cn.net.ziqiang.teamup.backend.common.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.common.pojo.entity.Competition;
-import cn.net.ziqiang.teamup.backend.common.pojo.vo.competition.CompetitionBriefVO;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public interface CompetitionService {
      * @return
      */
     @NotNull
-    List<CompetitionBriefVO> getCompetitionList();
+    List<Competition> getCompetitionList();
 
     /**
      * 根据id获取比赛
@@ -67,5 +66,5 @@ public interface CompetitionService {
      * @return
      * @throws ApiException
      */
-    boolean setVerified(Long id, boolean verified) throws ApiException;
+    Competition setVerified(Long id, boolean verified) throws ApiException;
 }
