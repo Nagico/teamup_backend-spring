@@ -13,15 +13,15 @@ import org.springframework.stereotype.Component
 @Component
 class SecurityContextUtils {
     @Autowired
-    fun setService(service: cn.net.ziqiang.teamup.backend.service.UserService) {
+    fun setService(service: UserService) {
         userService = service
     }
 
     companion object {
-        private lateinit var userService: cn.net.ziqiang.teamup.backend.service.UserService
+        private lateinit var userService: UserService
 
-        private val jwtPayload: cn.net.ziqiang.teamup.backend.pojo.auth.JwtPayload?
-            get() = SecurityContextHolder.getContext().authentication.details as? cn.net.ziqiang.teamup.backend.pojo.auth.JwtPayload
+        private val jwtPayload: JwtPayload?
+            get() = SecurityContextHolder.getContext().authentication.details as? JwtPayload
 
         private val userIdOrNull: Long?
             get() = jwtPayload?.userId

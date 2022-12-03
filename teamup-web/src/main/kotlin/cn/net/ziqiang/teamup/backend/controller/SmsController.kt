@@ -13,7 +13,7 @@ import javax.annotation.security.PermitAll
 @RequestMapping("/sms")
 class SmsController {
     @Autowired
-    private lateinit var smsService: cn.net.ziqiang.teamup.backend.service.SmsService
+    private lateinit var smsService: SmsService
 
     @PermitAll
     @GetMapping("/verifyCodes")

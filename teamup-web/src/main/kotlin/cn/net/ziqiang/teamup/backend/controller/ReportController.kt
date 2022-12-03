@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/reports")
 class ReportController {
     @Autowired
-    private lateinit var reportService: cn.net.ziqiang.teamup.backend.service.ReportService
+    private lateinit var reportService: ReportService
 
     @ActiveUser
     @Operation(summary = "获取举报列表")

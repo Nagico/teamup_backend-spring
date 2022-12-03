@@ -18,11 +18,11 @@ import javax.validation.Valid
 @RequestMapping("/messages")
 class MessageController {
     @Autowired
-    private lateinit var messageService: cn.net.ziqiang.teamup.backend.service.MessageService
+    private lateinit var messageService: MessageService
 
     @NormalUser
     @GetMapping("/offline")
-    fun getMessages() : List<cn.net.ziqiang.teamup.backend.pojo.entity.Message> {
+    fun getMessages() : List<Message> {
         val user = SecurityContextUtils.user
         return messageService.getOfflineMsg(user.id!!)
     }
@@ -34,7 +34,7 @@ class MessageController {
      */
     @PermitAll
     @MessageMapping("/send")
-    fun sendMessageTest(principal: Principal,@Valid @Payload message: cn.net.ziqiang.teamup.backend.pojo.entity.Message) : String {
+    fun sendMessageTest(principal: Principal,@Valid @Payload message: Message) : String {
         messageService.sendMsg(principal.name.toLong(), message)
 
         return "success"

@@ -1,6 +1,5 @@
 package cn.net.ziqiang.teamup.backend.cache
 
-import cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean
 import cn.net.ziqiang.teamup.backend.constant.RedisKey
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate

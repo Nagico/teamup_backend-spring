@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class LogServiceImpl : cn.net.ziqiang.teamup.backend.service.LogService {
+class LogServiceImpl : LogService {
     @Autowired
     private lateinit var requestLogRepository: RequestLogRepository
 
@@ -20,7 +20,7 @@ class LogServiceImpl : cn.net.ziqiang.teamup.backend.service.LogService {
         requestLogRepository.save(log)
     }
 
-    override fun addExceptionLog(log: cn.net.ziqiang.teamup.backend.pojo.entity.ExceptionLog) {
+    override fun addExceptionLog(log: ExceptionLog) {
         exceptionLogRepository.save(log)
     }
 }

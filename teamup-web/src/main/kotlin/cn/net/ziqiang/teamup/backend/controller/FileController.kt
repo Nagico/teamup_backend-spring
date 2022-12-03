@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/files")
 class FileController {
     @Autowired
-    private lateinit var fileService: cn.net.ziqiang.teamup.backend.service.FileService
+    private lateinit var fileService: FileService
 
     @ActiveUser
     @Operation(summary = "查询文件")
     @OwnerOrManager("file")
     @GetMapping("/{id}")
-    fun getFile(@PathVariable id: Long): cn.net.ziqiang.teamup.backend.pojo.entity.File {
+    fun getFile(@PathVariable id: Long): File {
         return fileService.getFile(id)
     }
 
@@ -53,7 +53,7 @@ class FileController {
     fun ossCallback(
         @PathVariable id: Long,
         @RequestBody ossCallbackVO: OssCallbackVO
-    ) : cn.net.ziqiang.teamup.backend.pojo.entity.File {
+    ) : File {
         return fileService.callback(id, ossCallbackVO)
     }
 }

@@ -16,25 +16,22 @@ import cn.net.ziqiang.teamup.backend.dao.repository.UserRepository
 import cn.net.ziqiang.teamup.backend.cache.AuthCacheManager
 import cn.net.ziqiang.teamup.backend.util.properties.JwtProperties
 import cn.net.ziqiang.teamup.backend.service.AuthService
-import cn.net.ziqiang.teamup.backend.service.SmsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Slf4j
 @Service
-class AuthServiceImpl: cn.net.ziqiang.teamup.backend.service.AuthService {
+class AuthServiceImpl: AuthService {
     @Autowired
     private lateinit var userRepository: UserRepository
     @Autowired
     private lateinit var jwtProperties: JwtProperties
     @Autowired
     private lateinit var authCacheManager: AuthCacheManager
-    @Autowired
-    private lateinit var smsService: cn.net.ziqiang.teamup.backend.service.SmsService
 
     //region implementation
-    override fun loginWechat(code: String, iv: String, encryptedString: String): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean {
+    override fun loginWechat(code: String, iv: String, encryptedString: String): TokenBean {
         //从微信获取资料
 //        val sessionKey = wechatServiceManager.getSessionKey(code = code)
 //        val decryptedJson =
@@ -45,7 +42,7 @@ class AuthServiceImpl: cn.net.ziqiang.teamup.backend.service.AuthService {
         return loginOpenid(openid = decryptedJson["openid"].toString())
     }
 
-    override fun loginOpenid(openid: String): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean {
+    override fun loginOpenid(openid: String): TokenBean {
         var user = userRepository.findByOpenid(openid = openid)
 
         if (user == null) {
@@ -68,7 +65,7 @@ class AuthServiceImpl: cn.net.ziqiang.teamup.backend.service.AuthService {
         return generateToken(user)
     }
 
-    override fun loginPassword(phone: String, password: String): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean {
+    override fun loginPassword(phone: String, password: String): TokenBean {
         val user = userRepository.findByPhone(phone = phone)
             ?: throw ApiException(ResultType.UsernameNotExist, "手机号不存在")
 
@@ -80,7 +77,7 @@ class AuthServiceImpl: cn.net.ziqiang.teamup.backend.service.AuthService {
         return generateToken(user)
     }
 
-    override fun refreshToken(refreshToken: String): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean {
+    override fun refreshToken(refreshToken: String): TokenBean {
         authCacheManager.getRefreshToken(refreshToken = refreshToken)
             ?: throw ApiException(ResultType.TokenInvalid)
 
@@ -113,8 +110,8 @@ class AuthServiceImpl: cn.net.ziqiang.teamup.backend.service.AuthService {
 
     //region utils
 
-    fun generateToken(userId: Long, role: UserRole, username: String): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean {
-        val authPayload = cn.net.ziqiang.teamup.backend.pojo.auth.JwtPayload(
+    fun generateToken(userId: Long, role: UserRole, username: String): TokenBean {
+        val authPayload = JwtPayload(
             userId = userId,
             role = role,
             jwtType = JwtType.Auth,
@@ -126,7 +123,7 @@ class AuthServiceImpl: cn.net.ziqiang.teamup.backend.service.AuthService {
             payload = authPayload
         )
 
-        val refreshPayload = cn.net.ziqiang.teamup.backend.pojo.auth.JwtPayload(
+        val refreshPayload = JwtPayload(
             userId = userId,
             role = role,
             jwtType = JwtType.Refresh,
@@ -138,10 +135,10 @@ class AuthServiceImpl: cn.net.ziqiang.teamup.backend.service.AuthService {
             payload = refreshPayload
         )
 
-        return cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean(access = bearerToken, refresh = refreshToken)
+        return TokenBean(access = bearerToken, refresh = refreshToken)
     }
 
-    override fun generateToken(user: User): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean {
+    override fun generateToken(user: User): TokenBean {
         return generateToken(userId = user.id!!, role = user.role, username = user.username).apply {
             this.user = user
             authCacheManager.setToken(userId = user.id!!, tokenBean = this)

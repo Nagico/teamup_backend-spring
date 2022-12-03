@@ -8,7 +8,7 @@ interface MessageService {
      *
      * @param message
      */
-    fun deliver(message: cn.net.ziqiang.teamup.backend.pojo.entity.Message)
+    fun deliver(message: Message)
 
     /**
      * 传送消息
@@ -24,7 +24,7 @@ interface MessageService {
      * @param senderId
      * @param message
      */
-    fun sendMsg(senderId: Long, message: cn.net.ziqiang.teamup.backend.pojo.entity.Message)
+    fun sendMsg(senderId: Long, message: Message)
 
     /**
      * 获取离线消息列表
@@ -32,5 +32,5 @@ interface MessageService {
      * @param receiver
      * @return
      */
-    fun getOfflineMsg(receiver: Long): List<cn.net.ziqiang.teamup.backend.pojo.entity.Message>
+    fun getOfflineMsg(receiver: Long): List<Message>
 }

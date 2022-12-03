@@ -18,17 +18,17 @@ import kotlin.concurrent.thread
 
 @Slf4j
 @Service
-class MessageServiceImpl : cn.net.ziqiang.teamup.backend.service.MessageService {
+class MessageServiceImpl : MessageService {
     @Autowired
     private lateinit var messagingTemplate: SimpMessageSendingOperations
     @Autowired
     private lateinit var rabbitTemplate: RabbitTemplate
     @Autowired
-    private lateinit var userService: cn.net.ziqiang.teamup.backend.service.UserService
+    private lateinit var userService: UserService
     @Autowired
     private lateinit var messageRepository: MessageRepository
 
-    override fun deliver(message: cn.net.ziqiang.teamup.backend.pojo.entity.Message) {
+    override fun deliver(message: Message) {
         if (message.receiver != null) {
             if (userService.getUserStatus(message.receiver!!) == UserStatus.Online) {
                 deliverToUser(message)
@@ -48,7 +48,7 @@ class MessageServiceImpl : cn.net.ziqiang.teamup.backend.service.MessageService 
 
     override fun deliver(message: String) : Boolean {
         return try {
-            val msg = JSONObject.parseObject(message, cn.net.ziqiang.teamup.backend.pojo.entity.Message::class.java)
+            val msg = JSONObject.parseObject(message, Message::class.java)
             deliver(msg)
             true
         } catch (e: MessagingException) {
@@ -58,13 +58,13 @@ class MessageServiceImpl : cn.net.ziqiang.teamup.backend.service.MessageService 
         }
     }
 
-    override fun sendMsg(senderId: Long, message: cn.net.ziqiang.teamup.backend.pojo.entity.Message) {
+    override fun sendMsg(senderId: Long, message: Message) {
         message.sender = senderId
         sendToMQ(message)
     }
 
     @Transactional
-    override fun getOfflineMsg(receiver: Long): List<cn.net.ziqiang.teamup.backend.pojo.entity.Message> {
+    override fun getOfflineMsg(receiver: Long): List<Message> {
         val messages = messageRepository.findAllByReceiverOrderByCreateTime(receiver)
         messageRepository.deleteAllByReceiver(receiver)
 
@@ -72,7 +72,7 @@ class MessageServiceImpl : cn.net.ziqiang.teamup.backend.service.MessageService 
     }
 
     // region Utils
-    private fun sendToMQ(message: cn.net.ziqiang.teamup.backend.pojo.entity.Message) {
+    private fun sendToMQ(message: Message) {
         rabbitTemplate.convertAndSend(
             "topicWebSocketExchange",
             "topic.public",
@@ -80,14 +80,14 @@ class MessageServiceImpl : cn.net.ziqiang.teamup.backend.service.MessageService 
         )
     }
 
-    private fun deliverToAll(message: cn.net.ziqiang.teamup.backend.pojo.entity.Message) {
+    private fun deliverToAll(message: Message) {
         messagingTemplate.convertAndSend(
             "/topic/public",
             JSONObject.toJSONString(message)
         )
     }
 
-    private fun deliverToUser(message: cn.net.ziqiang.teamup.backend.pojo.entity.Message) {
+    private fun deliverToUser(message: Message) {
         messagingTemplate.convertAndSendToUser(
             message.receiver.toString(),
             "/topic/private",

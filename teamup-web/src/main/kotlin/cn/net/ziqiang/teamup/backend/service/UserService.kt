@@ -86,7 +86,7 @@ interface UserService {
      *
      * @return
      */
-    fun register(registerDto: UserDto): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean
+    fun register(registerDto: UserDto): TokenBean
 
     /**
      * 重置密码

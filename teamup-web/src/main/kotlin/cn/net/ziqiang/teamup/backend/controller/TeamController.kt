@@ -21,7 +21,7 @@ import javax.annotation.security.PermitAll
 @RequestMapping("/teams")
 class TeamController {
     @Autowired
-    private lateinit var teamService: cn.net.ziqiang.teamup.backend.service.TeamService
+    private lateinit var teamService: TeamService
 
     @ActiveUser
     @GetMapping

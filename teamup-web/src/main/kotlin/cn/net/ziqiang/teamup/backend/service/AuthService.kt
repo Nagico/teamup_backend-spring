@@ -8,10 +8,9 @@ interface AuthService {
     /**
      * 微信登录
      * @param code
-     * @param encryptedString
      * @return token
      */
-    fun loginWechat(code: String, iv: String, encryptedString: String): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean
+    fun loginWechat(code: String, iv: String, encryptedString: String): TokenBean
 
     /**
      * 测试 openid直接登录
@@ -19,7 +18,7 @@ interface AuthService {
      * @param openid
      * @return
      */
-    fun loginOpenid(openid: String): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean
+    fun loginOpenid(openid: String): TokenBean
 
     /**
      * 用户名密码登录
@@ -28,14 +27,14 @@ interface AuthService {
      * @param password
      * @return
      */
-    fun loginPassword(phone: String, password: String): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean
+    fun loginPassword(phone: String, password: String): TokenBean
 
     /**
      * 刷新token
      * @param refreshToken
      * @return
      */
-    fun refreshToken(refreshToken: String): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean
+    fun refreshToken(refreshToken: String): TokenBean
 
     /**
      * 缓存获取用户token
@@ -51,5 +50,5 @@ interface AuthService {
      * @param user
      * @return
      */
-    fun generateToken(user: User): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean
+    fun generateToken(user: User): TokenBean
 }

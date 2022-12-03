@@ -17,7 +17,7 @@ import java.util.*
 @RequestMapping("/test")
 class TestController {
     @Autowired
-    private lateinit var userService: cn.net.ziqiang.teamup.backend.service.UserService
+    private lateinit var userService: UserService
 
     @GetMapping
     fun testAnonymous(): TestVO {

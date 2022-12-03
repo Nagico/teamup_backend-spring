@@ -20,7 +20,7 @@ import javax.validation.Valid
 @RequestMapping("/auth")
 class AuthController {
     @Autowired
-    private lateinit var authService: cn.net.ziqiang.teamup.backend.service.AuthService
+    private lateinit var authService: AuthService
 
     @PermitAll
     @Deprecated("暂停微信登录")

@@ -22,7 +22,7 @@ import javax.validation.Valid
 @RequestMapping("/users")
 class UserController {
     @Autowired
-    private lateinit var userService: cn.net.ziqiang.teamup.backend.service.UserService
+    private lateinit var userService: UserService
 
     @NormalUser
     @Operation(summary = "获取个人信息")

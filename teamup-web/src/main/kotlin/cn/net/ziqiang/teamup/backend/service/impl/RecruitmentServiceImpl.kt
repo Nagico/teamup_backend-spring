@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 import kotlin.concurrent.thread
 
 @Service
-class RecruitmentServiceImpl : cn.net.ziqiang.teamup.backend.service.RecruitmentService {
+class RecruitmentServiceImpl : RecruitmentService {
     @Autowired
     private lateinit var recruitmentRepository: RecruitmentRepository
     @Autowired

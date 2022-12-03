@@ -10,7 +10,8 @@ import cn.net.ziqiang.teamup.backend.util.getInfo
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRoleRepository
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRepository
 import cn.net.ziqiang.teamup.backend.cache.TeamCacheManager
-import cn.net.ziqiang.teamup.backend.service.service.*
+import cn.net.ziqiang.teamup.backend.service.CompetitionService
+import cn.net.ziqiang.teamup.backend.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -18,23 +19,23 @@ import org.springframework.transaction.annotation.Transactional
 import kotlin.concurrent.thread
 
 @Service
-class TeamServiceImpl : cn.net.ziqiang.teamup.backend.service.TeamService {
+class TeamServiceImpl : TeamService {
     @Autowired
     private lateinit var teamRepository: TeamRepository
     @Autowired
     private lateinit var teamRoleRepository: TeamRoleRepository
     @Autowired
-    private lateinit var competitionService: cn.net.ziqiang.teamup.backend.service.CompetitionService
+    private lateinit var competitionService: CompetitionService
     @Autowired
-    private lateinit var userService: cn.net.ziqiang.teamup.backend.service.UserService
+    private lateinit var userService: UserService
     @Autowired
-    private lateinit var tagService: cn.net.ziqiang.teamup.backend.service.TagService
+    private lateinit var tagService: TagService
     @Autowired
-    private lateinit var recruitmentService: cn.net.ziqiang.teamup.backend.service.RecruitmentService
+    private lateinit var recruitmentService: RecruitmentService
     @Autowired
     private lateinit var teamCacheManager: TeamCacheManager
     @Autowired
-    private lateinit var esService: cn.net.ziqiang.teamup.backend.service.EsService
+    private lateinit var esService: EsService
 
 
     private fun getTeam(teamId: Long, useCache: Boolean = false): Team {

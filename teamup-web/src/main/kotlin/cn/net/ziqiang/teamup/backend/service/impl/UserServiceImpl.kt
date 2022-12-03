@@ -27,7 +27,7 @@ import kotlin.concurrent.thread
 
 @Slf4j
 @Service
-class UserServiceImpl : cn.net.ziqiang.teamup.backend.service.UserService {
+class UserServiceImpl : UserService {
     @Autowired
     private lateinit var userRepository: UserRepository
     @Autowired
@@ -35,9 +35,9 @@ class UserServiceImpl : cn.net.ziqiang.teamup.backend.service.UserService {
     @Autowired
     private lateinit var ossBusiness: OssBusiness
     @Autowired
-    private lateinit var smsService: cn.net.ziqiang.teamup.backend.service.SmsService
+    private lateinit var smsService: SmsService
     @Autowired
-    private lateinit var authService: cn.net.ziqiang.teamup.backend.service.AuthService
+    private lateinit var authService: AuthService
 
     override fun getUserById(id: Long, useCache: Boolean): User {
         return getUserByIdOrNull(id, useCache) ?: throw ApiException(type = ResultType.ResourceNotFound, message = "用户不存在")
@@ -143,7 +143,7 @@ class UserServiceImpl : cn.net.ziqiang.teamup.backend.service.UserService {
         return userRepository.countByPhone(phone)
     }
 
-    override fun register(registerDto: UserDto): cn.net.ziqiang.teamup.backend.pojo.auth.TokenBean {
+    override fun register(registerDto: UserDto): TokenBean {
         if (!smsService.checkVerifyCode(phone = registerDto.phone, code = registerDto.verifyCode)) {
             throw ApiException(ResultType.ParamValidationFailed, "验证码错误")
         }

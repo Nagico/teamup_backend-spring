@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Lazy
 class RabbitMQConfig {
     @Lazy
     @Autowired
-    private lateinit var messageService: cn.net.ziqiang.teamup.backend.service.MessageService
+    private lateinit var messageService: MessageService
     @Autowired
     private lateinit var rabbitMqProperties: RabbitMqProperties
 

@@ -6,7 +6,6 @@ import cn.net.ziqiang.teamup.backend.pojo.exception.ApiException
 import cn.net.ziqiang.teamup.backend.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.util.JwtUtils
 import cn.net.ziqiang.teamup.backend.util.properties.JwtProperties
-import cn.net.ziqiang.teamup.backend.service.MessageService
 import cn.net.ziqiang.teamup.backend.service.UserService
 import cn.net.ziqiang.teamup.backend.util.security.JwtAuthenticationToken
 import org.apache.logging.log4j.util.Strings
@@ -29,7 +28,7 @@ class WebSocketMessageProcessor : ChannelInterceptor {
     @Autowired
     private lateinit var jwtProperties: JwtProperties
     @Autowired
-    private lateinit var userService: cn.net.ziqiang.teamup.backend.service.UserService
+    private lateinit var userService: UserService
 
     override fun preSend(message: Message<*>, channel: MessageChannel): Message<*> {
         val accessor = MessageHeaderAccessor.getAccessor(

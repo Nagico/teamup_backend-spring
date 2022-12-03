@@ -16,7 +16,7 @@ import java.util.*
 import javax.persistence.criteria.Predicate
 
 @Service
-class ReportServiceImpl : cn.net.ziqiang.teamup.backend.service.ReportService {
+class ReportServiceImpl : ReportService {
     @Autowired
     private lateinit var reportRepository: ReportRepository
 

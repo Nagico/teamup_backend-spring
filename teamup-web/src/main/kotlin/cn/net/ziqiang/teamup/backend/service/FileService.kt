@@ -13,7 +13,7 @@ interface FileService {
      * @param id
      * @return
      */
-    fun getFile(id: Long): cn.net.ziqiang.teamup.backend.pojo.entity.File
+    fun getFile(id: Long): File
 
     /**
      * 删除文件
@@ -39,7 +39,7 @@ interface FileService {
      * @param ossCallbackVO
      * @return
      */
-    fun callback(fileId: Long, ossCallbackVO: OssCallbackVO): cn.net.ziqiang.teamup.backend.pojo.entity.File
+    fun callback(fileId: Long, ossCallbackVO: OssCallbackVO): File
 
     fun fileExpireScheduler()
 }

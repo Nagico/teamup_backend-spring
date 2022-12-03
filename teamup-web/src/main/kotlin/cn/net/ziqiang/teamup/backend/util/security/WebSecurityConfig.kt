@@ -28,7 +28,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 class WebSecurityConfig(
     private val failHandler: AuthenticationFailHandler,
     private val jwtProperties: JwtProperties,
-    private val authService: cn.net.ziqiang.teamup.backend.service.AuthService,
+    private val authService: AuthService,
     private val corsProperties: CorsProperties,
 ): WebSecurityConfigurerAdapter() {
 

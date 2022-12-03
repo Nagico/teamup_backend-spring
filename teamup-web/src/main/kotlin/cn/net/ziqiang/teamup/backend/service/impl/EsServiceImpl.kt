@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 
 @Slf4j
 @Service
-class EsServiceImpl(@Autowired private val esBusiness: EsBusiness) : cn.net.ziqiang.teamup.backend.service.EsService {
+class EsServiceImpl(@Autowired private val esBusiness: EsBusiness) : EsService {
     init {
         esBusiness.createIndexSettingsMappings(TeamDoc::class.java)
     }

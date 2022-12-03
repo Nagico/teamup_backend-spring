@@ -22,12 +22,12 @@ import java.util.*
 @Service
 @EnableAsync
 @EnableScheduling
-class FileServiceImpl : cn.net.ziqiang.teamup.backend.service.FileService {
+class FileServiceImpl : FileService {
     @Autowired
     private lateinit var ossBusiness: OssBusiness
     @Autowired
     private lateinit var fileRepository: FileRepository
-    override fun getFile(id: Long): cn.net.ziqiang.teamup.backend.pojo.entity.File {
+    override fun getFile(id: Long): File {
         return fileRepository.findById(id).orElseThrow { ApiException(ResultType.ResourceNotFound) }.checkPermission()
     }
 
@@ -35,7 +35,7 @@ class FileServiceImpl : cn.net.ziqiang.teamup.backend.service.FileService {
         fileRepository.delete(getFile(id))
     }
 
-     private fun expireFile(file: cn.net.ziqiang.teamup.backend.pojo.entity.File) {
+     private fun expireFile(file: File) {
         file.expired = true
         try {
             ossBusiness.deleteFileByUrl(file.url)
@@ -49,7 +49,7 @@ class FileServiceImpl : cn.net.ziqiang.teamup.backend.service.FileService {
         if (fileName.isEmpty())
             throw ApiException(ResultType.ParamValidationFailed, "文件名不能为空")
 
-        var file = cn.net.ziqiang.teamup.backend.pojo.entity.File(
+        var file = File(
             user = user,
             name = fileName,
             type = type,
@@ -66,7 +66,7 @@ class FileServiceImpl : cn.net.ziqiang.teamup.backend.service.FileService {
     }
 
     @Transactional
-    override fun callback(fileId: Long, ossCallbackVO: OssCallbackVO): cn.net.ziqiang.teamup.backend.pojo.entity.File {
+    override fun callback(fileId: Long, ossCallbackVO: OssCallbackVO): File {
         ossBusiness.verifyCallback()
         val file = getFile(fileId)
 

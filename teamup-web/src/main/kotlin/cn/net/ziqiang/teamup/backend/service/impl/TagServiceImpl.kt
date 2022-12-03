@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class TagServiceImpl : cn.net.ziqiang.teamup.backend.service.TagService {
+class TagServiceImpl : TagService {
     @Autowired
     private lateinit var tagRepository: TagRepository
 

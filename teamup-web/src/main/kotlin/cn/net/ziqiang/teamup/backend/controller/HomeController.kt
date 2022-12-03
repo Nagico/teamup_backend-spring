@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/home")
 class HomeController {
     @Autowired
-    private lateinit var teamService: cn.net.ziqiang.teamup.backend.service.TeamService
+    private lateinit var teamService: TeamService
 
     @GetMapping("/teams")
     fun getTeams(
