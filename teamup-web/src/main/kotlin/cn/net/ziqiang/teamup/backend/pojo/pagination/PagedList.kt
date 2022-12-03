@@ -35,7 +35,7 @@ class PagedList<M, T>(
     constructor(pageData: Page<M>, func: (M) -> T = { m -> m as T }) : this() {
         count = pageData.totalElements
         results = pageData.content.map(func)
-        val page = pageData.number
+        val page = pageData.number + 1
         val pageSize = pageData.size
 
         val baseUrl = getBaseUrlString()

@@ -9,9 +9,5 @@ spring:
     group:
       dev:
         - web-dev
-        - dao-dev
-        - common-dev
       prod:
         - web-prod
-        - dao-prod
-        - common-prod
