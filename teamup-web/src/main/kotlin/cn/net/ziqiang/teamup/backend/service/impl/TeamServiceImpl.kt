@@ -56,10 +56,8 @@ class TeamServiceImpl : TeamService {
         searchText: String?,
         pageRequest: PageRequest
     ): PagedList<Team, Team> {
-        val idList =  if (competition != null) {
-            esService.getTeamDocListByCompetition(competition).map { it.id!! }
-        } else if (role != null) {
-            esService.getTeamDocListByRole(role).map { it.id!! }
+        val idList =  if (competition != null || role != null) {
+            esService.getTeamDocListByCompetitionAndRole(competition ?: "", role ?: "").map { it.id!! }
         } else if (searchText != null) {
             esService.getTeamDocListBySearch(searchText).map { it.id!! }
         } else {

@@ -41,20 +41,13 @@ interface EsService {
     fun getTeamDocById(teamId: Long): TeamDoc
 
     /**
-     * 根据比赛名称获取队伍索引
+     * 根据比赛名称、角色获取队伍索引
      *
      * @param competition
-     * @return
-     */
-    fun getTeamDocListByCompetition(competition: String): List<TeamDoc>
-
-    /**
-     * 根据角色获取队伍索引
-     *
      * @param role
      * @return
      */
-    fun getTeamDocListByRole(role: String): List<TeamDoc>
+    fun getTeamDocListByCompetitionAndRole(competition: String, role: String): List<TeamDoc>
 
     /**
      * 根据搜索词获取队伍索引
