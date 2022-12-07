@@ -63,7 +63,9 @@ class TeamServiceImpl : TeamService {
         } else {
             esService.getAllTeamDocs().map { it.id!! }
         }
-        return PagedList(teamRepository.findAllByIdIn(idList, pageRequest)) { it.apply { it.leader?.getInfo() } }
+        return PagedList(teamRepository.findAllByIdIn(idList, pageRequest)) {
+            it.apply { it.leader?.getInfo() }
+        }
     }
 
     override fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, Team> {
@@ -82,6 +84,7 @@ class TeamServiceImpl : TeamService {
     override fun getTeamDetail(teamId: Long): Team {
         return getTeam(teamId, useCache = true).apply {
             leader?.getInfo()
+            recruitments = recruitmentService.getRecruitmentListByTeamId(id!!)
         }
     }
 

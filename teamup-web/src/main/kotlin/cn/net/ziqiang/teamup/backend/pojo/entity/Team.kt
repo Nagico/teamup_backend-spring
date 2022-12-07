@@ -55,7 +55,12 @@ class Team (
     @Column(name = "recruiting", nullable = false)
     @Schema(description = "是否招募中")
     var recruiting: Boolean = false,
-): cn.net.ziqiang.teamup.backend.pojo.entity.PermissionChecker<Team>("team", "leader") {
+
+    @Transient
+    @Schema(description = "招募详情")
+    var recruitments: List<Recruitment>? = null,
+
+): PermissionChecker<Team>("team", "leader") {
     override fun toString(): String {
         return "Team(id=$id, name=$name)"
     }
