@@ -31,7 +31,7 @@ class UserController {
         return userService.getUserProfileById(SecurityContextUtils.userId)
     }
 
-    @ActiveUser
+    @PermitAll
     @Operation(summary = "获取用户简要信息")
     @GetMapping("/{id}")
     fun getUserProfileById(@PathVariable id: Long) : User {
