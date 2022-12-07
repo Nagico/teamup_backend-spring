@@ -18,7 +18,9 @@ import cn.net.ziqiang.teamup.backend.util.SecurityUtils
 import cn.net.ziqiang.teamup.backend.util.getInfo
 import cn.net.ziqiang.teamup.backend.service.AuthService
 import cn.net.ziqiang.teamup.backend.service.SmsService
+import cn.net.ziqiang.teamup.backend.service.TeamService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
@@ -38,6 +40,9 @@ class UserServiceImpl : UserService {
     private lateinit var smsService: SmsService
     @Autowired
     private lateinit var authService: AuthService
+    @Lazy
+    @Autowired
+    private lateinit var teamService: TeamService
 
     override fun getUserById(id: Long, useCache: Boolean): User {
         return getUserByIdOrNull(id, useCache) ?: throw ApiException(type = ResultType.ResourceNotFound, message = "用户不存在")
@@ -63,6 +68,7 @@ class UserServiceImpl : UserService {
             throw ApiException(type = ResultType.ResourceNotFound, message = "用户不存在")
         return user.apply {
             status = userCacheManager.getUserStatusCache(userId = id)
+            teamCount = teamService.getTeamCountByUserId(id)
             getInfo()
         }
     }

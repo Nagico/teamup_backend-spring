@@ -81,6 +81,10 @@ class TeamServiceImpl : TeamService {
         }
     }
 
+    override fun getTeamCountByUserId(userId: Long): Long {
+        return teamRepository.countByLeaderId(userId)
+    }
+
     override fun getTeamDetail(teamId: Long): Team {
         return getTeam(teamId, useCache = true).apply {
             leader?.getInfo()

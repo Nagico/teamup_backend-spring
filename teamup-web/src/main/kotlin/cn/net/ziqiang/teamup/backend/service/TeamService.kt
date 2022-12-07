@@ -23,6 +23,8 @@ interface TeamService {
      */
     fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, Team>
 
+    fun getTeamCountByUserId(userId: Long): Long
+
     /**
      * 获取队伍详情
      *

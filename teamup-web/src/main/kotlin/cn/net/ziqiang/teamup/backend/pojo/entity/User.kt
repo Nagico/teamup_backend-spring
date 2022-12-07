@@ -91,7 +91,11 @@ class User(
 
     @Transient
     @Schema(description = "当前状态")
-    var status: UserStatus? = null
+    var status: UserStatus? = null,
+
+    @Transient
+    @Schema(description = "队伍数量")
+    var teamCount: Long? = null,
 ): Serializable, Principal {
     override fun toString(): String {
         return "User(id=$id, username='$username', openid='$openid')"
