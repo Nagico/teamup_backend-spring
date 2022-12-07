@@ -41,7 +41,7 @@ class TeamController {
         return teamService.getRoleTree()
     }
 
-    @ActiveUser
+    @PermitAll
     @GetMapping("/{id}")
     @Operation(summary = "获取队伍详情")
     fun getTeamDetail(@PathVariable id: Long): Team {
