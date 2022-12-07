@@ -3,7 +3,10 @@ package cn.net.ziqiang.teamup.backend.pojo.entity
 import cn.net.ziqiang.teamup.backend.constant.UserRole
 import cn.net.ziqiang.teamup.backend.constant.status.UserStatus
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.vladmihalcea.hibernate.type.json.JsonStringType
 import io.swagger.v3.oas.annotations.media.Schema
+import org.hibernate.annotations.Type
+import org.hibernate.annotations.TypeDef
 import org.springframework.data.annotation.CreatedDate
 import java.io.Serializable
 import java.security.Principal
@@ -11,6 +14,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity(name = "user")
+@TypeDef(name = "json", typeClass = JsonStringType::class)
 @JsonIgnoreProperties(ignoreUnknown = true, value = ["password"], allowSetters = true)
 class User(
     @Id
@@ -49,6 +53,11 @@ class User(
     @Column(name = "introduction")
     @Schema(description = "个人介绍")
     var introduction: String? = null,
+
+    @Type(type = "json")
+    @Column(name = "awards", nullable = false, columnDefinition = "json")
+    @Schema(description = "获奖情况")
+    var awards: List<String>? = null,
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)

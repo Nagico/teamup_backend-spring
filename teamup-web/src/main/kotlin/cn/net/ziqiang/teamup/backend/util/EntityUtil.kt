@@ -6,6 +6,5 @@ fun User.getInfo() {
     realName = ""
     studentId = ""
     phone = ""
-    introduction = ""
     openid = ""
 }
