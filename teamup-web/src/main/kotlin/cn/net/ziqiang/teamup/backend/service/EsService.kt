@@ -47,7 +47,7 @@ interface EsService {
      * @param role
      * @return
      */
-    fun getTeamDocListByCompetitionAndRole(competition: String, role: String): List<TeamDoc>
+    fun getTeamDocListByCompetitionAndRole(competition: String?, role: String?): List<TeamDoc>
 
     /**
      * 根据搜索词获取队伍索引

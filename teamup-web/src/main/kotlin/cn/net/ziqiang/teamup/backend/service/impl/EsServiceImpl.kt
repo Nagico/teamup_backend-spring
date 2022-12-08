@@ -4,10 +4,10 @@ import cn.net.ziqiang.teamup.backend.util.annotation.Slf4j
 import cn.net.ziqiang.teamup.backend.pojo.entity.Team
 import cn.net.ziqiang.teamup.backend.pojo.es.TeamDoc
 import cn.net.ziqiang.teamup.backend.business.EsBusiness
+import cn.net.ziqiang.teamup.backend.constant.type.ResultType
+import cn.net.ziqiang.teamup.backend.pojo.exception.ApiException
 import cn.net.ziqiang.teamup.backend.service.EsService
 import co.elastic.clients.elasticsearch._types.query_dsl.Query
-import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders
-import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders.bool
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -46,19 +46,24 @@ class EsServiceImpl(@Autowired private val esBusiness: EsBusiness) : EsService {
         return esBusiness.getByDocId(teamId.toString(), TeamDoc::class.java)
     }
 
-    override fun getTeamDocListByCompetitionAndRole(competition: String, role: String): List<TeamDoc> {
-        val query = Query.of {
-            q -> q.bool {
-                b -> b.should {
-                    s -> s.match {
-                        m -> m.field("competition").query(competition)
-                    }
-                }.should {
-                    s -> s.match {
-                        m -> m.field("role").query(role)
-                    }
+    override fun getTeamDocListByCompetitionAndRole(competition: String?, role: String?): List<TeamDoc> {
+        val query = if (competition != null && role != null) {
+            Query.of {
+                    q -> q.bool {
+                    b -> b.must { s -> s.match { m -> m.field("competitionField").query(competition) } }
+                .must { s -> s.match { m -> m.field("roleField").query(role) } }
                 }
             }
+        } else if (competition != null) {
+            Query.of {
+                    s -> s.match { m -> m.field("competitionField").query(competition) }
+            }
+        } else if (role != null) {
+            Query.of {
+                    s -> s.match { m -> m.field("roleField").query(role) }
+            }
+        } else {
+            throw ApiException(ResultType.ParamEmpty)
         }
         val res = esBusiness.complexQuery(query, TeamDoc::class.java)
         return (res as MutableList<TeamDoc?>).apply {
