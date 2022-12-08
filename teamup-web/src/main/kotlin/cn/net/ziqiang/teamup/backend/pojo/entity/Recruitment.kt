@@ -1,6 +1,5 @@
 package cn.net.ziqiang.teamup.backend.pojo.entity
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.vladmihalcea.hibernate.type.json.JsonStringType
 import io.swagger.v3.oas.annotations.media.Schema
@@ -27,6 +26,10 @@ class Recruitment (
     @JoinColumn(name = "role_id", nullable = false, referencedColumnName = "id")
     @Schema(description = "角色")
     var role: TeamRole? = null,
+
+    @Column(name = "count")
+    @Schema(description = "招募人数")
+    var count: Int? = null,
 
     @Type(type = "json")
     @Column(name = "requirements", nullable = false, columnDefinition = "json")

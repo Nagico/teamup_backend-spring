@@ -73,6 +73,7 @@ class RecruitmentServiceImpl : RecruitmentService {
             team = dto.team!!,
             role = teamRoleRepository.findById(dto.role!!.id!!).orElseThrow { ApiException(ResultType.ResourceNotFound, "角色不存在") },
             requirements = dto.requirements,
+            count = dto.count,
         )
 
         return recruitmentRepository.save(recruitment).apply {
@@ -88,6 +89,7 @@ class RecruitmentServiceImpl : RecruitmentService {
         val recruitment = getRecruitment(id, false)
         dto.role?.let { recruitment.role = teamRoleRepository.findById(it.id!!).orElseThrow { ApiException(ResultType.ResourceNotFound, "角色不存在") } }
         dto.requirements.let { recruitment.requirements = it }
+        dto.count?.let { recruitment.count = it }
 
         return recruitmentRepository.save(recruitment).apply {
             val teamId = team!!.id!!
