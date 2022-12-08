@@ -7,11 +7,21 @@ import cn.net.ziqiang.teamup.backend.pojo.vo.team.TeamRoleTreeVO
 import org.springframework.data.domain.PageRequest
 
 interface TeamService {
+    /**
+     * 搜索队伍
+     *
+     * @param competition
+     * @param role
+     * @param searchText
+     * @param pageRequest
+     * @return
+     */
     fun searchTeams(
         competition: String?,
         role: String?,
         searchText: String?,
-        pageRequest: PageRequest
+        pageRequest: PageRequest,
+        userId: Long?
     ): PagedList<Team, Team>
 
     /**
@@ -31,7 +41,7 @@ interface TeamService {
      * @param teamId
      * @return
      */
-    fun getTeamDetail(teamId: Long): Team
+    fun getTeamDetail(userId: Long?, teamId: Long): Team
 
     /**
      * 刷新队伍招募角色

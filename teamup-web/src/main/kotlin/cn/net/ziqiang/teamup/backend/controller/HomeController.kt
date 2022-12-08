@@ -4,6 +4,7 @@ import cn.net.ziqiang.teamup.backend.pojo.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.pojo.entity.Team
 import cn.net.ziqiang.teamup.backend.util.handleSort
 import cn.net.ziqiang.teamup.backend.service.TeamService
+import cn.net.ziqiang.teamup.backend.util.security.SecurityContextUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.web.bind.annotation.GetMapping
@@ -26,7 +27,7 @@ class HomeController {
         @RequestParam("page", required = false, defaultValue = "1") page: Int,
         @RequestParam("size", required = false, defaultValue = "10") size: Int
     ): PagedList<Team, Team> =
-        teamService.searchTeams(competition, role, search, PageRequest.of(page - 1, size, handleSort(order)))
+        teamService.searchTeams(competition, role, search, PageRequest.of(page - 1, size, handleSort(order)), SecurityContextUtils.userIdOrNull)
 
     @GetMapping("/teams/rebuild")
     fun rebuildTeams() {

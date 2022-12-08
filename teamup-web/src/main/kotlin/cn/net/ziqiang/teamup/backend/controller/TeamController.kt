@@ -30,8 +30,9 @@ class TeamController {
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") pageSize: Int,
     ): PagedList<Team, Team> {
+        val userId = SecurityContextUtils.user.id!!
         val pageRequest = PageRequest.of(page - 1, pageSize)
-        return teamService.getUserTeams(SecurityContextUtils.user.id!!, pageRequest)
+        return teamService.getUserTeams(userId, pageRequest)
     }
 
     @PermitAll
@@ -45,7 +46,7 @@ class TeamController {
     @GetMapping("/{id}")
     @Operation(summary = "获取队伍详情")
     fun getTeamDetail(@PathVariable id: Long): Team {
-        return teamService.getTeamDetail(id)
+        return teamService.getTeamDetail(SecurityContextUtils.userIdOrNull, id)
     }
 
     @ActiveUser

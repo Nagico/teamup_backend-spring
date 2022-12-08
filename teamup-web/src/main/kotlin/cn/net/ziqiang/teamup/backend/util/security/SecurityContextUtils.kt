@@ -23,7 +23,7 @@ class SecurityContextUtils {
         private val jwtPayload: JwtPayload?
             get() = SecurityContextHolder.getContext().authentication.details as? JwtPayload
 
-        private val userIdOrNull: Long?
+        val userIdOrNull: Long?
             get() = jwtPayload?.userId
 
         val role: UserRole

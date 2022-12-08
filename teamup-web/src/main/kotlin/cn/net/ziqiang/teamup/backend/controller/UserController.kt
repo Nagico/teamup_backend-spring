@@ -2,6 +2,7 @@ package cn.net.ziqiang.teamup.backend.controller
 
 import cn.net.ziqiang.teamup.backend.constant.type.ResultType
 import cn.net.ziqiang.teamup.backend.pojo.entity.Competition
+import cn.net.ziqiang.teamup.backend.pojo.entity.Team
 import cn.net.ziqiang.teamup.backend.pojo.entity.TeamRole
 import cn.net.ziqiang.teamup.backend.pojo.exception.ApiException
 import cn.net.ziqiang.teamup.backend.pojo.entity.User
@@ -175,6 +176,61 @@ class UserController {
     @DeleteMapping("/subscriptions/roles/{id}")
     fun deleteRoleSubscription(@PathVariable id: Long) : Map<String, String> {
         recommendService.deleteUserSubscribeRole(SecurityContextUtils.userId, id)
+        return mapOf("status" to "success")
+    }
+
+    @NormalUser
+    @Operation(summary = "获取用户收藏队伍列表")
+    @GetMapping("/favorites/teams/")
+    fun getTeamFavorites() : Set<Team> {
+        return recommendService.getUserFavoriteTeam(SecurityContextUtils.userId)
+    }
+
+    @NormalUser
+    @Operation(summary = "收藏队伍")
+    @PostMapping("/favorites/teams/{id}")
+    fun addTeamFavorite(@PathVariable id: Long) : Map<String, String> {
+        recommendService.addUserFavoriteTeam(SecurityContextUtils.userId, id)
+        return mapOf("status" to "success")
+    }
+
+    @NormalUser
+    @Operation(summary = "取消收藏队伍")
+    @DeleteMapping("/favorites/teams/{id}")
+    fun deleteTeamFavorite(@PathVariable id: Long) : Map<String, String> {
+        recommendService.deleteUserFavoriteTeam(SecurityContextUtils.userId, id)
+        return mapOf("status" to "success")
+    }
+
+    @NormalUser
+    @Operation(summary = "队伍感兴趣")
+    @PostMapping("/interests/teams/{id}")
+    fun addTeamInterest(@PathVariable id: Long) : Map<String, String> {
+        recommendService.addUserInterestingTeam(SecurityContextUtils.userId, id)
+        return mapOf("status" to "success")
+    }
+
+    @NormalUser
+    @Operation(summary = "取消队伍感兴趣")
+    @DeleteMapping("/interests/teams/{id}")
+    fun deleteTeamInterest(@PathVariable id: Long) : Map<String, String> {
+        recommendService.deleteUserInterestingTeam(SecurityContextUtils.userId, id)
+        return mapOf("status" to "success")
+    }
+
+    @NormalUser
+    @Operation(summary = "队伍不感兴趣")
+    @PostMapping("/disinterests/teams/{id}")
+    fun addTeamDisinterest(@PathVariable id: Long) : Map<String, String> {
+        recommendService.addUserUninterestingTeam(SecurityContextUtils.userId, id)
+        return mapOf("status" to "success")
+    }
+
+    @NormalUser
+    @Operation(summary = "取消队伍不感兴趣")
+    @DeleteMapping("/disinterests/teams/{id}")
+    fun deleteTeamDisinterest(@PathVariable id: Long) : Map<String, String> {
+        recommendService.deleteUserUninterestingTeam(SecurityContextUtils.userId, id)
         return mapOf("status" to "success")
     }
 }

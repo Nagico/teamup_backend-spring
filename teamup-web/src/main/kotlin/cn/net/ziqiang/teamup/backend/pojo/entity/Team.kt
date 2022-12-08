@@ -65,6 +65,18 @@ class Team (
     @Schema(description = "创建时间")
     var createTime: Date? = null,
 
+    @Transient
+    @Schema(description = "是否收藏")
+    var favorite: Boolean? = null,
+
+    @Transient
+    @Schema(description = "是否感兴趣")
+    var interested: Boolean? = null,
+
+    @Transient
+    @Schema(description = "是否不感兴趣")
+    var uninterested: Boolean? = null,
+
 ): PermissionChecker<Team>("team", "leader") {
     override fun toString(): String {
         return "Team(id=$id, name=$name)"

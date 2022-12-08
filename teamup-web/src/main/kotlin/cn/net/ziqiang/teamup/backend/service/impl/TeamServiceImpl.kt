@@ -37,6 +37,8 @@ class TeamServiceImpl : TeamService {
     private lateinit var teamCacheManager: TeamCacheManager
     @Autowired
     private lateinit var esService: EsService
+    @Autowired
+    private lateinit var recommendService: RecommendService
 
 
     private fun getTeam(teamId: Long, useCache: Boolean = false): Team {
@@ -55,7 +57,8 @@ class TeamServiceImpl : TeamService {
         competition: String?,
         role: String?,
         searchText: String?,
-        pageRequest: PageRequest
+        pageRequest: PageRequest,
+        userId: Long?
     ): PagedList<Team, Team> {
         val idList =  if (competition != null || role != null) {
             esService.getTeamDocListByCompetitionAndRole(competition, role).map { it.id!! }
@@ -64,14 +67,21 @@ class TeamServiceImpl : TeamService {
         } else {
             esService.getAllTeamDocs().map { it.id!! }
         }
-        return PagedList(teamRepository.findAllByIdIn(idList, pageRequest)) {
+        val result = PagedList(teamRepository.findAllByIdIn(idList, pageRequest)) {
             it.apply { it.leader?.getInfo() }
+        }
+
+        return result.apply {
+            if (userId != null) {
+                recommendService.checkUserFavoriteTeams(userId, this.results)
+            }
         }
     }
 
     override fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, Team> {
         val cachedList = teamCacheManager.getTeamListByUserIdCache(userId)
-        return if (cachedList != null) {
+
+        val result = if (cachedList != null) {
             PagedList(cachedList, pageRequest) { it.apply { it.leader!!.getInfo() } }
         } else {
             val teams = teamRepository.findAllByLeaderId(userId, pageRequest)
@@ -80,16 +90,23 @@ class TeamServiceImpl : TeamService {
             }
             PagedList(teams) { it.apply { it.leader!!.getInfo() } }
         }
+
+        return result.apply {
+            recommendService.checkUserFavoriteTeams(userId, results)
+        }
     }
 
     override fun getTeamCountByUserId(userId: Long): Long {
         return teamRepository.countByLeaderId(userId)
     }
 
-    override fun getTeamDetail(teamId: Long): Team {
+    override fun getTeamDetail(userId: Long?, teamId: Long): Team {
         return getTeam(teamId, useCache = true).apply {
             leader?.getInfo()
             recruitments = recruitmentService.getRecruitmentListByTeamId(id!!)
+            if (userId != null) {
+                recommendService.checkUserTeam(userId, this)
+            }
         }
     }
 
