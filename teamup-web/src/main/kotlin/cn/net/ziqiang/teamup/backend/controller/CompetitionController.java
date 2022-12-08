@@ -2,12 +2,14 @@ package cn.net.ziqiang.teamup.backend.controller;
 
 import cn.net.ziqiang.teamup.backend.constant.UserRole;
 import cn.net.ziqiang.teamup.backend.constant.type.ResultType;
+import cn.net.ziqiang.teamup.backend.pojo.entity.User;
 import cn.net.ziqiang.teamup.backend.pojo.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.pojo.entity.Competition;
 import cn.net.ziqiang.teamup.backend.pojo.vo.DateCountVO;
 import cn.net.ziqiang.teamup.backend.service.CompetitionService;
 import cn.net.ziqiang.teamup.backend.util.annotation.role.AllowRole;
 import cn.net.ziqiang.teamup.backend.util.annotation.user.ActiveUser;
+import cn.net.ziqiang.teamup.backend.util.security.SecurityContextUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,8 @@ public class CompetitionController {
     @Operation(summary = "根据id获取比赛")
     @GetMapping("/{id}")
     public Competition getCompetitionById(@PathVariable Long id) throws ApiException {
-        return competitionService.getCompetitionById(id);
+        User user = SecurityContextUtils.Companion.getUserOrNull();
+        return competitionService.getCompetitionById(id, user == null ? null : user.getId());
     }
 
     @PermitAll

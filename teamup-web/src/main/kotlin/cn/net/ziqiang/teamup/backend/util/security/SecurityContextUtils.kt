@@ -38,7 +38,7 @@ class SecurityContextUtils {
         val userOrNull: User?
             get() {
                 try {
-                    userIdOrNull?.let { userService.getUserById(it) }
+                    return userIdOrNull?.let { userService.getUserById(it) }
                 }
                 catch (_: Exception) {
                 }

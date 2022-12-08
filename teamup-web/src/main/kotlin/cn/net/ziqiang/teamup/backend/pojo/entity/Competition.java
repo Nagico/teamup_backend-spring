@@ -52,6 +52,10 @@ public class Competition {
     @Schema(description = "队伍数量")
     Integer teamCount = 0;
 
+    @Transient
+    @Schema(description = "用户订阅")
+    Boolean subscribed = null;
+
     public Long getId() {
         return id;
     }
@@ -138,6 +142,14 @@ public class Competition {
 
     public void setTeamCount(Integer teamCount) {
         this.teamCount = teamCount;
+    }
+
+    public Boolean getSubscribed() {
+        return subscribed;
+    }
+
+    public void setSubscribed(Boolean subscribed) {
+        this.subscribed = subscribed;
     }
 
     @Override

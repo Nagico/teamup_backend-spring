@@ -4,6 +4,7 @@ import cn.net.ziqiang.teamup.backend.pojo.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.pojo.entity.Competition;
 import cn.net.ziqiang.teamup.backend.pojo.vo.DateCountVO;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface CompetitionService {
      * @return 比赛
      */
     @NotNull
-    Competition getCompetitionById(Long id) throws ApiException;
+    Competition getCompetitionById(@NotNull Long id, @Nullable Long userId) throws ApiException;
 
     List<DateCountVO> getTeamCountByCompetitionId(Long id);
 

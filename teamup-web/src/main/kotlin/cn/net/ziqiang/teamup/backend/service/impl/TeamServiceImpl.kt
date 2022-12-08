@@ -106,7 +106,7 @@ class TeamServiceImpl : TeamService {
 
     @Transactional
     override fun createTeam(userId: Long, dto: Team): Team {
-        val competition = competitionService.getCompetitionById(dto.competition!!.id!!)
+        val competition = competitionService.getCompetitionById(dto.competition!!.id!!, null)
 
         val members = dto.members.map {
             TeamMember(

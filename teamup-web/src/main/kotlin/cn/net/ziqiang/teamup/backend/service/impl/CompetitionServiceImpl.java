@@ -8,7 +8,9 @@ import cn.net.ziqiang.teamup.backend.dao.repository.CompetitionRepository;
 import cn.net.ziqiang.teamup.backend.cache.CompetitionCacheManager;
 import cn.net.ziqiang.teamup.backend.pojo.vo.DateCountVO;
 import cn.net.ziqiang.teamup.backend.service.CompetitionService;
+import cn.net.ziqiang.teamup.backend.service.RecommendService;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,14 +24,17 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     final TeamRepository teamRepository;
 
+    final RecommendService recommendService;
+
     public CompetitionServiceImpl(
             CompetitionRepository competitionRepository,
             CompetitionCacheManager competitionCacheManager,
-            TeamRepository teamRepository
-    ) {
+            TeamRepository teamRepository,
+            RecommendService recommendService) {
         this.competitionRepository = competitionRepository;
         this.competitionCacheManager = competitionCacheManager;
         this.teamRepository = teamRepository;
+        this.recommendService = recommendService;
     }
 
     @Override
@@ -56,12 +61,16 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     @NotNull
-    public Competition getCompetitionById(Long id) throws ApiException {
+    public Competition getCompetitionById(@NotNull Long id, @Nullable Long userId) throws ApiException {
         Competition cached = competitionCacheManager.getCompetitionCache(id);
 
         if (cached == null) {
             cached = competitionRepository.findById(id).orElseThrow(() -> new ApiException(ResultType.ResourceNotFound, "比赛不存在"));
             competitionCacheManager.setCompetitionCache(cached);
+        }
+
+        if (userId != null) {
+            cached.setSubscribed(recommendService.checkUserSubscribeCompetition(userId, id));
         }
 
         return cached;
