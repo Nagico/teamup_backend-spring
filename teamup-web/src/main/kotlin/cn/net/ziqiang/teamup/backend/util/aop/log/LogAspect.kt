@@ -81,8 +81,13 @@ class LogAspect {
         val headerNames = request.headerNames
         val headers = mutableMapOf<String, String>()
         while (headerNames.hasMoreElements()) {
-            val key = headerNames.nextElement()
-            headers[key] = request.getHeader(key)
+            try {
+                val name = headerNames.nextElement()
+                headers[name] = request.getHeader(name)
+            } catch (e: Exception) {
+                logger.error("Error when getting header", e)
+                break
+            }
         }
         log.header = headers.toString()
 
