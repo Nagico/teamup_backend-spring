@@ -106,8 +106,7 @@ class TeamServiceImpl : TeamService {
 
     @Transactional
     override fun createTeam(userId: Long, dto: Team): Team {
-        val competition = competitionService.getCompetitionById(dto.competition!!.id!!).takeIf { it.verified }
-                ?: throw ApiException(ResultType.ParamValidationFailed, "比赛暂未通过审核")
+        val competition = competitionService.getCompetitionById(dto.competition!!.id!!)
 
         val members = dto.members.map {
             TeamMember(
