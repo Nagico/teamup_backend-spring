@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 
 interface TeamRoleRepository : JpaRepository<TeamRole, Long>, JpaSpecificationExecutor<TeamRole> {
     fun getAllByIdIn(ids: List<Long>): List<TeamRole>
+    fun getAllByIdIn(ids: Set<Long>): List<TeamRole>
 }

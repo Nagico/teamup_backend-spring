@@ -15,7 +15,12 @@ import javax.persistence.*
 
 @Entity(name = "user")
 @TypeDef(name = "json", typeClass = JsonStringType::class)
-@JsonIgnoreProperties(ignoreUnknown = true, value = ["password"], allowSetters = true)
+@JsonIgnoreProperties(
+    ignoreUnknown = true,
+    value = ["password", "subscribeCompetition", "subscribeRole", "favoriteTeam",
+             "interestingTeam", "uninterestingTeam"],
+    allowSetters = true
+)
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -96,6 +101,31 @@ class User(
     @Transient
     @Schema(description = "队伍数量")
     var teamCount: Long? = null,
+
+    @Type(type = "json")
+    @Column(name = "subscribe_competition", columnDefinition = "json")
+    @Schema(description = "订阅比赛")
+    var subscribeCompetition: Set<Long>? = null,
+
+    @Type(type = "json")
+    @Column(name = "subscribe_role", columnDefinition = "json")
+    @Schema(description = "订阅角色")
+    var subscribeRole: Set<Long>? = null,
+
+    @Type(type = "json")
+    @Column(name = "favorite_team", columnDefinition = "json")
+    @Schema(description = "收藏队伍")
+    var favoriteTeam: Set<Long>? = null,
+
+    @Type(type = "json")
+    @Column(name = "interesting_team", columnDefinition = "json")
+    @Schema(description = "感兴趣的队伍")
+    var interestingTeam: Set<Long>? = null,
+
+    @Type(type = "json")
+    @Column(name = "uninteresting_team", columnDefinition = "json")
+    @Schema(description = "不感兴趣的队伍")
+    var uninterestingTeam: Set<Long>? = null,
 ): Serializable, Principal {
     override fun toString(): String {
         return "User(id=$id, username='$username', openid='$openid')"

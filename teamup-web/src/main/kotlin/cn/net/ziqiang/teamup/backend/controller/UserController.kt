@@ -1,14 +1,16 @@
 package cn.net.ziqiang.teamup.backend.controller
 
 import cn.net.ziqiang.teamup.backend.constant.type.ResultType
+import cn.net.ziqiang.teamup.backend.pojo.entity.Competition
+import cn.net.ziqiang.teamup.backend.pojo.entity.TeamRole
 import cn.net.ziqiang.teamup.backend.pojo.exception.ApiException
 import cn.net.ziqiang.teamup.backend.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.pojo.vo.auth.AuthVO
 import cn.net.ziqiang.teamup.backend.pojo.vo.user.*
+import cn.net.ziqiang.teamup.backend.service.RecommendService
 import cn.net.ziqiang.teamup.backend.service.UserService
 import cn.net.ziqiang.teamup.backend.util.annotation.user.NormalUser
 import cn.net.ziqiang.teamup.backend.util.security.SecurityContextUtils
-import cn.net.ziqiang.teamup.backend.util.annotation.user.ActiveUser
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,6 +25,8 @@ import javax.validation.Valid
 class UserController {
     @Autowired
     private lateinit var userService: UserService
+    @Autowired
+    private lateinit var recommendService: RecommendService
 
     @NormalUser
     @Operation(summary = "获取个人信息")
@@ -126,5 +130,51 @@ class UserController {
     @PostMapping("/avatar")
     fun uploadAvatar(@RequestParam("file") avatar: MultipartFile) : User {
         return userService.updateUserAvatar(SecurityContextUtils.userId, avatar)
+    }
+
+    @NormalUser
+    @Operation(summary = "获取用户订阅比赛列表")
+    @GetMapping("/subscriptions/competitions/")
+    fun getSubscriptions() : List<Competition> {
+        return recommendService.getUserSubscribeCompetition(SecurityContextUtils.userId)
+    }
+
+    @NormalUser
+    @Operation(summary = "添加比赛订阅")
+    @PostMapping("/subscriptions/competitions/{id}")
+    fun addSubscription(@PathVariable id: Long) : Map<String, String> {
+        recommendService.addUserSubscribeCompetition(SecurityContextUtils.userId, id)
+        return mapOf("status" to "success")
+    }
+
+    @NormalUser
+    @Operation(summary = "删除比赛订阅")
+    @DeleteMapping("/subscriptions/competitions/{id}")
+    fun deleteSubscription(@PathVariable id: Long) : Map<String, String> {
+        recommendService.deleteUserSubscribeCompetition(SecurityContextUtils.userId, id)
+        return mapOf("status" to "success")
+    }
+
+    @NormalUser
+    @Operation(summary = "获取用户订阅角色列表")
+    @GetMapping("/subscriptions/roles/")
+    fun getRoleSubscriptions() : List<TeamRole> {
+        return recommendService.getUserSubscribeRole(SecurityContextUtils.userId)
+    }
+
+    @NormalUser
+    @Operation(summary = "添加角色订阅")
+    @PostMapping("/subscriptions/roles/{id}")
+    fun addRoleSubscription(@PathVariable id: Long) : Map<String, String> {
+        recommendService.addUserSubscribeRole(SecurityContextUtils.userId, id)
+        return mapOf("status" to "success")
+    }
+
+    @NormalUser
+    @Operation(summary = "删除角色订阅")
+    @DeleteMapping("/subscriptions/roles/{id}")
+    fun deleteRoleSubscription(@PathVariable id: Long) : Map<String, String> {
+        recommendService.deleteUserSubscribeRole(SecurityContextUtils.userId, id)
+        return mapOf("status" to "success")
     }
 }
