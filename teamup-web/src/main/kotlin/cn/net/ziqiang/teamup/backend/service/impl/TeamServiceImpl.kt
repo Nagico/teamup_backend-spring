@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 import kotlin.concurrent.thread
 
 @Service
@@ -123,7 +124,8 @@ class TeamServiceImpl : TeamService {
             tags = tagService.getOrCreateTags(dto.tags.map { it.content!! }) as MutableList<Tag>,
             leader = userService.getUserById(userId),
             members = members as MutableList<TeamMember>,
-            recruiting = dto.recruiting
+            recruiting = dto.recruiting,
+            createTime = Date(),
         )
 
         return teamRepository.save(team).apply {

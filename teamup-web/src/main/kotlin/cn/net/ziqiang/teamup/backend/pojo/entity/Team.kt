@@ -4,6 +4,7 @@ import com.vladmihalcea.hibernate.type.json.JsonStringType
 import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
+import java.util.Date
 import javax.persistence.*
 
 @Entity
@@ -22,7 +23,7 @@ class Team (
     @OneToOne
     @JoinColumn(name = "competition_id", nullable = false, referencedColumnName = "id")
     @Schema(description = "竞赛")
-    var competition: cn.net.ziqiang.teamup.backend.pojo.entity.Competition? = null,
+    var competition: Competition? = null,
 
     @ManyToOne
     @JoinColumn(name = "leader_id", nullable = false, referencedColumnName = "id")
@@ -59,6 +60,10 @@ class Team (
     @Transient
     @Schema(description = "招募详情")
     var recruitments: List<Recruitment>? = null,
+
+    @Column(name = "create_time", nullable = false)
+    @Schema(description = "创建时间")
+    var createTime: Date? = null,
 
 ): PermissionChecker<Team>("team", "leader") {
     override fun toString(): String {
