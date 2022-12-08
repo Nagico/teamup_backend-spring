@@ -84,6 +84,9 @@ public class CompetitionServiceImpl implements CompetitionService {
         if (competition.getName() != null) {
             newCompetition.setName(competition.getName());
         }
+        if (competition.getAbbreviation() != null) {
+            newCompetition.setAbbreviation(competition.getAbbreviation());
+        }
         if (competition.getDescription() != null) {
             newCompetition.setDescription(competition.getDescription());
         }

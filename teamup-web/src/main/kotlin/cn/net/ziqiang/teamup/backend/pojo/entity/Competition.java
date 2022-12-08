@@ -17,6 +17,9 @@ public class Competition {
     @Schema(description = "名称")
     String name;
 
+    @Column(name = "abbreviation", nullable = false, length = 32)
+    String abbreviation;
+
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     @Schema(description = "描述")
     String description = "";
@@ -63,6 +66,14 @@ public class Competition {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAbbreviation() {
+        return abbreviation;
+    }
+
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
     }
 
     public String getDescription() {
