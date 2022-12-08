@@ -127,7 +127,14 @@ class TeamServiceImpl : TeamService {
             createTime = Date(),
         )
 
-        return teamRepository.save(team).apply {
+        val savedTeam = teamRepository.save(team)
+
+        for (recruitment in dto.recruitments!!) {
+            recruitment.team = savedTeam
+            recruitmentService.createRecruitment(recruitment)
+        }
+
+        return savedTeam.apply {
             leader?.getInfo()
             thread {
                 teamCacheManager.setTeamCache(team)
