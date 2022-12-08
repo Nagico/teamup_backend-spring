@@ -112,7 +112,7 @@ class LogAspect {
             }
         } else {
             //取不到真实ip则返回空，不能返回内网地址。
-            request.remoteAddr
+            request.remoteAddr ?: ""
         }
     }
 
