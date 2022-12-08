@@ -81,6 +81,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     @NotNull
     public Competition addCompetition(Competition competition) {
+        competition.setVerified(false);
         Competition res = competitionRepository.save(competition);
         competitionCacheManager.setCompetitionCache(res);
         return res;

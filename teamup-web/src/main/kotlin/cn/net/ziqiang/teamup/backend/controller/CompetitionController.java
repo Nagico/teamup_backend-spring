@@ -7,6 +7,7 @@ import cn.net.ziqiang.teamup.backend.pojo.entity.Competition;
 import cn.net.ziqiang.teamup.backend.pojo.vo.DateCountVO;
 import cn.net.ziqiang.teamup.backend.service.CompetitionService;
 import cn.net.ziqiang.teamup.backend.util.annotation.role.AllowRole;
+import cn.net.ziqiang.teamup.backend.util.annotation.user.ActiveUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class CompetitionController {
         return competitionService.getTeamCountByCompetitionId(id);
     }
 
-    @AllowRole(role = UserRole.Manager)
+    @ActiveUser
     @Operation(summary = "创建比赛")
     @PostMapping
     public Competition addCompetition(@Valid @RequestBody Competition competition) {
