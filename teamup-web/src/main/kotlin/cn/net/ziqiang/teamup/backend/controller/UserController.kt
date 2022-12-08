@@ -124,7 +124,7 @@ class UserController {
     @NormalUser
     @Operation(summary = "上传头像")
     @PostMapping("/avatar")
-    fun uploadAvatar(@RequestParam avatar: MultipartFile) : User {
+    fun uploadAvatar(@RequestParam("file") avatar: MultipartFile) : User {
         return userService.updateUserAvatar(SecurityContextUtils.userId, avatar)
     }
 }

@@ -10,16 +10,16 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 
-@Order(value = Ordered.HIGHEST_PRECEDENCE)
-@Component
-@WebFilter(filterName = "ContentCachingFilter", urlPatterns = ["/*"])
-class ContentCachingFilter : OncePerRequestFilter() {
-    override fun doFilterInternal(
-        httpServletRequest: HttpServletRequest,
-        httpServletResponse: HttpServletResponse,
-        filterChain: FilterChain,
-    ) {
-        val cachedBodyHttpServletRequest = CachedBodyHttpServletRequest(httpServletRequest)
-        filterChain.doFilter(cachedBodyHttpServletRequest, httpServletResponse)
-    }
-}
+//@Order(value = Ordered.HIGHEST_PRECEDENCE)
+//@Component
+//@WebFilter(filterName = "ContentCachingFilter", urlPatterns = ["/*"])
+//class ContentCachingFilter : OncePerRequestFilter() {
+//    override fun doFilterInternal(
+//        httpServletRequest: HttpServletRequest,
+//        httpServletResponse: HttpServletResponse,
+//        filterChain: FilterChain,
+//    ) {
+//        val cachedBodyHttpServletRequest = CachedBodyHttpServletRequest(httpServletRequest)
+//        filterChain.doFilter(cachedBodyHttpServletRequest, httpServletResponse)
+//    }
+//}

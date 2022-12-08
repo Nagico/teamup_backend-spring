@@ -91,7 +91,7 @@ class LogAspect {
         }
         log.header = headers.toString()
 
-        log.body = request.inputStream.bufferedReader().readText()
+        // log.body = request.inputStream.bufferedReader().readText()
     }
 
     /**
