@@ -84,6 +84,7 @@ public class CompetitionServiceImpl implements CompetitionService {
         competition.setVerified(false);
         Competition res = competitionRepository.save(competition);
         competitionCacheManager.setCompetitionCache(res);
+        competitionCacheManager.deleteCompetitionListCache();
         return res;
     }
 
