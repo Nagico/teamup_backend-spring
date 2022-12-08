@@ -2,6 +2,7 @@ package cn.net.ziqiang.teamup.backend.service;
 
 import cn.net.ziqiang.teamup.backend.pojo.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.pojo.entity.Competition;
+import cn.net.ziqiang.teamup.backend.pojo.vo.DateCountVO;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -29,6 +30,8 @@ public interface CompetitionService {
      */
     @NotNull
     Competition getCompetitionById(Long id) throws ApiException;
+
+    List<DateCountVO> getTeamCountByCompetitionId(Long id);
 
     /**
      * 根据名称获取比赛列表

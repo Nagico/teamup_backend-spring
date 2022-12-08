@@ -4,6 +4,7 @@ import cn.net.ziqiang.teamup.backend.constant.UserRole;
 import cn.net.ziqiang.teamup.backend.constant.type.ResultType;
 import cn.net.ziqiang.teamup.backend.pojo.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.pojo.entity.Competition;
+import cn.net.ziqiang.teamup.backend.pojo.vo.DateCountVO;
 import cn.net.ziqiang.teamup.backend.service.CompetitionService;
 import cn.net.ziqiang.teamup.backend.util.annotation.role.AllowRole;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,6 +36,13 @@ public class CompetitionController {
     @GetMapping("/{id}")
     public Competition getCompetitionById(@PathVariable Long id) throws ApiException {
         return competitionService.getCompetitionById(id);
+    }
+
+    @PermitAll
+    @Operation(summary = "根据id获取队伍创建日期数量")
+    @GetMapping("/{id}/count")
+    public List<DateCountVO> getTeamCountByCompetitionId(@PathVariable Long id) {
+        return competitionService.getTeamCountByCompetitionId(id);
     }
 
     @AllowRole(role = UserRole.Manager)

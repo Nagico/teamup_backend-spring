@@ -1,10 +1,12 @@
 package cn.net.ziqiang.teamup.backend.service.impl;
 
 import cn.net.ziqiang.teamup.backend.constant.type.ResultType;
+import cn.net.ziqiang.teamup.backend.dao.repository.TeamRepository;
 import cn.net.ziqiang.teamup.backend.pojo.exception.ApiException;
 import cn.net.ziqiang.teamup.backend.pojo.entity.Competition;
 import cn.net.ziqiang.teamup.backend.dao.repository.CompetitionRepository;
 import cn.net.ziqiang.teamup.backend.cache.CompetitionCacheManager;
+import cn.net.ziqiang.teamup.backend.pojo.vo.DateCountVO;
 import cn.net.ziqiang.teamup.backend.service.CompetitionService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -14,15 +16,20 @@ import java.util.List;
 @Service
 public class CompetitionServiceImpl implements CompetitionService {
 
-    final
-    CompetitionRepository competitionRepository;
+    final CompetitionRepository competitionRepository;
 
-    final
-    CompetitionCacheManager competitionCacheManager;
+    final CompetitionCacheManager competitionCacheManager;
 
-    public CompetitionServiceImpl(CompetitionRepository competitionRepository, CompetitionCacheManager competitionCacheManager) {
+    final TeamRepository teamRepository;
+
+    public CompetitionServiceImpl(
+            CompetitionRepository competitionRepository,
+            CompetitionCacheManager competitionCacheManager,
+            TeamRepository teamRepository
+    ) {
         this.competitionRepository = competitionRepository;
         this.competitionCacheManager = competitionCacheManager;
+        this.teamRepository = teamRepository;
     }
 
     @Override
@@ -58,6 +65,11 @@ public class CompetitionServiceImpl implements CompetitionService {
         }
 
         return cached;
+    }
+
+    @Override
+    public List<DateCountVO> getTeamCountByCompetitionId(Long id) {
+        return teamRepository.countGroupByCreateDateById(id);
     }
 
     @Override
