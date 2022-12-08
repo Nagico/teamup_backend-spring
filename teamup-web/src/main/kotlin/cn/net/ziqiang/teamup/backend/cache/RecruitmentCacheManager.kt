@@ -17,7 +17,7 @@ class RecruitmentCacheManager {
         redisTemplate.opsForValue().set(
             /* key = */ RedisKey.recruitmentKey(recruitment.id!!),
             /* value = */ recruitment,
-            /* timeout = */ Duration.ofDays(1)
+            /* timeout = */ Duration.ofSeconds(30)
         )
     }
 
@@ -37,7 +37,7 @@ class RecruitmentCacheManager {
         redisTemplate.opsForValue().set(
             /* key = */ RedisKey.recruitmentListByTeamIdKey(teamId),
             /* value = */ recruitmentList,
-            /* timeout = */ Duration.ofDays(1)
+            /* timeout = */ Duration.ofSeconds(30)
         )
     }
 

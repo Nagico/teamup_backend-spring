@@ -16,7 +16,7 @@ class CompetitionCacheManager {
         redisTemplate.opsForValue().set(
             /* key = */ RedisKey.competitionKey(competition.id!!),
             /* value = */ competition,
-            /* timeout = */ Duration.ofDays(1)
+            /* timeout = */ Duration.ofSeconds(30)
         )
     }
 
@@ -32,7 +32,7 @@ class CompetitionCacheManager {
         redisTemplate.opsForValue().set(
             /* key = */ RedisKey.competitionListKey(),
             /* value = */ competitionList,
-            /* timeout = */ Duration.ofDays(1)
+            /* timeout = */ Duration.ofSeconds(30)
         )
     }
 

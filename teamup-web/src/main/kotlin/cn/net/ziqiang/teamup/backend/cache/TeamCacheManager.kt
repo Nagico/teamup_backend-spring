@@ -18,7 +18,7 @@ class TeamCacheManager {
         redisTemplate.opsForValue().set(
             /* key = */ RedisKey.teamKey(team.id!!),
             /* value = */ team,
-            /* timeout = */ Duration.ofDays(1)
+            /* timeout = */ Duration.ofSeconds(30)
         )
     }
 
@@ -38,7 +38,7 @@ class TeamCacheManager {
         redisTemplate.opsForValue().set(
             /* key = */ RedisKey.teamListByUserIdKey(userId),
             /* value = */ teamList,
-            /* timeout = */ Duration.ofDays(1)
+            /* timeout = */ Duration.ofSeconds(30)
         )
     }
 
