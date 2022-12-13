@@ -28,4 +28,6 @@ interface TeamRepository : JpaRepository<Team, Long>, JpaSpecificationExecutor<T
             "WHERE t.competition.id = :id " +
             "GROUP BY function('date_format', t.createTime, '%Y-%m-%d')")
     fun countGroupByCreateDateById(id: Long): List<DateCountVO>
+
+    fun countByCompetition_Id(id: Long): Long
 }

@@ -66,6 +66,7 @@ public class CompetitionServiceImpl implements CompetitionService {
 
         if (cached == null) {
             cached = competitionRepository.findById(id).orElseThrow(() -> new ApiException(ResultType.ResourceNotFound, "比赛不存在"));
+            cached.setTeamCount((int) teamRepository.countByCompetition_Id(id));
             competitionCacheManager.setCompetitionCache(cached);
         }
 
