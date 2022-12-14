@@ -180,6 +180,7 @@ class TeamServiceImpl : TeamService {
 
         return teamRepository.save(team).apply {
             leader?.getInfo()
+            recruitments = recruitmentService.getRecruitmentListByTeamId(id!!)
             val userId = team.leader!!.id!!
             thread {
                 teamCacheManager.setTeamCache(team)
