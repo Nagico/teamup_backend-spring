@@ -98,6 +98,7 @@ class UserServiceImpl : UserService {
         dto.grade?.let { user.grade = it }
         dto.studentId?.let { user.studentId = it }
         dto.introduction?.let { user.introduction = it }
+        dto.awards?.let { user.awards = it }
 
         userRepository.save(user)
         userCacheManager.setUserCache(user)
