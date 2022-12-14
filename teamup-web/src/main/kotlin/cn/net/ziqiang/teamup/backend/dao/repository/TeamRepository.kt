@@ -15,7 +15,9 @@ interface TeamRepository : JpaRepository<Team, Long>, JpaSpecificationExecutor<T
     fun findAllByLeaderId(creatorId: Long): List<Team>
 
     fun findAllByIdIn(ids: List<Long>, pageable: Pageable): Page<Team>
-    fun findAllByIdIn(ids: Set<Long>): Set<Team>
+
+    @Query("select t from Team t where t.id in :ids order by FIELD(t.id, :ids)")
+    fun findAllByIdsOrdered(ids: List<Long>, pageable: Pageable): Page<Team>
 
     fun countByLeaderId(creatorId: Long): Long
 

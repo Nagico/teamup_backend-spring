@@ -136,4 +136,20 @@ interface RecommendService {
      * @param teamId
      */
     fun deleteUserUninterestingTeam(userId: Long, teamId: Long)
+
+    /**
+     * 获取向用户推荐的队伍ID
+     *
+     * @param userId
+     * @return
+     */
+    fun getRecommendTeamIds(userId: Long): List<Long>
+
+    /**
+     * 获取向队伍推荐的用户
+     *
+     * @param teamId
+     * @return
+     */
+    fun getRecommendUserIds(teamId: Long): List<Long>
 }

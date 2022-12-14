@@ -64,10 +64,16 @@ class TeamServiceImpl : TeamService {
             esService.getTeamDocListByCompetitionAndRole(competition, role).map { it.id!! }
         } else if (searchText != null) {
             esService.getTeamDocListBySearch(searchText).map { it.id!! }
-        } else {
-            esService.getAllTeamDocs().map { it.id!! }
+        } else {  // 获取所有队伍（推荐模式）
+            var originIds = esService.getAllTeamDocs().map { it.id!! }
+            if (userId != null) {
+                val recommendIds = recommendService.getRecommendTeamIds(userId)
+                originIds = originIds.filter { !recommendIds.contains(it) }
+                originIds = recommendIds + originIds
+            }
+            originIds
         }
-        val result = PagedList(teamRepository.findAllByIdIn(idList, pageRequest)) {
+        val result = PagedList(teamRepository.findAllByIdsOrdered(idList, pageRequest)) {
             it.apply { it.leader?.getInfo() }
         }
 

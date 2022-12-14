@@ -1,9 +1,7 @@
 package cn.net.ziqiang.teamup.backend.service.impl
 
-import cn.net.ziqiang.teamup.backend.dao.repository.CompetitionRepository
-import cn.net.ziqiang.teamup.backend.dao.repository.TeamRepository
-import cn.net.ziqiang.teamup.backend.dao.repository.TeamRoleRepository
-import cn.net.ziqiang.teamup.backend.dao.repository.UserRepository
+import cn.net.ziqiang.teamup.backend.constant.type.RecommendType
+import cn.net.ziqiang.teamup.backend.dao.repository.*
 import cn.net.ziqiang.teamup.backend.pojo.entity.Competition
 import cn.net.ziqiang.teamup.backend.pojo.entity.Team
 import cn.net.ziqiang.teamup.backend.pojo.entity.TeamRole
@@ -22,9 +20,10 @@ class RecommendServiceImpl : RecommendService {
     private lateinit var teamRoleRepository: TeamRoleRepository
     @Autowired
     private lateinit var teamRepository: TeamRepository
-
     @Autowired
     private lateinit var userRepository: UserRepository
+    @Autowired
+    private lateinit var recommendRepository: RecommendRepository
 
     override fun getUserSubscribeCompetition(userId: Long): List<Competition> {
         val user = userRepository.getById(userId)
@@ -149,5 +148,13 @@ class RecommendServiceImpl : RecommendService {
         user.uninterestingTeam = user.uninterestingTeam?.minus(teamId) ?: emptySet()
 
         userRepository.save(user)
+    }
+
+    override fun getRecommendTeamIds(userId: Long): List<Long> {
+        return recommendRepository.findByObjectIdAndType(userId, RecommendType.User)?.items ?: emptyList()
+    }
+
+    override fun getRecommendUserIds(teamId: Long): List<Long> {
+        return recommendRepository.findByObjectIdAndType(teamId, RecommendType.Team)?.items ?: emptyList()
     }
 }
