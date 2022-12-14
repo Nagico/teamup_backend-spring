@@ -36,9 +36,9 @@ class Team (
     @Schema(description = "队伍描述")
     var description: String? = null,
 
-    @Column(name = "like_count", nullable = false)
-    @Schema(description = "点赞数")
-    var likeCount: Long = 0,
+    @Column(name = "interesting_count", nullable = false)
+    @Schema(description = "感兴趣的数量")
+    var interestingCount: Long = 0,
 
     @Type(type = "json")
     @Column(name = "members", nullable = false, columnDefinition = "json")

@@ -113,6 +113,10 @@ class RecommendServiceImpl : RecommendService {
         user.interestingTeam = user.interestingTeam?.plus(teamId) ?: setOf(teamId)
         user.uninterestingTeam = user.uninterestingTeam?.minus(teamId) ?: emptySet()
 
+        val team = teamRepository.getById(teamId)
+        team.interestingCount += 1
+        teamRepository.save(team)
+
         userRepository.save(user)
     }
 
@@ -120,13 +124,22 @@ class RecommendServiceImpl : RecommendService {
         val user = userRepository.getById(userId)
         user.interestingTeam = user.interestingTeam?.minus(teamId) ?: emptySet()
 
+        val team = teamRepository.getById(teamId)
+        team.interestingCount -= 1
+        teamRepository.save(team)
+
         userRepository.save(user)
     }
 
     override fun addUserUninterestingTeam(userId: Long, teamId: Long) {
         val user = userRepository.getById(userId)
+        val team = teamRepository.getById(teamId)
+
+        if (user.interestingTeam?.contains(teamId) == true) {
+            user.interestingTeam = user.interestingTeam?.minus(teamId) ?: emptySet()
+            team.interestingCount -= 1
+        }
         user.uninterestingTeam = user.uninterestingTeam?.plus(teamId) ?: setOf(teamId)
-        user.interestingTeam = user.interestingTeam?.minus(teamId) ?: emptySet()
 
         userRepository.save(user)
     }
