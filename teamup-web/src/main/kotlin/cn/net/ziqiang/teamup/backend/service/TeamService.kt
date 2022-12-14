@@ -3,6 +3,7 @@ package cn.net.ziqiang.teamup.backend.service
 import cn.net.ziqiang.teamup.backend.pojo.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.pojo.entity.Recruitment
 import cn.net.ziqiang.teamup.backend.pojo.entity.Team
+import cn.net.ziqiang.teamup.backend.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.pojo.vo.team.TeamRoleTreeVO
 import org.springframework.data.domain.PageRequest
 
@@ -124,4 +125,13 @@ interface TeamService {
      *
      */
     fun rebuildTeamDoc()
+
+    /**
+     * 获取队伍推荐人员
+     *
+     * @param teamId
+     * @param pageRequest
+     * @return
+     */
+    fun recommendUsers(teamId: Long, pageRequest: PageRequest): PagedList<User>
 }

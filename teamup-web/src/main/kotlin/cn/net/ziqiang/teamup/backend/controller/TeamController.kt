@@ -3,6 +3,7 @@ package cn.net.ziqiang.teamup.backend.controller
 import cn.net.ziqiang.teamup.backend.pojo.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.pojo.entity.Recruitment
 import cn.net.ziqiang.teamup.backend.pojo.entity.Team
+import cn.net.ziqiang.teamup.backend.pojo.entity.User
 import cn.net.ziqiang.teamup.backend.pojo.vo.team.TeamRoleTreeVO
 import cn.net.ziqiang.teamup.backend.service.TeamService
 import cn.net.ziqiang.teamup.backend.util.annotation.permission.OwnerOrManager
@@ -70,6 +71,18 @@ class TeamController {
     @Operation(summary = "修改队伍信息")
     fun updateTeam(@PathVariable id: Long, @RequestBody team: Team): Team {
         return teamService.updateTeam(id, team)
+    }
+
+    @ActiveUser
+    @OwnerOrManager("team")
+    @GetMapping("/{id}/users")
+    @Operation(summary = "获取队伍推荐用户")
+    fun getTeamRecommendUsers(
+        @PathVariable id: Long,
+        @RequestParam(defaultValue = "1") page: Int,
+        @RequestParam(defaultValue = "10") pageSize: Int,
+    ): PagedList<User> {
+        return teamService.recommendUsers(id, PageRequest.of(page - 1, pageSize))
     }
 
     @ActiveUser

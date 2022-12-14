@@ -10,6 +10,7 @@ import cn.net.ziqiang.teamup.backend.util.getInfo
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRoleRepository
 import cn.net.ziqiang.teamup.backend.dao.repository.TeamRepository
 import cn.net.ziqiang.teamup.backend.cache.TeamCacheManager
+import cn.net.ziqiang.teamup.backend.dao.repository.UserRepository
 import cn.net.ziqiang.teamup.backend.service.CompetitionService
 import cn.net.ziqiang.teamup.backend.service.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,6 +28,8 @@ class TeamServiceImpl : TeamService {
     private lateinit var teamRoleRepository: TeamRoleRepository
     @Autowired
     private lateinit var competitionService: CompetitionService
+    @Autowired
+    private lateinit var userRepository: UserRepository
     @Autowired
     private lateinit var userService: UserService
     @Autowired
@@ -295,5 +298,13 @@ class TeamServiceImpl : TeamService {
     override fun rebuildTeamDoc() {
         val teams = teamRepository.findAll().map { TeamDoc(it) }
         esService.rebuildIndex(teams)
+    }
+
+    override fun recommendUsers(teamId: Long, pageRequest: PageRequest): PagedList<User> {
+        getTeam(teamId, useCache = true)
+        val ids = recommendService.getRecommendUserIds(teamId)
+        return PagedList(userRepository.findAllByIdsOrdered(ids, pageRequest)).apply {
+            results.forEach { it.getInfo() }
+        }
     }
 }
