@@ -41,6 +41,11 @@ class SpringDocConfig {
             )
             .servers(
                 listOf(
+                    if (!System.getenv("HOST_FULL").isNullOrBlank()) {
+                        Server().url(System.getenv("HOST_FULL")).description("当前环境")
+                    } else {
+                        Server().url("http://localhost:8080").description("开发环境")
+                    },
                     Server()
                         .url("https://api.teamup.nagico.cn")
                         .description("测试环境"),
