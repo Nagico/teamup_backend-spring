@@ -69,15 +69,15 @@ class Team (
 
     @Transient
     @Schema(description = "是否收藏")
-    var favorite: Boolean? = null,
+    var favorite: Boolean? = false,
 
     @Transient
     @Schema(description = "是否感兴趣")
-    var interested: Boolean? = null,
+    var interested: Boolean? = false,
 
     @Transient
     @Schema(description = "是否不感兴趣")
-    var uninterested: Boolean? = null,
+    var uninterested: Boolean? = false,
 
 ): PermissionChecker<Team>("team", "leader") {
     override fun toString(): String {

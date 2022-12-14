@@ -54,7 +54,7 @@ public class Competition {
 
     @Transient
     @Schema(description = "用户订阅")
-    Boolean subscribed = null;
+    Boolean subscribed = false;
 
     public Long getId() {
         return id;
