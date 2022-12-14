@@ -60,7 +60,8 @@ class TeamController {
     @PostMapping
     @Operation(summary = "创建队伍")
     fun createTeam(@RequestBody team: Team): Team {
-        return teamService.createTeam(SecurityContextUtils.user.id!!, team)
+        val res = teamService.createTeam(SecurityContextUtils.user.id!!, team)
+        return teamService.getTeamDetail(SecurityContextUtils.user.id!!, res.id!!)
     }
 
     @ActiveUser
