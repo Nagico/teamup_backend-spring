@@ -26,7 +26,7 @@ class HomeController {
         @RequestParam(defaultValue = "-id") order: String,
         @RequestParam("page", required = false, defaultValue = "1") page: Int,
         @RequestParam("size", required = false, defaultValue = "10") size: Int
-    ): PagedList<Team, Team> =
+    ): PagedList<Team> =
         teamService.searchTeams(competition, role, search, PageRequest.of(page - 1, size, handleSort(order)), SecurityContextUtils.userIdOrNull)
 
     @GetMapping("/teams/rebuild")

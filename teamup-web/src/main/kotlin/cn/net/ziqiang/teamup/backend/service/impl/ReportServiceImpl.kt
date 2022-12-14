@@ -51,7 +51,7 @@ class ReportServiceImpl : ReportService {
         return report
     }
 
-    override fun queryReports(queryMap: Map<String, Any>, pageRequest: PageRequest): PagedList<Report, Report> {
+    override fun queryReports(queryMap: Map<String, Any>, pageRequest: PageRequest): PagedList<Report> {
         val res =  reportRepository.findAll( { root, _, cb ->
             val predicates = mutableListOf<Predicate>()
             if (queryMap.containsKey("type")) {

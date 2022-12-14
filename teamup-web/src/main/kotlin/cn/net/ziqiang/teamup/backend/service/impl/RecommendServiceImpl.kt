@@ -69,7 +69,7 @@ class RecommendServiceImpl : RecommendService {
         userRepository.save(user)
     }
 
-    override fun getUserFavoriteTeam(userId: Long, pageRequest: PageRequest): PagedList<Team, Team> {
+    override fun getUserFavoriteTeam(userId: Long, pageRequest: PageRequest): PagedList<Team> {
         val user = userRepository.getById(userId)
         val res = teamRepository.findAllByIdIn(user.favoriteTeam?.toList() ?: emptyList(), pageRequest)
         return PagedList(res) {

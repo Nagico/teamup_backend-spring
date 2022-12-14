@@ -22,7 +22,7 @@ interface TeamService {
         searchText: String?,
         pageRequest: PageRequest,
         userId: Long?
-    ): PagedList<Team, Team>
+    ): PagedList<Team>
 
     /**
      * 获取用户创建的队伍列表
@@ -31,7 +31,7 @@ interface TeamService {
      * @param pageRequest
      * @return
      */
-    fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, Team>
+    fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team>
 
     fun getTeamCountByUserId(userId: Long): Long
 
@@ -83,7 +83,7 @@ interface TeamService {
      * @param pageRequest
      * @return
      */
-    fun getTeamRecruitments(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment, Recruitment>
+    fun getTeamRecruitments(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment>
 
     /**
      * 创建队伍招募信息

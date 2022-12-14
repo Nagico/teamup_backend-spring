@@ -29,7 +29,7 @@ class TeamController {
     fun getUserTeams(
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") pageSize: Int,
-    ): PagedList<Team, Team> {
+    ): PagedList<Team> {
         val userId = SecurityContextUtils.user.id!!
         val pageRequest = PageRequest.of(page - 1, pageSize)
         return teamService.getUserTeams(userId, pageRequest)
@@ -87,7 +87,7 @@ class TeamController {
         @PathVariable id: Long,
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") pageSize: Int,
-    ): PagedList<Recruitment, Recruitment> {
+    ): PagedList<Recruitment> {
         val pageRequest = PageRequest.of(page - 1, pageSize)
         return teamService.getTeamRecruitments(id, pageRequest)
     }

@@ -70,7 +70,7 @@ interface RecommendService {
      * @param userId
      * @return
      */
-    fun getUserFavoriteTeam(userId: Long, pageRequest: PageRequest): PagedList<Team, Team>
+    fun getUserFavoriteTeam(userId: Long, pageRequest: PageRequest): PagedList<Team>
 
     /**
      * 添加队伍收藏

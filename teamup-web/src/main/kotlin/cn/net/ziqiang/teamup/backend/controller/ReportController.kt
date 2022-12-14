@@ -38,7 +38,7 @@ class ReportController {
         @RequestParam(defaultValue = "-id") order: String,
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") pageSize: Int,
-    ) : PagedList<Report, Report> {
+    ) : PagedList<Report> {
         val user = SecurityContextUtils.user
 
         var searchUserId = userId

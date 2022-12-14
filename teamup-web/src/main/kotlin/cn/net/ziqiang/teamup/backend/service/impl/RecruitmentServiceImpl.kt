@@ -34,7 +34,7 @@ class RecruitmentServiceImpl : RecruitmentService {
         }
     }
 
-    override fun getRecruitmentList(pageRequest: PageRequest): PagedList<Recruitment, Recruitment> {
+    override fun getRecruitmentList(pageRequest: PageRequest): PagedList<Recruitment> {
         val recruitmentList = recruitmentRepository.findByTeam_RecruitingTrue(pageRequest)
         return PagedList(recruitmentList) { it }
     }
@@ -42,7 +42,7 @@ class RecruitmentServiceImpl : RecruitmentService {
     override fun getRecruitmentListByTeamId(
         teamId: Long,
         pageRequest: PageRequest
-    ): PagedList<Recruitment, Recruitment> {
+    ): PagedList<Recruitment> {
         val cachedList = recruitmentCacheManager.getRecruitmentListByTeamIdCache(teamId)
 
         return if (cachedList != null) {

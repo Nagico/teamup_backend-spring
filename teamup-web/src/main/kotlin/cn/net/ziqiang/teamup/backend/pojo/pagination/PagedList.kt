@@ -8,14 +8,13 @@ import kotlin.math.min
 /**
  * 分页列表
  *
- * @param M 数据库实体
- * @param T VO
+ * @param T 列表元素类型
  * @property count 总数
  * @property previous 上一页
  * @property next 下一页
  * @property results 结果列表
  */
-class PagedList<M, T>(
+class PagedList<T>(
     var count: Long = 0,
     var previous: String? = null,
     var next: String? = null,
@@ -24,15 +23,20 @@ class PagedList<M, T>(
     companion object {
         private fun getBaseUrlString(): String {
             val uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri()
-            return if (uri.port == -1) {
-                uri.scheme + "://" + uri.host + uri.path
-            } else {
-                uri.scheme + "://" + uri.host + ":" + uri.port + uri.path
+
+            val host = System.getenv("HOST_FULL").orEmpty().ifEmpty {
+                if (uri.port == -1) {
+                    uri.scheme + "://" + uri.host
+                } else {
+                    uri.scheme + "://" + uri.host + ":" + uri.port
+                }
             }
+
+            return host + uri.path
         }
     }
 
-    constructor(pageData: Page<M>, func: (M) -> T = { m -> m as T }) : this() {
+    constructor(pageData: Page<T>, func: (T) -> T = { m -> m }) : this() {
         count = pageData.totalElements
         results = pageData.content.map(func)
         val page = pageData.number + 1
@@ -56,7 +60,7 @@ class PagedList<M, T>(
         }
     }
 
-    constructor(data: List<M>, pageable: Pageable, func: (M) -> T = { m -> m as T }) : this() {
+    constructor(data: List<T>, pageable: Pageable, func: (T) -> T = { m -> m }) : this() {
         count = data.size.toLong()
         val page = pageable.pageNumber + 1
         val pageSize = pageable.pageSize

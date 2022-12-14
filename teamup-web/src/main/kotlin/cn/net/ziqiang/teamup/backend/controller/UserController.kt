@@ -187,7 +187,7 @@ class UserController {
     fun getTeamFavorites(
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") pageSize: Int,
-    ) : PagedList<Team, Team> {
+    ) : PagedList<Team> {
         val pageRequest = PageRequest.of(page - 1, pageSize)
         return recommendService.getUserFavoriteTeam(SecurityContextUtils.userId, pageRequest)
     }

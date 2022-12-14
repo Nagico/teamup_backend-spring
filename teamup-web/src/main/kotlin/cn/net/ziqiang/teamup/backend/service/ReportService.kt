@@ -13,7 +13,7 @@ interface ReportService {
 
     fun updateReport(reportId: Long, reportManager: Report) : Report
 
-    fun queryReports(queryMap: Map<String, Any>, pageRequest: PageRequest) : PagedList<Report, Report>
+    fun queryReports(queryMap: Map<String, Any>, pageRequest: PageRequest) : PagedList<Report>
 
     fun getReport(reportId: Long) : Report
 }

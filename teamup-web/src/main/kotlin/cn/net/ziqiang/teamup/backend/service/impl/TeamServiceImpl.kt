@@ -59,7 +59,7 @@ class TeamServiceImpl : TeamService {
         searchText: String?,
         pageRequest: PageRequest,
         userId: Long?
-    ): PagedList<Team, Team> {
+    ): PagedList<Team> {
         val idList =  if (competition != null || role != null) {
             esService.getTeamDocListByCompetitionAndRole(competition, role).map { it.id!! }
         } else if (searchText != null) {
@@ -78,7 +78,7 @@ class TeamServiceImpl : TeamService {
         }
     }
 
-    override fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team, Team> {
+    override fun getUserTeams(userId: Long, pageRequest: PageRequest): PagedList<Team> {
         val cachedList = teamCacheManager.getTeamListByUserIdCache(userId)
 
         val result = if (cachedList != null) {
@@ -199,7 +199,7 @@ class TeamServiceImpl : TeamService {
         }
     }
 
-    override fun getTeamRecruitments(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment, Recruitment> {
+    override fun getTeamRecruitments(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment> {
         val team = getTeam(teamId, useCache = true)
         return recruitmentService.getRecruitmentListByTeamId(team.id!!, pageRequest)
     }

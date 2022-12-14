@@ -11,7 +11,7 @@ interface RecruitmentService {
      * @param pageRequest
      * @return
      */
-    fun getRecruitmentList(pageRequest: PageRequest): PagedList<Recruitment, Recruitment>
+    fun getRecruitmentList(pageRequest: PageRequest): PagedList<Recruitment>
 
     /**
      * 根据队伍id获取招聘列表
@@ -20,7 +20,7 @@ interface RecruitmentService {
      * @param pageRequest
      * @return
      */
-    fun getRecruitmentListByTeamId(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment, Recruitment>
+    fun getRecruitmentListByTeamId(teamId: Long, pageRequest: PageRequest): PagedList<Recruitment>
 
     fun getRecruitmentListByTeamId(teamId: Long): List<Recruitment>
 
