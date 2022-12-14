@@ -151,7 +151,9 @@ class TeamServiceImpl : TeamService {
             recruitmentService.createRecruitment(recruitment)
         }
 
-        return savedTeam.apply {
+        val res = refreshTeamRoles(savedTeam.id!!)
+
+        return res.apply {
             leader?.getInfo()
             thread {
                 teamCacheManager.setTeamCache(team)
