@@ -7,8 +7,11 @@ import cn.net.ziqiang.teamup.backend.dao.repository.UserRepository
 import cn.net.ziqiang.teamup.backend.pojo.entity.Competition
 import cn.net.ziqiang.teamup.backend.pojo.entity.Team
 import cn.net.ziqiang.teamup.backend.pojo.entity.TeamRole
+import cn.net.ziqiang.teamup.backend.pojo.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.service.RecommendService
+import cn.net.ziqiang.teamup.backend.util.getInfo
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 @Service
@@ -66,9 +69,15 @@ class RecommendServiceImpl : RecommendService {
         userRepository.save(user)
     }
 
-    override fun getUserFavoriteTeam(userId: Long): Set<Team> {
+    override fun getUserFavoriteTeam(userId: Long, pageRequest: PageRequest): PagedList<Team, Team> {
         val user = userRepository.getById(userId)
-        return teamRepository.findAllByIdIn(user.favoriteTeam ?: emptySet()).onEach { it.favorite = true }
+        val res = teamRepository.findAllByIdIn(user.favoriteTeam?.toList() ?: emptyList(), pageRequest)
+        return PagedList(res) {
+            it.apply {
+                it.leader?.getInfo()
+                it.favorite = true
+            }
+        }
     }
 
     override fun addUserFavoriteTeam(userId: Long, teamId: Long) {

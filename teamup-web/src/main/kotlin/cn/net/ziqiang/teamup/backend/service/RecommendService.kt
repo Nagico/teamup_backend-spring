@@ -3,6 +3,8 @@ package cn.net.ziqiang.teamup.backend.service
 import cn.net.ziqiang.teamup.backend.pojo.entity.Competition
 import cn.net.ziqiang.teamup.backend.pojo.entity.Team
 import cn.net.ziqiang.teamup.backend.pojo.entity.TeamRole
+import cn.net.ziqiang.teamup.backend.pojo.pagination.PagedList
+import org.springframework.data.domain.PageRequest
 
 interface RecommendService {
     /**
@@ -68,7 +70,7 @@ interface RecommendService {
      * @param userId
      * @return
      */
-    fun getUserFavoriteTeam(userId: Long): Set<Team>
+    fun getUserFavoriteTeam(userId: Long, pageRequest: PageRequest): PagedList<Team, Team>
 
     /**
      * 添加队伍收藏

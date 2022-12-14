@@ -6,6 +6,7 @@ import cn.net.ziqiang.teamup.backend.pojo.entity.Team
 import cn.net.ziqiang.teamup.backend.pojo.entity.TeamRole
 import cn.net.ziqiang.teamup.backend.pojo.exception.ApiException
 import cn.net.ziqiang.teamup.backend.pojo.entity.User
+import cn.net.ziqiang.teamup.backend.pojo.pagination.PagedList
 import cn.net.ziqiang.teamup.backend.pojo.vo.auth.AuthVO
 import cn.net.ziqiang.teamup.backend.pojo.vo.user.*
 import cn.net.ziqiang.teamup.backend.service.RecommendService
@@ -15,6 +16,7 @@ import cn.net.ziqiang.teamup.backend.util.security.SecurityContextUtils
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import javax.annotation.security.PermitAll
@@ -182,8 +184,12 @@ class UserController {
     @NormalUser
     @Operation(summary = "获取用户收藏队伍列表")
     @GetMapping("/favorites/teams/")
-    fun getTeamFavorites() : Set<Team> {
-        return recommendService.getUserFavoriteTeam(SecurityContextUtils.userId)
+    fun getTeamFavorites(
+        @RequestParam(defaultValue = "1") page: Int,
+        @RequestParam(defaultValue = "10") pageSize: Int,
+    ) : PagedList<Team, Team> {
+        val pageRequest = PageRequest.of(page - 1, pageSize)
+        return recommendService.getUserFavoriteTeam(SecurityContextUtils.userId, pageRequest)
     }
 
     @NormalUser
