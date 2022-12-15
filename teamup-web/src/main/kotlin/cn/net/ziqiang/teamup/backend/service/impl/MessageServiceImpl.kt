@@ -32,12 +32,12 @@ class MessageServiceImpl : MessageService {
         if (message.receiver != null) {
             if (userService.getUserStatus(message.receiver!!) == UserStatus.Online) {
                 deliverToUser(message)
-                // return
+                return
             }
             thread {
                 if (userService.getUserByIdOrNull(message.receiver!!) != null) {
                     messageRepository.save(message)
-                    // logger.debug("User {} is offline, save message to database", message.receiver)
+                    logger.debug("User {} is offline, save message to database", message.receiver)
                 }
             }
             return
@@ -66,7 +66,7 @@ class MessageServiceImpl : MessageService {
     @Transactional
     override fun getOfflineMsg(receiver: Long): List<Message> {
         val messages = messageRepository.findAllByReceiverOrderByCreateTime(receiver)
-        // messageRepository.deleteAllByReceiver(receiver)
+        messageRepository.deleteAllByReceiver(receiver)
 
         return messages
     }
