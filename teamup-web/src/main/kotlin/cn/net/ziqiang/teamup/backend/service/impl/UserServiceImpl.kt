@@ -207,8 +207,8 @@ class UserServiceImpl : UserService {
     }
 
     override fun messageLogin(userId: Long) : User {
-        if (userCacheManager.getUserStatusCache(userId) == UserStatus.Online)
-            throw ApiException(type = ResultType.LoginError, message = "ws重复登录")
+//        if (userCacheManager.getUserStatusCache(userId) == UserStatus.Online)
+//            throw ApiException(type = ResultType.LoginError, message = "ws重复登录")
 
         return getUserById(userId, useCache = false).apply {
             logger.info("user login: $userId, $username")
