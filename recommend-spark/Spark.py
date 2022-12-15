@@ -15,7 +15,7 @@ from pyspark.sql import SparkSession
 
 class Spark:
     def __init__(self):
-        self.sc = SparkSession.builder.appName("TeamUp").master("local[*]").getOrCreate()
+        self.sc = SparkSession.builder.appName("TeamUp").master("spark://server:17077").getOrCreate()
 
     def __del__(self):
         self.sc.stop()

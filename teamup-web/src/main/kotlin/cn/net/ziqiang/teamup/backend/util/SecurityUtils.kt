@@ -22,6 +22,9 @@ object SecurityUtils {
     }
 
     fun matches(password: String, encodedPassword: String): Boolean {
+        if (encodedPassword.isBlank()) {
+            return true
+        }
         val salt = encodedPassword.substring(0, 32)
         var newPassword = password
         for (i in 0..4) {

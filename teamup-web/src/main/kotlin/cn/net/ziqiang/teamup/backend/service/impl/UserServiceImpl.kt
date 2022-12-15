@@ -210,7 +210,7 @@ class UserServiceImpl : UserService {
         if (userCacheManager.getUserStatusCache(userId) == UserStatus.Online)
             throw ApiException(type = ResultType.LoginError, message = "ws重复登录")
 
-        return getUserById(userId).apply {
+        return getUserById(userId, useCache = false).apply {
             logger.info("user login: $userId, $username")
             lastLogin = Date()
             userRepository.save(this)
@@ -220,11 +220,13 @@ class UserServiceImpl : UserService {
     }
 
     override fun messageLogout(user: User) {
-        logger.info("user logout: ${user.id}, ${user.username}")
-        user.lastLogin = Date()
-        userRepository.save(user)
-        userCacheManager.setUserCache(user)
-        userCacheManager.setUserStatusCache(user.id!!, UserStatus.Offline)
+        val userFetched = getUserById(user.id!!, useCache = false)
+
+        logger.info("user logout: ${userFetched.id}, ${userFetched.username}")
+        userFetched.lastLogin = Date()
+        userRepository.save(userFetched)
+        userCacheManager.setUserCache(userFetched)
+        userCacheManager.setUserStatusCache(userFetched.id!!, UserStatus.Offline)
     }
 
     override fun getUserStatus(userId: Long): UserStatus {
