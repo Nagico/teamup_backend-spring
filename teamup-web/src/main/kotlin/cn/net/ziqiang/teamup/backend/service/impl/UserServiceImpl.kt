@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
-import kotlin.concurrent.thread
 
 @Slf4j
 @Service
@@ -210,24 +209,19 @@ class UserServiceImpl : UserService {
     override fun messageLogin(userId: Long) : User {
         return getUserById(userId).apply {
             logger.info("user login: $userId, $username")
-            thread {
-                lastLogin = Date()
-                userRepository.save(this)
-                userCacheManager.setUserCache(this)
-                userCacheManager.setUserStatusCache(userId, UserStatus.Online)
-            }
+            lastLogin = Date()
+            userRepository.save(this)
+            userCacheManager.setUserCache(this)
+            userCacheManager.setUserStatusCache(userId, UserStatus.Online)
         }
     }
 
     override fun messageLogout(user: User) {
         logger.info("user logout: ${user.id}, ${user.username}")
-        thread {
-            user.lastLogin = Date()
-            userRepository.save(user)
-            userCacheManager.setUserCache(user)
-            userCacheManager.setUserStatusCache(user.id!!, UserStatus.Offline)
-        }
-
+        user.lastLogin = Date()
+        userRepository.save(user)
+        userCacheManager.setUserCache(user)
+        userCacheManager.setUserStatusCache(user.id!!, UserStatus.Offline)
     }
 
     override fun getUserStatus(userId: Long): UserStatus {
